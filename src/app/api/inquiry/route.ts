@@ -54,7 +54,7 @@ export async function POST(request: NextRequest) {
       body: JSON.stringify({
         sender: {
           name: 'Village Framer Website',
-          email: 'noreply@saladovillageframer.com',
+          email: 'cherie@solasgallery.com',
         },
         to: [{ email: NOTIFICATION_EMAIL, name: 'Tim Flanagan' }],
         subject: `New inquiry from ${name} — ${source || 'Website'}`,
