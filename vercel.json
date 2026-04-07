@@ -1,0 +1,26 @@
+{
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "village-framer.com"
+        }
+      ],
+      "destination": "https://saladovillageframer.com/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.village-framer.com"
+        }
+      ],
+      "destination": "https://saladovillageframer.com/:path*",
+      "permanent": true
+    }
+  ]
+}
