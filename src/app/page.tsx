@@ -1,9 +1,46 @@
 import Image from 'next/image'
 import Link from 'next/link'
 
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'LocalBusiness',
+  additionalType: 'http://www.productontology.org/id/Picture_frame',
+  name: 'Salado Village Framer',
+  description: 'Custom picture framing and décor on Main Street in Salado, Texas.',
+  url: 'https://saladovillageframer.com',
+  telephone: '+1-254-613-6123',
+  email: 'info@solasgallery.com',
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: '2 Rock Creek Dr Unit A',
+    addressLocality: 'Salado',
+    addressRegion: 'TX',
+    postalCode: '76571',
+    addressCountry: 'US',
+  },
+  geo: {
+    '@type': 'GeoCoordinates',
+    latitude: 30.9468,
+    longitude: -97.5395,
+  },
+  openingHoursSpecification: [
+    {
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: ['Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+      opens: '10:00',
+      closes: '17:00',
+    },
+  ],
+  image: 'https://saladovillageframer.com/images/home/hero.jpg',
+}
+
 export default function Home() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* Hero */}
       <section className="relative h-screen w-full overflow-hidden bg-deep">
         <Image

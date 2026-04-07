@@ -27,11 +27,11 @@ export default function GalleryPage() {
 
       <section className="section-pad bg-cream">
         <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {Array.from({ length: 16 }, (_, i) => (
-            <div key={i} className="relative aspect-square overflow-hidden group">
+          {[1,2,3,4,5,6,7,8,9,11,12,13,14,15,16].map((n) => (
+            <div key={n} className="relative aspect-square overflow-hidden group">
               <Image
-                src={`/images/gallery/frame-${String(i + 1).padStart(2, '0')}.jpg`}
-                alt={`Custom framing example ${i + 1}`}
+                src={`/images/gallery/frame-${String(n).padStart(2, '0')}.jpg`}
+                alt={`Custom framing example ${n}`}
                 fill
                 className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
                 sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"

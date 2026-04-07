@@ -6,17 +6,21 @@ import './globals.css'
 
 export const metadata: Metadata = {
   title: {
-    default: 'Salado Village Framer — Custom Framing & Décor | Salado, Texas',
-    template: '%s | Salado Village Framer',
+    default: 'Salado Village Framer — Custom Framing & Décor | Salado, TX',
+    template: '%s | Salado Village Framer — Salado, TX',
   },
   description:
     'Custom picture framing, art framing, and décor on Main Street in Salado, Texas. Sister business to Solas Gallery.',
+  metadataBase: new URL('https://saladovillageframer.com'),
   openGraph: {
     type: 'website',
     locale: 'en_US',
     url: 'https://saladovillageframer.com',
     siteName: 'Salado Village Framer',
   },
+  ...(process.env.VERCEL_ENV === 'preview' && {
+    robots: { index: false, follow: false },
+  }),
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

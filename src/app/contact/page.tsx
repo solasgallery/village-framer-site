@@ -46,15 +46,15 @@ export default function ContactPage() {
               </div>
               <div>
                 <p className="text-xs text-stone tracking-[0.15em] uppercase mb-1">Phone</p>
-                <p><a href="tel:+12549476700" className="hover:text-charcoal transition-colors">(254) 947-6700</a></p>
+                <p><a href="tel:+12546136123" className="hover:text-charcoal transition-colors">(254) 613-6123</a></p>
               </div>
               <div>
                 <p className="text-xs text-stone tracking-[0.15em] uppercase mb-1">Email</p>
-                <p><a href="mailto:solasgallery@gmail.com" className="hover:text-charcoal transition-colors">solasgallery@gmail.com</a></p>
+                <p><a href="mailto:info@solasgallery.com" className="hover:text-charcoal transition-colors">info@solasgallery.com</a></p>
               </div>
               <div>
                 <p className="text-xs text-stone tracking-[0.15em] uppercase mb-1">Address</p>
-                <p>Main Street, Salado, Texas 76571</p>
+                <p>2 Rock Creek Dr Unit A, Salado, Texas 76571</p>
               </div>
             </div>
           </div>

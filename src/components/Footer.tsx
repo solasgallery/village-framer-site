@@ -11,9 +11,10 @@ export default function Footer() {
               Custom framing and décor on Main Street.
             </p>
             <p className="font-body text-sm mt-4">
+              2 Rock Creek Dr Unit A<br />
               Salado, Texas 76571
               <br />
-              <a href="tel:+12549476700" className="hover:text-cream transition-colors">(254) 947-6700</a>
+              <a href="tel:+12546136123" className="hover:text-cream transition-colors">(254) 613-6123</a>
             </p>
           </div>
           <div>
