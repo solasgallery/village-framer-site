@@ -6,6 +6,22 @@ export const metadata: Metadata = {
   title: 'Custom Framing Near Killeen TX — Picture Frames, Shadow Boxes & Mirrors',
   description:
     'Salado Village Framer — custom picture framing 21 minutes from Killeen, Texas. Military shadow boxes, flag cases, art framing, and mirrors. Serving Killeen, Fort Cavazos, Harker Heights, and Copperas Cove.',
+  alternates: {
+    canonical: '/area/killeen',
+  },
+  openGraph: {
+    title: 'Custom Framing Near Killeen TX',
+    description: 'Salado Village Framer — custom picture framing 21 minutes from Killeen.',
+    url: 'https://saladovillageframer.com/area/killeen',
+    type: 'website',
+    images: [{ url: '/og-default.jpg', width: 1200, height: 630, alt: 'Custom Framing Near Killeen TX | Salado Village Framer' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Custom Framing Near Killeen TX',
+    description: 'Salado Village Framer — custom picture framing 21 minutes from Killeen.',
+    images: ['/og-default.jpg'],
+  },
 }
 
 export default function KilleenAreaPage() {

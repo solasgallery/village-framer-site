@@ -4,6 +4,22 @@ import Image from 'next/image'
 export const metadata: Metadata = {
   title: 'Gallery — Recent Framing Work',
   description: 'Custom framing examples from Salado Village Framer. Art framing, shadow boxes, mirrors, and more.',
+  alternates: {
+    canonical: '/gallery',
+  },
+  openGraph: {
+    title: 'Gallery — Recent Framing Work',
+    description: 'Custom framing examples from Salado Village Framer — art, shadow boxes, mirrors, and more.',
+    url: 'https://saladovillageframer.com/gallery',
+    type: 'website',
+    images: [{ url: '/og-default.jpg', width: 1200, height: 630, alt: 'Gallery — Recent Framing Work | Salado Village Framer' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Gallery — Recent Framing Work',
+    description: 'Custom framing examples from Salado Village Framer — art, shadow boxes, mirrors, and more.',
+    images: ['/og-default.jpg'],
+  },
 }
 
 export default function GalleryPage() {

@@ -6,6 +6,22 @@ export const metadata: Metadata = {
   title: 'Custom Framing Near Austin TX — Picture Frames, Art & Mirrors',
   description:
     'Salado Village Framer — custom picture framing 45 minutes from Austin, Texas. Museum-quality art framing, oversized pieces, mirrors, and conservation framing. Worth the drive from Austin, Cedar Park, and Lakeway.',
+  alternates: {
+    canonical: '/area/austin',
+  },
+  openGraph: {
+    title: 'Custom Framing Near Austin TX',
+    description: 'Salado Village Framer — custom picture framing 45 minutes from Austin.',
+    url: 'https://saladovillageframer.com/area/austin',
+    type: 'website',
+    images: [{ url: '/og-default.jpg', width: 1200, height: 630, alt: 'Custom Framing Near Austin TX | Salado Village Framer' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Custom Framing Near Austin TX',
+    description: 'Salado Village Framer — custom picture framing 45 minutes from Austin.',
+    images: ['/og-default.jpg'],
+  },
 }
 
 export default function AustinAreaPage() {

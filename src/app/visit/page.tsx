@@ -4,6 +4,22 @@ import Image from 'next/image'
 export const metadata: Metadata = {
   title: 'Visit Us',
   description: 'Visit Salado Village Framer on Main Street in Salado, Texas. Hours, directions, and contact information.',
+  alternates: {
+    canonical: '/visit',
+  },
+  openGraph: {
+    title: 'Visit Us',
+    description: 'Visit Salado Village Framer on Main Street in Salado, Texas. Hours, directions, and contact info.',
+    url: 'https://saladovillageframer.com/visit',
+    type: 'website',
+    images: [{ url: '/og-default.jpg', width: 1200, height: 630, alt: 'Visit Us | Salado Village Framer' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Visit Us',
+    description: 'Visit Salado Village Framer on Main Street in Salado, Texas. Hours, directions, and contact info.',
+    images: ['/og-default.jpg'],
+  },
 }
 
 export default function VisitPage() {

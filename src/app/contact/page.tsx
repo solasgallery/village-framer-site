@@ -4,6 +4,22 @@ import InquiryForm from '@/components/InquiryForm'
 export const metadata: Metadata = {
   title: 'Contact',
   description: 'Contact Salado Village Framer for custom framing quotes, questions, or to schedule a consultation.',
+  alternates: {
+    canonical: '/contact',
+  },
+  openGraph: {
+    title: 'Contact',
+    description: 'Contact Salado Village Framer for custom framing quotes or to schedule a consultation.',
+    url: 'https://saladovillageframer.com/contact',
+    type: 'website',
+    images: [{ url: '/og-default.jpg', width: 1200, height: 630, alt: 'Contact | Salado Village Framer' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Contact',
+    description: 'Contact Salado Village Framer for custom framing quotes or to schedule a consultation.',
+    images: ['/og-default.jpg'],
+  },
 }
 
 export default function ContactPage() {

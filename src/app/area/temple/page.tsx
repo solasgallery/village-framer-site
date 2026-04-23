@@ -6,6 +6,22 @@ export const metadata: Metadata = {
   title: 'Custom Framing Near Temple TX — Picture Frames, Art & Mirrors',
   description:
     'Salado Village Framer — custom picture framing 17 minutes from Temple, Texas. Art framing, shadow boxes, mirror framing, diploma framing, and restoration. Serving Temple, Belton, and Bell County.',
+  alternates: {
+    canonical: '/area/temple',
+  },
+  openGraph: {
+    title: 'Custom Framing Near Temple TX',
+    description: 'Salado Village Framer — custom picture framing 17 minutes from Temple.',
+    url: 'https://saladovillageframer.com/area/temple',
+    type: 'website',
+    images: [{ url: '/og-default.jpg', width: 1200, height: 630, alt: 'Custom Framing Near Temple TX | Salado Village Framer' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Custom Framing Near Temple TX',
+    description: 'Salado Village Framer — custom picture framing 17 minutes from Temple.',
+    images: ['/og-default.jpg'],
+  },
 }
 
 export default function TempleAreaPage() {

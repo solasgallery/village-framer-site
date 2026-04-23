@@ -3,13 +3,15 @@ import Link from 'next/link'
 
 const jsonLd = {
   '@context': 'https://schema.org',
-  '@type': 'LocalBusiness',
+  '@type': ['LocalBusiness', 'HomeGoodsStore'],
+  '@id': 'https://saladovillageframer.com/#business',
   additionalType: 'http://www.productontology.org/id/Picture_frame',
   name: 'Salado Village Framer',
   description: 'Custom picture framing and décor on Main Street in Salado, Texas.',
   url: 'https://saladovillageframer.com',
   telephone: '+1-254-613-6123',
   email: 'info@solasgallery.com',
+  priceRange: '$$',
   address: {
     '@type': 'PostalAddress',
     streetAddress: '2 Rock Creek Dr Unit A',
@@ -31,7 +33,21 @@ const jsonLd = {
       closes: '17:00',
     },
   ],
-  image: 'https://saladovillageframer.com/images/home/hero.jpg',
+  image: 'https://saladovillageframer.com/og-default.jpg',
+  logo: 'https://saladovillageframer.com/logo.png',
+  // TODO Tim: paste real social profile URLs (Facebook, Instagram, etc.)
+  sameAs: [
+    // 'https://www.facebook.com/saladovillageframer',
+    // 'https://www.instagram.com/saladovillageframer',
+  ],
+  // Sister business on same property — helps Google disambiguate the two GMB listings at
+  // 2 Rock Creek Dr (Solas Gallery) and 2 Rock Creek Dr Unit A (Salado Village Framer).
+  parentOrganization: {
+    '@type': 'Organization',
+    '@id': 'https://solasgallery.com/#business',
+    name: 'Solas Gallery',
+    url: 'https://solasgallery.com',
+  },
 }
 
 export default function Home() {

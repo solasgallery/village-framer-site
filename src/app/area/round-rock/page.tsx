@@ -6,6 +6,22 @@ export const metadata: Metadata = {
   title: 'Custom Framing Near Round Rock TX — Picture Frames, Art & Mirrors',
   description:
     'Salado Village Framer — custom picture framing 31 minutes from Round Rock, Texas. Art framing, corporate art installations, mirror framing, and oversized pieces. Serving Round Rock, Pflugerville, and Hutto.',
+  alternates: {
+    canonical: '/area/round-rock',
+  },
+  openGraph: {
+    title: 'Custom Framing Near Round Rock TX',
+    description: 'Salado Village Framer — custom picture framing 31 minutes from Round Rock.',
+    url: 'https://saladovillageframer.com/area/round-rock',
+    type: 'website',
+    images: [{ url: '/og-default.jpg', width: 1200, height: 630, alt: 'Custom Framing Near Round Rock TX | Salado Village Framer' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Custom Framing Near Round Rock TX',
+    description: 'Salado Village Framer — custom picture framing 31 minutes from Round Rock.',
+    images: ['/og-default.jpg'],
+  },
 }
 
 export default function RoundRockAreaPage() {

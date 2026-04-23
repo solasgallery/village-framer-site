@@ -6,6 +6,22 @@ export const metadata: Metadata = {
   title: 'Custom Framing Near Georgetown TX — Picture Frames, Art & Mirrors',
   description:
     'Salado Village Framer — custom picture framing 24 minutes from Georgetown, Texas. Art framing, mirror framing, needlework, and restoration. Serving Georgetown, Jarrell, Florence, and Williamson County.',
+  alternates: {
+    canonical: '/area/georgetown',
+  },
+  openGraph: {
+    title: 'Custom Framing Near Georgetown TX',
+    description: 'Salado Village Framer — custom picture framing 24 minutes from Georgetown.',
+    url: 'https://saladovillageframer.com/area/georgetown',
+    type: 'website',
+    images: [{ url: '/og-default.jpg', width: 1200, height: 630, alt: 'Custom Framing Near Georgetown TX | Salado Village Framer' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Custom Framing Near Georgetown TX',
+    description: 'Salado Village Framer — custom picture framing 24 minutes from Georgetown.',
+    images: ['/og-default.jpg'],
+  },
 }
 
 export default function GeorgetownAreaPage() {

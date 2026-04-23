@@ -4,6 +4,22 @@ import Image from 'next/image'
 export const metadata: Metadata = {
   title: 'Custom Framing Services',
   description: 'Custom picture framing, art framing, mirror framing, shadow boxes, and restoration at Salado Village Framer in Salado, Texas.',
+  alternates: {
+    canonical: '/services',
+  },
+  openGraph: {
+    title: 'Custom Framing Services',
+    description: 'Custom picture framing, art framing, mirror framing, shadow boxes, and restoration.',
+    url: 'https://saladovillageframer.com/services',
+    type: 'website',
+    images: [{ url: '/og-default.jpg', width: 1200, height: 630, alt: 'Custom Framing Services | Salado Village Framer' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Custom Framing Services',
+    description: 'Custom picture framing, art framing, mirror framing, shadow boxes, and restoration.',
+    images: ['/og-default.jpg'],
+  },
 }
 
 const services = [
