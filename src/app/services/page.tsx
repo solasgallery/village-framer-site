@@ -40,8 +40,8 @@ const services = [
     desc: 'Cross-stitch, embroidery, quilts, and textiles mounted and framed with archival methods that protect the fabric.',
   },
   {
-    title: 'Diploma & Certificate Framing',
-    desc: 'Professional framing for diplomas, certificates, awards, and professional credentials. Multiple mat and moulding options.',
+    title: 'Diplomas & Credentials',
+    desc: 'The degree took years. The frame should last longer. Acid-free materials, conservation glass, and mouldings that do justice to what it represents.',
   },
   {
     title: 'Restoration & Repair',
@@ -63,10 +63,10 @@ export default function ServicesPage() {
         />
         <div className="relative z-10 flex flex-col items-center justify-center h-full text-center px-6">
           <h1 className="font-display text-4xl md:text-5xl text-cream tracking-[0.1em]">
-            Our Services
+            What We Frame
           </h1>
           <p className="font-body text-sm text-cream/50 tracking-[0.15em] uppercase mt-4">
-            Everything framed with care
+            Built by hand &middot; Finished in Salado
           </p>
         </div>
       </section>
