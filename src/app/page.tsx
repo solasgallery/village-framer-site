@@ -157,6 +157,86 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Rifle Paper Co. Section */}
+      <section className="section-pad bg-cream border-t border-stone/20">
+        <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-14 items-center">
+          <div>
+            <p className="font-body text-xs text-stone tracking-[0.2em] uppercase mb-4">
+              Exclusively Stocked
+            </p>
+            <h2 className="font-display text-3xl md:text-4xl text-charcoal mb-5">
+              Rifle Paper Co.
+            </h2>
+            <p className="font-body text-sm text-charcoal/60 leading-relaxed mb-4">
+              Salado Village Framer is one of the few Texas retailers carrying
+              Rifle Paper Co. stationery, journals, and gift collections. The
+              same attention to craft that defines our framing work — in something
+              you can hold in your hands.
+            </p>
+            <p className="font-body text-sm text-charcoal/60 leading-relaxed mb-8">
+              Greeting cards, notecards, wrapping paper, and seasonal
+              collections. New arrivals throughout the year. Walk in to browse —
+              stock changes with the season.
+            </p>
+            <Link href="/visit" className="btn-quiet text-charcoal">
+              Come see us &rarr;
+            </Link>
+          </div>
+          <div className="relative aspect-square bg-stone/10 flex items-center justify-center overflow-hidden">
+            <div className="text-center px-8">
+              <p className="font-display text-2xl text-charcoal/30 italic">
+                Rifle Paper Co.
+              </p>
+              <p className="font-body text-xs text-charcoal/20 mt-2 tracking-widest uppercase">
+                In store now
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Boxo Memories Cross-Sell */}
+      <section className="section-pad bg-deep text-cream">
+        <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-14 items-center">
+          <div className="relative aspect-[4/3] bg-charcoal/50 flex items-center justify-center">
+            <div className="text-center px-8">
+              <p className="font-display text-xl text-cream/30 italic">
+                BoxoMemories
+              </p>
+              <p className="font-body text-xs text-cream/20 mt-2 tracking-widest uppercase">
+                Inside this shop
+              </p>
+            </div>
+          </div>
+          <div>
+            <p className="font-body text-xs text-stone tracking-[0.2em] uppercase mb-4">
+              Also Inside Salado Village Framer
+            </p>
+            <h2 className="font-display text-3xl md:text-4xl text-cream mb-5">
+              BoxoMemories
+            </h2>
+            <p className="font-body text-sm text-cream/60 leading-relaxed mb-4">
+              Your family&rsquo;s photographs deserve a future. BoxoMemories —
+              our in-house digitization studio — converts photos, slides,
+              negatives, VHS tapes, and film reels into permanent digital
+              archives.
+            </p>
+            <p className="font-body text-sm text-cream/60 leading-relaxed mb-8">
+              Walk in during business hours. No appointment needed. We&rsquo;ll
+              assess your collection and give you a quote on the spot.
+            </p>
+            <a
+              href="https://www.boxomemories.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-quiet text-cream border-stone/40 hover:border-cream"
+            >
+              Learn about BoxoMemories &rarr;
+            </a>
+          </div>
+        </div>
+      </section>
+
       {/* CTA */}
       <section className="section-pad bg-cream text-center">
         <div className="max-w-2xl mx-auto">
