@@ -9,7 +9,8 @@ const BREVO_LIST_ID = Number(process.env.BREVO_LIST_ID) || 2
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { name, email, phone, message, source } = body
+    const { name, email, phone, message, source, listId } = body
+    const targetList = Number(listId) || BREVO_LIST_ID
 
     if (!email || !name) {
       return NextResponse.json(
@@ -33,7 +34,7 @@ export async function POST(request: NextRequest) {
           LASTNAME: name.split(' ').slice(1).join(' ') || '',
           SMS: phone || '',
         },
-        listIds: [BREVO_LIST_ID],
+        listIds: [targetList],
         updateEnabled: true,
       }),
     })

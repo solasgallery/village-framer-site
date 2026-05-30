@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Salado Village Framer Trade Collective — A custom framing partnership program for interior design professionals in Central Texas.">
+    <meta name="keywords" content="custom framing trade program, interior designer framing partnership Central Texas, professional framing services">
+    <meta property="og:title" content="Trade Collective | Salado Village Framer">
+    <meta property="og:description" content="A custom framing partnership for interior design professionals.">
+    <meta property="og:type" content="website">
+
+    <title>Trade Collective | Salado Village Framer</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Lora:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Google Analytics 4 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-XXXXXXXXXX');
+
+        function trackTradePageView() {
+            gtag('event', 'trade_page_view', {
+                'page_title': 'Trade Collective',
+                'page_location': window.location.href
+            });
+        }
+
+        function trackFormStart() {
+            gtag('event', 'trade_form_start', {
+                'form_name': 'trade_collective_application'
+            });
+        }
+
+        function trackFormSubmit() {
+            gtag('event', 'trade_form_submit', {
+                'form_name': 'trade_collective_application'
+            });
+        }
+    </script>
+
+    <!-- Meta Pixel -->
+    <script>
+        !function(f,b,e,v,n,t,s)
+        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+        n.queue=[];t=b.createElement(e);t.async=!0;
+        t.src=v;s=b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t,s)}(window, document,'script',
+        'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', 'YOUR_PIXEL_ID');
+        fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=YOUR_PIXEL_ID&ev=PageView&noscript=1" /></noscript>
+
+    <!-- JSON-LD Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "name": "Salado Village Framer",
+        "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "2 Rock Creek Dr Unit A",
+            "addressLocality": "Salado",
+            "addressRegion": "TX",
+            "postalCode": "76571",
+            "addressCountry": "US"
+        },
+        "telephone": "(254) 613-6123",
+        "email": "trade@saladovillageframer.com",
+        "url": "https://saladovillageframer.com/trade",
+        "description": "Custom framing partnership program for interior design professionals",
+        "serviceArea": {
+            "@type": "Place",
+            "name": "Central Texas"
+        }
+    }
+    </script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --cream: #F5F0DC;
+            --soft-yellow: #F2E879;
+            --olive: #8B8848;
+            --teal: #5FBFB3;
+            --charcoal: #3A3A3A;
+            --dark-bg: #1a1a1a;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Lora', serif;
+            color: var(--charcoal);
+            background-color: var(--cream);
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: var(--charcoal);
+            padding: 1.5rem 2rem;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        nav ul {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            list-style: none;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        nav a {
+            color: var(--cream);
+            text-decoration: none;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.85rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: var(--teal);
+        }
+
+        nav a.active {
+            color: var(--teal);
+        }
+
+        .nav-right {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        /* Hero Section */
+        .hero {
+            margin-top: 70px;
+            padding: 6rem 2rem;
+            background: linear-gradient(135deg, var(--cream) 0%, var(--soft-yellow) 100%);
+            text-align: center;
+            min-height: calc(100vh - 70px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hero h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 4rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--charcoal);
+            margin-bottom: 0.5rem;
+            line-height: 1.2;
+        }
+
+        .hero .subtitle {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.5rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--teal);
+            margin-bottom: 1.5rem;
+        }
+
+        .hero .tagline {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            color: var(--olive);
+            margin-bottom: 1rem;
+            font-style: italic;
+        }
+
+        .hero .descriptor {
+            font-size: 1.1rem;
+            color: var(--charcoal);
+            max-width: 600px;
+            margin: 0 auto 2.5rem;
+            font-weight: 500;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background-color: var(--teal);
+            color: var(--cream);
+            padding: 1rem 2.5rem;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            text-decoration: none;
+            border: 2px solid var(--teal);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .cta-button:hover {
+            background-color: transparent;
+            color: var(--teal);
+        }
+
+        /* About Section */
+        .about {
+            padding: 5rem 2rem;
+            background-color: var(--cream);
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .about h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--charcoal);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .about-content p {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: var(--charcoal);
+        }
+
+        .about-content p strong {
+            color: var(--olive);
+        }
+
+        .callout {
+            background-color: #fff9e6;
+            border-left: 4px solid var(--teal);
+            padding: 2rem;
+            margin-top: 2rem;
+            font-size: 0.95rem;
+            line-height: 1.8;
+        }
+
+        .callout h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.2rem;
+            color: var(--olive);
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.05em;
+        }
+
+        /* Services Grid */
+        .services {
+            padding: 5rem 2rem;
+            background-color: #fafaf8;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .services h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--charcoal);
+            margin-bottom: 3rem;
+            text-align: center;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .service-card {
+            background-color: var(--cream);
+            padding: 2rem;
+            border-top: 3px solid var(--teal);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: default;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(95, 191, 179, 0.1);
+        }
+
+        .service-card h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.3rem;
+            color: var(--olive);
+            margin-bottom: 0.75rem;
+            letter-spacing: 0.05em;
+        }
+
+        .service-card p {
+            font-size: 0.95rem;
+            line-height: 1.7;
+            color: var(--charcoal);
+        }
+
+        /* Partnership Tiers */
+        .partnership {
+            padding: 5rem 2rem;
+            background-color: var(--cream);
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .partnership h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--charcoal);
+            margin-bottom: 3rem;
+            text-align: center;
+        }
+
+        .tiers {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+
+        .tier {
+            background-color: #fafaf8;
+            padding: 2.5rem;
+            border: 2px solid var(--olive);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .tier:hover {
+            border-color: var(--teal);
+            box-shadow: 0 8px 20px rgba(95, 191, 179, 0.15);
+        }
+
+        .tier h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--charcoal);
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.05em;
+        }
+
+        .tier-label {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.85rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--teal);
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+
+        .tier ul {
+            list-style: none;
+            margin: 1.5rem 0;
+            text-align: left;
+        }
+
+        .tier li {
+            padding: 0.75rem 0;
+            font-size: 0.95rem;
+            color: var(--charcoal);
+            border-bottom: 1px solid #e0dcd4;
+        }
+
+        .tier li:last-child {
+            border-bottom: none;
+        }
+
+        /* How It Works */
+        .how-it-works {
+            padding: 5rem 2rem;
+            background: linear-gradient(180deg, #fafaf8 0%, var(--cream) 100%);
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .how-it-works h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--charcoal);
+            margin-bottom: 3rem;
+            text-align: center;
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .step {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .step-number {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3rem;
+            color: var(--teal);
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .step h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            color: var(--charcoal);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 0.75rem;
+        }
+
+        .step p {
+            font-size: 0.95rem;
+            color: var(--charcoal);
+            line-height: 1.7;
+        }
+
+        /* Form Section */
+        .form-section {
+            padding: 5rem 2rem;
+            background-color: #fafaf8;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .form-section h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--charcoal);
+            margin-bottom: 2.5rem;
+            text-align: center;
+        }
+
+        .form-wrapper {
+            background-color: var(--cream);
+            padding: 3rem;
+            border: 1px solid #e0dcd4;
+        }
+
+        form {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: grid;
+            gap: 0.5rem;
+        }
+
+        .form-group label {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.95rem;
+            letter-spacing: 0.05em;
+            color: var(--charcoal);
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 0.75rem;
+            border: 1px solid #d4d0c8;
+            background-color: #ffffff;
+            font-family: 'Lora', serif;
+            font-size: 0.95rem;
+            color: var(--charcoal);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--teal);
+            box-shadow: 0 0 0 3px rgba(95, 191, 179, 0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .form-submit {
+            background-color: var(--teal);
+            color: var(--cream);
+            padding: 1rem;
+            border: 2px solid var(--teal);
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .form-submit:hover {
+            background-color: transparent;
+            color: var(--teal);
+        }
+
+        /* Cross-Navigation */
+        .cross-nav {
+            padding: 3rem 2rem;
+            background-color: var(--cream);
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .cross-nav h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.2rem;
+            color: var(--charcoal);
+            margin-bottom: 1.5rem;
+            letter-spacing: 0.05em;
+        }
+
+        .cross-nav-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .cross-nav-links a {
+            color: var(--teal);
+            text-decoration: none;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.95rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            transition: color 0.3s ease;
+        }
+
+        .cross-nav-links a:hover {
+            color: var(--olive);
+        }
+
+        .sister-business {
+            background-color: #fff9e6;
+            padding: 1.5rem;
+            border-left: 4px solid var(--teal);
+            margin-top: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .sister-business p {
+            font-size: 0.95rem;
+            color: var(--charcoal);
+            line-height: 1.7;
+        }
+
+        .sister-business a {
+            color: var(--teal);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .sister-business a:hover {
+            color: var(--olive);
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--charcoal);
+            color: var(--cream);
+            padding: 3rem 2rem;
+            margin-top: 5rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-section h4 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+            color: var(--teal);
+        }
+
+        .footer-section p {
+            font-size: 0.9rem;
+            line-height: 1.7;
+            color: #d0cdc5;
+        }
+
+        .footer-section a {
+            color: var(--teal);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: var(--cream);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #555;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            text-align: center;
+            font-size: 0.85rem;
+            color: #999;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem;
+            }
+
+            nav ul {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-right {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .hero {
+                margin-top: 200px;
+                padding: 3rem 1rem;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero .subtitle {
+                font-size: 1.8rem;
+            }
+
+            .hero .tagline {
+                font-size: 1.1rem;
+            }
+
+            .about-content {
+                grid-template-columns: 1fr;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .tiers {
+                grid-template-columns: 1fr;
+            }
+
+            .steps {
+                grid-template-columns: 1fr;
+            }
+
+            .cross-nav-links {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body onload="trackTradePageView()">
+    <!-- Navigation -->
+    <nav>
+        <ul>
+            <li><a href="/">SALADO VILLAGE FRAMER</a></li>
+            <li class="nav-right">
+                <a href="/services">SERVICES</a>
+                <a href="/gallery">GALLERY</a>
+                <a href="/visit">VISIT</a>
+                <a href="/contact">CONTACT</a>
+                <a href="/trade" class="active">TRADE</a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>SALADO VILLAGE FRAMER</h1>
+        <p class="subtitle">TRADE COLLECTIVE</p>
+        <p class="tagline">Where Craft Meets Design</p>
+        <p class="descriptor">A Custom Framing Partnership for Interior Design Professionals</p>
+        <a href="#apply" class="cta-button" onclick="trackFormStart()">Apply for Membership</a>
+    </section>
+
+    <!-- About Section -->
+    <section class="about">
+        <h2>About the Partnership</h2>
+        <div class="about-content">
+            <p>
+                For years, Salado Village Framer has been Central Texas's trusted source for custom framing, conservation, and curated décor. The Trade Collective extends this craft to the interior design community. From museum-quality framing to shadow boxes, conservation mounting to decorative mirrors — we serve as your dedicated framing partner from concept through installation.
+            </p>
+            <p>
+                As a design professional, you understand the impact of thoughtful materials and precise execution. Our workshop team brings decades of experience to every project, offering guidance at every stage — from initial concept sketches through final installation. We work at your pace, respecting your vision and timeline.
+            </p>
+        </div>
+
+        <div class="callout">
+            <h3>Sister Business Partnership</h3>
+            <p>As a sister business to Solas Gallery, Trade Collective membership extends across both businesses — giving you access to fine art, custom commissions, large-format printing, and museum-quality framing under one partnership. This dual access strengthens your ability to serve your clients with comprehensive design solutions.</p>
+        </div>
+    </section>
+
+    <!-- Services Grid -->
+    <section class="services">
+        <h2>Our Services</h2>
+        <div class="services-grid">
+            <div class="service-card">
+                <h3>Custom Framing</h3>
+                <p>Museum-quality materials, hundreds of moulding profiles, and endless design possibilities. We work with artwork, textiles, prints, and more.</p>
+            </div>
+            <div class="service-card">
+                <h3>Conservation & Archival</h3>
+                <p>Acid-free mounting, UV glass, and heirloom preservation techniques. Your clients' treasured pieces deserve expert care.</p>
+            </div>
+            <div class="service-card">
+                <h3>Shadow Boxes & Specialty</h3>
+                <p>Jerseys, memorabilia, dimensional objects, and bespoke solutions. We frame what matters most.</p>
+            </div>
+            <div class="service-card">
+                <h3>Decorative Mirrors</h3>
+                <p>Custom and curated mirror framing solutions that enhance any interior. From statement pieces to coordinated sets.</p>
+            </div>
+            <div class="service-card">
+                <h3>Commercial & Volume Framing</h3>
+                <p>Multi-piece projects for offices, hotels, restaurants, and hospitality spaces. Consistency, quality, and timeline reliability.</p>
+            </div>
+            <div class="service-card">
+                <h3>Design Consultation</h3>
+                <p>On-site visits, material selection, and collaborative project planning. We integrate seamlessly into your design process.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Partnership Tiers -->
+    <section class="partnership">
+        <h2>Partnership Tiers</h2>
+        <div class="tiers">
+            <div class="tier">
+                <h3>Associate</h3>
+                <span class="tier-label">Entry Level</span>
+                <ul>
+                    <li>15% trade consideration on all framing</li>
+                    <li>Portfolio consultation access</li>
+                    <li>Quarterly previews of new mouldings & materials</li>
+                    <li>Standard scheduling</li>
+                </ul>
+            </div>
+            <div class="tier">
+                <h3>Preferred</h3>
+                <span class="tier-label">Established</span>
+                <ul>
+                    <li>20% trade consideration on all framing</li>
+                    <li>Priority scheduling & expedited turnaround</li>
+                    <li>Dedicated liaison for consistent communication</li>
+                    <li>Exclusive materials preview access</li>
+                </ul>
+            </div>
+            <div class="tier">
+                <h3>Atelier</h3>
+                <span class="tier-label">Premium</span>
+                <ul>
+                    <li>25% trade consideration on all framing</li>
+                    <li>Volume project rates & custom pricing</li>
+                    <li>Co-branded opportunities & collaboration</li>
+                    <li>Direct workshop access & design partnership</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works">
+        <h2>How It Works</h2>
+        <div class="steps">
+            <div class="step">
+                <div class="step-number">1</div>
+                <h3>Apply</h3>
+                <p>Submit your application with details about your practice, design focus, and project volume. Tell us about your clients and the kinds of framing partnerships you're seeking.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <h3>Tour</h3>
+                <p>Visit our workshop at 2 Rock Creek Drive to explore our capabilities in person. Meet our team, see our moulding collection, and discuss your specific needs and preferences.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <h3>Create</h3>
+                <p>Begin your first project together. We'll work closely with you from design concept through installation, establishing the foundation for a lasting partnership.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Application Form -->
+    <section class="form-section" id="apply">
+        <h2>Apply for Membership</h2>
+        <div class="form-wrapper">
+            <form id="tradeForm">
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="firm">Design Firm / Studio Name</label>
+                    <input type="text" id="firm" name="firm" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" name="phone">
+                </div>
+                <div class="form-group">
+                    <label for="website">Website</label>
+                    <input type="url" id="website" name="website">
+                </div>
+                <div class="form-group">
+                    <label for="focus">Primary Design Focus</label>
+                    <select id="focus" name="focus" required>
+                        <option value="">Select your primary focus</option>
+                        <option value="residential">Residential Interior Design</option>
+                        <option value="commercial">Commercial Design</option>
+                        <option value="hospitality">Hospitality & Leisure</option>
+                        <option value="architecture">Architecture</option>
+                        <option value="corporate">Corporate Design</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="message">Tell us about your practice</label>
+                    <textarea id="message" name="message" placeholder="Share information about your studio, your clients, and what you're looking for in a framing partner."></textarea>
+                </div>
+                <button type="submit" class="form-submit">Submit Application</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Cross-Navigation -->
+    <section class="cross-nav">
+        <h3>Explore More</h3>
+        <div class="cross-nav-links">
+            <a href="/trade/faq">Trade FAQ</a>
+            <a href="/trade/events">Events & Workshops</a>
+            <a href="#apply">Application Portal</a>
+        </div>
+        <div class="sister-business">
+            <p>Also part of the Solas Gallery Trade Collective. Access both businesses under one partnership. <a href="https://solasgallery.com/trade">Explore Solas Gallery Trade Collective</a></p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Contact</h4>
+                <p><strong>Salado Village Framer</strong></p>
+                <p>2 Rock Creek Dr Unit A<br>Salado, TX 76571</p>
+                <p><a href="tel:254-613-6123">(254) 613-6123</a><br><a href="mailto:trade@saladovillageframer.com">trade@saladovillageframer.com</a></p>
+            </div>
+            <div class="footer-section">
+                <h4>Partnership</h4>
+                <p>In partnership with <strong>Solas Gallery</strong> & <strong>Village Lamplighter</strong></p>
+                <p>Celebrating years of craft on Main Street, Salado</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <p><a href="/">Home</a><br><a href="/services">Services</a><br><a href="/gallery">Gallery</a><br><a href="/visit">Visit Us</a><br><a href="/contact">Contact</a></p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Salado Village Framer. All rights reserved.</p>
+        </div>
+    </footer>
+    <!-- Brevo submission (list 43 = Trade Collective Prospects) -->
+    <script>
+    (function(){
+      var form=document.getElementById('tradeForm');
+      if(!form) return;
+      form.addEventListener('submit',async function(e){
+        e.preventDefault();
+        var d=new FormData(form),o={};
+        d.forEach(function(v,k){o[k]=v;});
+        var name=o.name||o.fullName||'';
+        var firm=o.company||o.firmName||'';
+        var extras=Object.keys(o).filter(function(k){return ['name','fullName','email','phone','company','firmName'].indexOf(k)<0;})
+          .map(function(k){return k+': '+o[k];}).join('\n');
+        var message=(firm?'Firm: '+firm+'\n':'')+extras;
+        try{
+          await fetch('/api/inquiry',{method:'POST',headers:{'content-type':'application/json'},
+            body:JSON.stringify({name:name,email:o.email||'',phone:o.phone||'',message:message,source:'Trade — SVF',listId:43})});
+          form.innerHTML='<p style="padding:2rem;text-align:center;font-size:1.1rem;">Thank you — your application has been received. We’ll be in touch shortly.</p>';
+        }catch(err){ alert('Something went wrong. Please email trade@saladovillageframer.com.'); }
+      });
+    })();
+    </script>
+</body>
+</html>

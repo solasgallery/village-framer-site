@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trade Collective FAQ | Salado Village Framer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Lora:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Lora', serif;
+            background-color: #F5F0DC;
+            color: #3A3A3A;
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        nav {
+            background-color: #3A3A3A;
+            padding: 1rem 2rem;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-brand {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.9rem;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            color: #F5F0DC;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            font-size: 0.85rem;
+            letter-spacing: 0.08em;
+            text-decoration: none;
+            color: #F5F0DC;
+            transition: color 0.3s ease;
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            color: #5FBFB3;
+        }
+
+        .nav-links a.active {
+            color: #5FBFB3;
+        }
+
+        /* Main Content */
+        main {
+            margin-top: 60px;
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            padding: 1.5rem 2rem;
+            font-size: 0.95rem;
+            background-color: #F5F0DC;
+        }
+
+        .breadcrumb a {
+            color: #5FBFB3;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .breadcrumb a:hover {
+            color: #8B8848;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 50vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+            background-color: #F5F0DC;
+        }
+
+        .hero h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            color: #3A3A3A;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-family: 'Lora', serif;
+            font-size: 1.3rem;
+            color: #8B8848;
+            font-weight: 500;
+        }
+
+        /* Content Section */
+        .faq-container {
+            max-width: 800px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+        }
+
+        /* Accordion */
+        .accordion {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .accordion-item {
+            border: 2px solid transparent;
+            border-radius: 4px;
+            overflow: hidden;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .accordion-item:hover {
+            border-color: #5FBFB3;
+            box-shadow: 0 4px 12px rgba(95, 191, 179, 0.1);
+        }
+
+        .accordion-header {
+            background-color: #F5F0DC;
+            padding: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: #3A3A3A;
+            transition: background-color 0.3s ease;
+        }
+
+        .accordion-header:hover {
+            background-color: #F0EAD0;
+        }
+
+        .accordion-toggle {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            color: #5FBFB3;
+            transition: transform 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .accordion-item.active .accordion-toggle {
+            transform: rotate(45deg);
+        }
+
+        .accordion-content {
+            background-color: #FFFFFF;
+            padding: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+        }
+
+        .accordion-item.active .accordion-content {
+            max-height: 1000px;
+            padding: 1.5rem;
+        }
+
+        .accordion-answer {
+            font-size: 1rem;
+            line-height: 1.7;
+            color: #3A3A3A;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background-color: #F2E879;
+            padding: 3rem 2rem;
+            text-align: center;
+            margin: 4rem 0;
+        }
+
+        .cta-section h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            letter-spacing: 0.12em;
+            color: #3A3A3A;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+        }
+
+        .cta-button {
+            background-color: #5FBFB3;
+            color: #F5F0DC;
+            padding: 1rem 2.5rem;
+            font-size: 1rem;
+            font-family: 'Cormorant Garamond', serif;
+            letter-spacing: 0.08em;
+            text-decoration: none;
+            display: inline-block;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            font-weight: 600;
+        }
+
+        .cta-button:hover {
+            background-color: #4A9E98;
+            transform: translateY(-2px);
+        }
+
+        /* Footer */
+        footer {
+            background-color: #3A3A3A;
+            color: #F5F0DC;
+            padding: 3rem 2rem;
+            text-align: center;
+            font-size: 0.95rem;
+            line-height: 1.8;
+        }
+
+        .footer-nap {
+            margin-bottom: 1rem;
+        }
+
+        .footer-nap p {
+            margin: 0.5rem 0;
+        }
+
+        .footer-nap a {
+            color: #5FBFB3;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-nap a:hover {
+            color: #F2E879;
+        }
+
+        .footer-partnership {
+            margin-top: 1.5rem;
+            font-style: italic;
+            color: #B0ABA0;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                gap: 1rem;
+                font-size: 0.75rem;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .accordion-header {
+                padding: 1.25rem;
+                font-size: 0.95rem;
+            }
+
+            .faq-container {
+                padding: 0 1rem;
+            }
+
+            .cta-section h2 {
+                font-size: 1.5rem;
+            }
+
+            footer {
+                padding: 2rem 1rem;
+                font-size: 0.85rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            nav {
+                padding: 0.75rem 1rem;
+            }
+
+            .nav-brand {
+                font-size: 0.8rem;
+            }
+
+            .nav-links {
+                gap: 0.5rem;
+            }
+
+            .nav-links a {
+                font-size: 0.7rem;
+            }
+
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+
+            .hero p {
+                font-size: 0.95rem;
+            }
+
+            .accordion-header {
+                padding: 1rem;
+                font-size: 0.9rem;
+            }
+
+            .accordion-toggle {
+                width: 20px;
+                height: 20px;
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-brand">SALADO VILLAGE FRAMER</div>
+        <ul class="nav-links">
+            <li><a href="/">SERVICES</a></li>
+            <li><a href="/">GALLERY</a></li>
+            <li><a href="/">VISIT</a></li>
+            <li><a href="/">CONTACT</a></li>
+            <li><a href="/trade" class="active">TRADE</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <!-- Breadcrumb -->
+        <div class="breadcrumb">
+            <a href="/trade">← Back to Trade Collective</a>
+        </div>
+
+        <!-- Hero Section -->
+        <section class="hero">
+            <h1>Frequently Asked Questions</h1>
+            <p>Everything you need to know about the Trade Collective</p>
+        </section>
+
+        <!-- FAQ Content -->
+        <div class="faq-container">
+            <div class="accordion">
+                <!-- FAQ Item 1 -->
+                <div class="accordion-item">
+                    <button class="accordion-header" onclick="toggleAccordion(this)">
+                        <span>Who qualifies for the Trade Collective?</span>
+                        <span class="accordion-toggle">+</span>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="accordion-answer">
+                            Licensed interior designers, registered architects, and accredited design professionals with an active practice. Professional credentials strengthen applications, though the program is not limited to ASID members.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 2 -->
+                <div class="accordion-item">
+                    <button class="accordion-header" onclick="toggleAccordion(this)">
+                        <span>What are the membership tiers?</span>
+                        <span class="accordion-toggle">+</span>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="accordion-answer">
+                            Associate, Preferred, and Atelier — each with increasing trade considerations on framing, priority scheduling, and co-marketing benefits. New members start at Associate and advance based on project volume.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 3 -->
+                <div class="accordion-item">
+                    <button class="accordion-header" onclick="toggleAccordion(this)">
+                        <span>Is there a cost to join?</span>
+                        <span class="accordion-toggle">+</span>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="accordion-answer">
+                            No membership fee. The Trade Collective is a partnership, not a subscription. Your investment is in the framing and décor you source for your clients.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 4 -->
+                <div class="accordion-item">
+                    <button class="accordion-header" onclick="toggleAccordion(this)">
+                        <span>What trade considerations are available?</span>
+                        <span class="accordion-toggle">+</span>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="accordion-answer">
+                            15% to 25% on custom framing, conservation services, mirrors, and décor. Additional considerations on volume and commercial projects. Rates correspond to your partnership tier.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 5 -->
+                <div class="accordion-item">
+                    <button class="accordion-header" onclick="toggleAccordion(this)">
+                        <span>Does membership include Solas Gallery?</span>
+                        <span class="accordion-toggle">+</span>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="accordion-answer">
+                            Yes. Salado Village Framer and Solas Gallery are sister businesses. Your Trade Collective membership extends to both — giving you access to fine art, custom commissions, large-format printing, and museum-quality framing under one partnership.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 6 -->
+                <div class="accordion-item">
+                    <button class="accordion-header" onclick="toggleAccordion(this)">
+                        <span>How does the application process work?</span>
+                        <span class="accordion-toggle">+</span>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="accordion-answer">
+                            Submit your application online or via our printable form. We review applications within 48–72 hours. Once approved, we schedule an introductory visit to our workshop so you can see our capabilities firsthand.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 7 -->
+                <div class="accordion-item">
+                    <button class="accordion-header" onclick="toggleAccordion(this)">
+                        <span>Can I bring my clients to the shop?</span>
+                        <span class="accordion-toggle">+</span>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="accordion-answer">
+                            Absolutely. We welcome client consultations. We can prepare material samples, moulding options, and project mockups to help your clients visualize the finished piece.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 8 -->
+                <div class="accordion-item">
+                    <button class="accordion-header" onclick="toggleAccordion(this)">
+                        <span>Do you handle commercial and volume projects?</span>
+                        <span class="accordion-toggle">+</span>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="accordion-answer">
+                            Yes. We regularly handle multi-piece projects for offices, hotels, restaurants, and model homes. Volume considerations are available for qualifying orders.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 9 -->
+                <div class="accordion-item">
+                    <button class="accordion-header" onclick="toggleAccordion(this)">
+                        <span>What about conservation and archival framing?</span>
+                        <span class="accordion-toggle">+</span>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="accordion-answer">
+                            We specialize in museum-quality conservation framing using acid-free materials, UV-protective glazing, and archival mounting techniques. Ideal for heirlooms, fine art, and valuable documents.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 10 -->
+                <div class="accordion-item">
+                    <button class="accordion-header" onclick="toggleAccordion(this)">
+                        <span>What geographic area do you serve?</span>
+                        <span class="accordion-toggle">+</span>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="accordion-answer">
+                            We serve designers throughout Central Texas — Austin, Round Rock, Georgetown, Temple, Killeen, Waco, and the Hill Country — with shipping available for completed work.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CTA Section -->
+        <section class="cta-section">
+            <h2>Ready to Begin?</h2>
+            <a href="/trade/apply" class="cta-button">Apply Now</a>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-nap">
+            <p><strong>Salado Village Framer</strong></p>
+            <p>2 Rock Creek Dr Unit A, Salado, TX 76571</p>
+            <p><a href="tel:2546136123">(254) 613-6123</a></p>
+            <p><a href="mailto:trade@saladovillageframer.com">trade@saladovillageframer.com</a></p>
+        </div>
+        <div class="footer-partnership">
+            In partnership with Solas Gallery
+        </div>
+    </footer>
+
+    <!-- Google Analytics 4 Placeholder -->
+    <script>
+        // GA4 tracking placeholder
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('event', 'trade_faq_view', {
+            'page_title': 'Trade Collective - FAQ',
+            'page_path': '/trade/faq'
+        });
+
+        // Accordion Toggle Function
+        function toggleAccordion(header) {
+            const item = header.parentElement;
+            item.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>

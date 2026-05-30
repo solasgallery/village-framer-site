@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trade Collective Events | Salado Village Framer</title>
+    <meta name="description" content="Workshops, previews, and gatherings for our design partners at Trade Collective.">
+
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Lora:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+        }
+
+        body {
+            font-family: 'Lora', serif;
+            background-color: #F5F0DC;
+            color: #3A3A3A;
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background-color: #3A3A3A;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-brand {
+            color: #F5F0DC;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: #F5F0DC;
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #5FBFB3;
+        }
+
+        .nav-links a.active {
+            color: #5FBFB3;
+            border-bottom: 2px solid #5FBFB3;
+            padding-bottom: 0.25rem;
+        }
+
+        /* Main content offset for fixed nav */
+        main {
+            margin-top: 70px;
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            padding: 1.5rem 2rem;
+            background-color: #F5F0DC;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .breadcrumb a {
+            color: #5FBFB3;
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+        }
+
+        .breadcrumb a:hover {
+            color: #8B8848;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 4rem 2rem;
+            text-align: center;
+            background: linear-gradient(135deg, #F5F0DC 0%, #f9f7f0 100%);
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: #3A3A3A;
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.02em;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: #8B8848;
+            max-width: 600px;
+            margin: 0 auto;
+            font-weight: 500;
+        }
+
+        /* Events Grid */
+        .events-section {
+            max-width: 1200px;
+            margin: 4rem auto;
+            padding: 0 2rem;
+        }
+
+        .events-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        /* Event Card */
+        .event-card {
+            background-color: white;
+            border: 2px solid #3A3A3A;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .event-card:hover {
+            border-color: #5FBFB3;
+            box-shadow: 0 8px 24px rgba(95, 191, 179, 0.15);
+        }
+
+        .event-card h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            color: #3A3A3A;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .event-date {
+            color: #5FBFB3;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+        }
+
+        .event-card p {
+            font-size: 0.95rem;
+            color: #555;
+            margin-bottom: 1rem;
+            flex-grow: 1;
+        }
+
+        .event-location {
+            color: #8B8848;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+
+        .event-location::before {
+            content: "📍";
+            flex-shrink: 0;
+        }
+
+        .rsvp-button {
+            background-color: #5FBFB3;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            font-family: 'Lora', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .rsvp-button:hover {
+            background-color: #4a9f94;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(95, 191, 179, 0.3);
+        }
+
+        /* Workshop Section */
+        .workshop-section {
+            background-color: white;
+            border: 2px solid #8B8848;
+            padding: 3rem 2rem;
+            max-width: 1200px;
+            margin: 3rem auto;
+            text-align: center;
+        }
+
+        .workshop-section h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            color: #3A3A3A;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .workshop-section p {
+            color: #555;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        /* Membership CTA */
+        .membership-cta {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 2rem;
+            background: linear-gradient(135deg, #F2E879 0%, #f9f7f0 100%);
+            border: 2px solid #F2E879;
+            text-align: center;
+        }
+
+        .membership-cta h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            color: #3A3A3A;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .membership-cta p {
+            color: #555;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        .apply-button {
+            background-color: #8B8848;
+            color: white;
+            border: none;
+            padding: 0.85rem 2rem;
+            font-family: 'Lora', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .apply-button:hover {
+            background-color: #6d6a38;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(139, 136, 72, 0.3);
+        }
+
+        /* Sister Events Section */
+        .sister-events {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 2rem;
+            background-color: white;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        .sister-events p {
+            color: #555;
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+        }
+
+        .sister-events a {
+            color: #5FBFB3;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .sister-events a:hover {
+            color: #3a8a7e;
+            text-decoration: underline;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #3A3A3A;
+            color: #F5F0DC;
+            padding: 3rem 2rem;
+            margin-top: 4rem;
+        }
+
+        footer h4 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        footer p {
+            font-size: 0.9rem;
+            line-height: 1.8;
+            margin-bottom: 0.5rem;
+        }
+
+        footer a {
+            color: #5FBFB3;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        footer a:hover {
+            color: #F5F0DC;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-section {
+            flex: 1;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #555;
+            font-size: 0.85rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                gap: 1rem;
+                justify-content: center;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .events-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .breadcrumb {
+                padding: 1rem;
+            }
+
+            main {
+                margin-top: 120px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nav-brand {
+                font-size: 1.2rem;
+            }
+
+            .nav-links {
+                gap: 0.75rem;
+                font-size: 0.85rem;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 0.9rem;
+            }
+
+            .hero {
+                padding: 2rem 1rem;
+            }
+
+            .events-section {
+                padding: 0 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-brand">SALADO VILLAGE FRAMER</div>
+        <ul class="nav-links">
+            <li><a href="#services">SERVICES</a></li>
+            <li><a href="#gallery">GALLERY</a></li>
+            <li><a href="#visit">VISIT</a></li>
+            <li><a href="#contact">CONTACT</a></li>
+            <li><a href="/trade" class="active">TRADE</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <!-- Breadcrumb -->
+        <div class="breadcrumb">
+            <a href="/trade">← Back to Trade Collective</a>
+        </div>
+
+        <!-- Hero Section -->
+        <section class="hero">
+            <h1>TRADE COLLECTIVE EVENTS</h1>
+            <p>Workshops, previews, and gatherings for our design partners</p>
+        </section>
+
+        <!-- Events Section -->
+        <section class="events-section">
+            <div class="events-grid">
+                <!-- Event 1 -->
+                <article class="event-card">
+                    <h3>Trade Collective Launch Reception</h3>
+                    <div class="event-date">Summer 2026 (Date TBA)</div>
+                    <p>An evening at Salado Village Framer to inaugurate the Trade Collective. Wine, a tour of our workshop, and a showcase of framing capabilities. Open to approved members and invited design professionals.</p>
+                    <div class="event-location">Salado Village Framer, 2 Rock Creek Dr Unit A, Salado</div>
+                    <a href="#" class="rsvp-button">RSVP</a>
+                </article>
+
+                <!-- Event 2 -->
+                <article class="event-card">
+                    <h3>Framing Materials Workshop</h3>
+                    <div class="event-date">Quarterly (Next: Summer 2026)</div>
+                    <p>A hands-on workshop exploring moulding profiles, glazing options, conservation techniques, and material selection for design projects. See and touch the materials before specifying for your clients.</p>
+                    <div class="event-location">Salado Village Framer</div>
+                    <a href="#" class="rsvp-button">RSVP</a>
+                </article>
+
+                <!-- Event 3 -->
+                <article class="event-card">
+                    <h3>New Mouldings Preview</h3>
+                    <div class="event-date">Quarterly</div>
+                    <p>Trade partners receive first access to new moulding collections and décor arrivals. Review materials in person, discuss project-specific selections, and reserve samples for client presentations.</p>
+                    <div class="event-location">Salado Village Framer</div>
+                    <a href="#" class="rsvp-button">RSVP</a>
+                </article>
+
+                <!-- Event 4 -->
+                <article class="event-card">
+                    <h3>Design + Art Roundtable (Joint with Solas Gallery)</h3>
+                    <div class="event-date">Quarterly</div>
+                    <p>An informal morning gathering for trade partners from both Salado Village Framer and Solas Gallery — coffee, conversation, and collaboration across art and framing.</p>
+                    <div class="event-location">Solas Gallery, 2 Rock Creek Dr, Salado</div>
+                    <a href="#" class="rsvp-button">RSVP</a>
+                </article>
+            </div>
+        </section>
+
+        <!-- Workshop Section -->
+        <section class="workshop-section">
+            <h2>Interested in hosting a client workshop?</h2>
+            <p>Preferred and Atelier members have access to our workshop space for private client events, consultations, and team gatherings. Let's collaborate on bringing your vision to life.</p>
+        </section>
+
+        <!-- Membership CTA -->
+        <section class="membership-cta">
+            <h2>Not Yet a Member?</h2>
+            <p>Join Trade Collective to access exclusive events, materials, and professional development opportunities.</p>
+            <a href="/trade/apply" class="apply-button">Apply for Membership</a>
+        </section>
+
+        <!-- Sister Events -->
+        <section class="sister-events">
+            <p><strong>Trade Collective members also have access to events at Solas Gallery.</strong> Explore our sister venue's curated programming and art-focused gatherings at <a href="https://solasgallery.com/trade/events">solasgallery.com/trade/events</a>.</p>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>SALADO VILLAGE FRAMER</h4>
+                <p>2 Rock Creek Dr Unit A<br>Salado, TX 76571</p>
+            </div>
+            <div class="footer-section">
+                <h4>CONTACT</h4>
+                <p>Phone: <a href="tel:(254)613-6123">(254) 613-6123</a></p>
+                <p>Email: <a href="mailto:trade@saladovillageframer.com">trade@saladovillageframer.com</a></p>
+            </div>
+            <div class="footer-section">
+                <h4>HOURS</h4>
+                <p>Tuesday - Saturday<br>10 AM - 5 PM<br>Sunday & Monday: Closed</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Salado Village Framer. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- GA4 Tracking Placeholder -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'GA_MEASUREMENT_ID', {
+            'page_path': '/trade/events'
+        });
+    </script>
+</body>
+</html>

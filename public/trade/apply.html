@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trade Collective Application - Salado Village Framer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Lora:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- Google Analytics 4 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'GA_MEASUREMENT_ID');
+    </script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --cream: #F5F0DC;
+            --charcoal: #3A3A3A;
+            --olive: #8B8848;
+            --teal: #5FBFB3;
+            --soft-yellow: #F2E879;
+        }
+
+        html, body {
+            height: 100%;
+        }
+
+        body {
+            font-family: 'Lora', serif;
+            background-color: var(--cream);
+            color: var(--charcoal);
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: var(--charcoal);
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 600;
+            font-size: 1.1rem;
+            letter-spacing: 0.1em;
+            color: var(--cream);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .nav-logo:hover {
+            color: var(--teal);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2.5rem;
+        }
+
+        .nav-links a {
+            font-family: 'Lora', serif;
+            font-size: 0.95rem;
+            color: var(--cream);
+            text-decoration: none;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--teal);
+        }
+
+        .nav-links a.active {
+            color: var(--teal);
+        }
+
+        .nav-links a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--teal);
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                gap: 1.5rem;
+                padding: 1rem;
+            }
+
+            .nav-links {
+                gap: 1.5rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Main Content */
+        main {
+            margin-top: 80px;
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            padding: 2rem 2rem 0;
+            font-size: 0.95rem;
+            background-color: var(--cream);
+        }
+
+        .breadcrumb a {
+            color: var(--teal);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .breadcrumb a:hover {
+            color: var(--olive);
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 40vh;
+            background: linear-gradient(135deg, var(--cream) 0%, rgba(95, 191, 179, 0.05) 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .hero h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 600;
+            font-size: clamp(2.5rem, 8vw, 4.5rem);
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--charcoal);
+            margin-bottom: 0.5rem;
+        }
+
+        .hero .subtitle {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 600;
+            font-size: clamp(1.25rem, 4vw, 1.75rem);
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--olive);
+            margin-bottom: 1.5rem;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            color: var(--charcoal);
+            max-width: 600px;
+            line-height: 1.7;
+        }
+
+        /* Membership Note */
+        .membership-note {
+            background-color: rgba(139, 136, 72, 0.08);
+            border-left: 4px solid var(--olive);
+            padding: 1.5rem 2rem;
+            margin: 3rem 2rem;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .membership-note p {
+            font-size: 0.95rem;
+            color: var(--charcoal);
+            line-height: 1.7;
+        }
+
+        /* Form Section */
+        .form-section {
+            max-width: 900px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+        }
+
+        .form-section h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 600;
+            font-size: 1.75rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--charcoal);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        form {
+            background-color: white;
+            padding: 2.5rem;
+            border-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .form-group {
+            margin-bottom: 1.75rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: var(--charcoal);
+            font-size: 0.95rem;
+        }
+
+        .form-group label .required {
+            color: var(--teal);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .form-row.full {
+            grid-template-columns: 1fr;
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="url"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: 'Lora', serif;
+            font-size: 0.95rem;
+            color: var(--charcoal);
+            background-color: #fafafa;
+            transition: border-color 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="tel"]:focus,
+        input[type="url"]:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--teal);
+            background-color: white;
+            box-shadow: 0 0 0 3px rgba(95, 191, 179, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        /* Address Grid */
+        .address-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .address-grid.second-row {
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+
+        @media (max-width: 768px) {
+            .address-grid,
+            .address-grid.second-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .address-grid input {
+            width: 100%;
+        }
+
+        /* Checkboxes */
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-top: 0.75rem;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            margin-right: 0.75rem;
+            cursor: pointer;
+            accent-color: var(--teal);
+        }
+
+        .checkbox-item label {
+            margin: 0;
+            cursor: pointer;
+            font-weight: normal;
+        }
+
+        /* Select */
+        select {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            background-size: 1.2em;
+            padding-right: 2.5rem;
+        }
+
+        /* Submit Button */
+        .form-actions {
+            display: flex;
+            justify-content: center;
+            margin-top: 2.5rem;
+            padding-top: 2rem;
+            border-top: 1px solid #eee;
+        }
+
+        button[type="submit"] {
+            background-color: var(--charcoal);
+            color: var(--cream);
+            border: none;
+            padding: 1rem 3rem;
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 600;
+            font-size: 1.1rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        button[type="submit"]:hover {
+            background-color: var(--olive);
+            box-shadow: 0 4px 12px rgba(139, 136, 72, 0.2);
+        }
+
+        button[type="submit"]:active {
+            transform: translateY(1px);
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--charcoal);
+            color: var(--cream);
+            padding: 3rem 2rem;
+            margin-top: 4rem;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .footer-nap {
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+            line-height: 1.8;
+        }
+
+        .footer-nap p {
+            margin: 0.25rem 0;
+        }
+
+        .footer-partnership {
+            font-style: italic;
+            color: var(--soft-yellow);
+            margin-top: 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        /* Success Message */
+        .success-message {
+            display: none;
+            background-color: rgba(95, 191, 179, 0.1);
+            border-left: 4px solid var(--teal);
+            padding: 1.5rem 2rem;
+            margin: 2rem auto;
+            max-width: 900px;
+            border-radius: 0 4px 4px 0;
+            text-align: center;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            form {
+                padding: 1.5rem;
+            }
+
+            button[type="submit"] {
+                padding: 0.85rem 2rem;
+                font-size: 1rem;
+            }
+
+            .membership-note {
+                margin: 2rem 1rem;
+            }
+
+            footer {
+                padding: 2rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <a href="/" class="nav-logo">Salado Village Framer</a>
+        <ul class="nav-links">
+            <li><a href="/services">Services</a></li>
+            <li><a href="/gallery">Gallery</a></li>
+            <li><a href="/visit">Visit</a></li>
+            <li><a href="/contact">Contact</a></li>
+            <li><a href="/trade" class="active">Trade</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Breadcrumb -->
+        <div class="breadcrumb">
+            <a href="/trade">← Back to Trade Collective</a>
+        </div>
+
+        <!-- Hero Section -->
+        <section class="hero">
+            <h1>Application</h1>
+            <div class="subtitle">Trade Collective</div>
+            <p>Begin your partnership with Salado Village Framer</p>
+        </section>
+
+        <!-- Membership Note -->
+        <div class="membership-note">
+            <p><strong>Partnership Benefit:</strong> Membership in the Trade Collective extends to our sister business, Solas Gallery, giving you access to fine art, custom commissions, and large-format printing.</p>
+        </div>
+
+        <!-- Form Section -->
+        <section class="form-section">
+            <h2>Trade Collective Application</h2>
+
+            <form id="tradeForm">
+                <!-- Full Name & Firm Name -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="fullName">Full Name <span class="required">*</span></label>
+                        <input type="text" id="fullName" name="fullName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="firmName">Firm / Studio Name <span class="required">*</span></label>
+                        <input type="text" id="firmName" name="firmName" required>
+                    </div>
+                </div>
+
+                <!-- Email & Phone -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="email">Email <span class="required">*</span></label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone</label>
+                        <input type="tel" id="phone" name="phone">
+                    </div>
+                </div>
+
+                <!-- Website & Portfolio -->
+                <div class="form-row full">
+                    <div class="form-group">
+                        <label for="website">Website / Portfolio URL</label>
+                        <input type="url" id="website" name="website" placeholder="https://example.com">
+                    </div>
+                </div>
+
+                <!-- Mailing Address -->
+                <div class="form-group">
+                    <label>Mailing Address <span class="required">*</span></label>
+                </div>
+
+                <div class="form-group">
+                    <div class="address-grid">
+                        <input type="text" name="street" placeholder="Street Address" required>
+                        <input type="text" name="city" placeholder="City" required>
+                        <input type="text" name="state" placeholder="State" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="address-grid second-row">
+                        <input type="text" name="zip" placeholder="ZIP Code" required>
+                        <input type="text" name="country" placeholder="Country" value="USA">
+                    </div>
+                </div>
+
+                <!-- Professional Credentials -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="asidMembership">ASID / Professional Membership</label>
+                        <input type="text" id="asidMembership" name="asidMembership">
+                    </div>
+                    <div class="form-group">
+                        <label for="resaleCert">Texas Resale Certificate Number</label>
+                        <input type="text" id="resaleCert" name="resaleCert">
+                    </div>
+                </div>
+
+                <!-- Years in Practice -->
+                <div class="form-group">
+                    <label for="yearsInPractice">Years in Practice <span class="required">*</span></label>
+                    <select id="yearsInPractice" name="yearsInPractice" required>
+                        <option value="">Select one...</option>
+                        <option value="1-3">1 to 3 Years</option>
+                        <option value="4-10">4 to 10 Years</option>
+                        <option value="11-20">11 to 20 Years</option>
+                        <option value="20+">20+ Years</option>
+                    </select>
+                </div>
+
+                <!-- Primary Specialization -->
+                <div class="form-group">
+                    <label for="specialization">Primary Specialization <span class="required">*</span></label>
+                    <select id="specialization" name="specialization" required>
+                        <option value="">Select one...</option>
+                        <option value="residential">Residential</option>
+                        <option value="commercial">Commercial</option>
+                        <option value="hospitality">Hospitality</option>
+                        <option value="mixed">Mixed Practice</option>
+                        <option value="staging">Staging</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+
+                <!-- Project Budget Range -->
+                <div class="form-group">
+                    <label for="budgetRange">Typical Project Budget Range <span class="required">*</span></label>
+                    <select id="budgetRange" name="budgetRange" required>
+                        <option value="">Select one...</option>
+                        <option value="under-5k">Under $5,000</option>
+                        <option value="5k-25k">$5,000–$25,000</option>
+                        <option value="25k-100k">$25,000–$100,000</option>
+                        <option value="100k+">$100,000+</option>
+                    </select>
+                </div>
+
+                <!-- Services of Interest -->
+                <div class="form-group">
+                    <label>Services of Interest</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="customFraming" name="services" value="Custom Framing">
+                            <label for="customFraming">Custom Framing</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="conservation" name="services" value="Conservation/Archival">
+                            <label for="conservation">Conservation / Archival</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="shadowBoxes" name="services" value="Shadow Boxes">
+                            <label for="shadowBoxes">Shadow Boxes</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="commercial" name="services" value="Commercial/Volume Framing">
+                            <label for="commercial">Commercial / Volume Framing</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="mirrorsDecor" name="services" value="Mirrors & Décor">
+                            <label for="mirrorsDecor">Mirrors & Décor</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="consultation" name="services" value="Design Consultation">
+                            <label for="consultation">Design Consultation</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- How did you hear about us -->
+                <div class="form-group">
+                    <label for="howHeard">How did you hear about us?</label>
+                    <textarea id="howHeard" name="howHeard" placeholder="Tell us how you learned about the Trade Collective..."></textarea>
+                </div>
+
+                <!-- Practice Description -->
+                <div class="form-group">
+                    <label for="practiceDescription">Brief Description of Your Practice and Goals <span class="required">*</span></label>
+                    <textarea id="practiceDescription" name="practiceDescription" placeholder="Share a bit about your practice, your design philosophy, and what you hope to gain from membership..." required></textarea>
+                </div>
+
+                <!-- Form Actions -->
+                <div class="form-actions">
+                    <button type="submit">Submit Application</button>
+                </div>
+
+                <!-- Success Message (hidden until form submits) -->
+                <div class="success-message" id="successMessage">
+                    <p><strong>Thank you for applying!</strong> We've received your application and will be in touch within 3–5 business days.</p>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-nap">
+                <p><strong>Salado Village Framer</strong></p>
+                <p>2 Rock Creek Dr Unit A</p>
+                <p>Salado, TX 76571</p>
+                <p>(254) 613-6123</p>
+                <p><a href="mailto:trade@saladovillageframer.com" style="color: var(--cream); text-decoration: none;">trade@saladovillageframer.com</a></p>
+            </div>
+            <p class="footer-partnership">In partnership with Solas Gallery</p>
+        </div>
+    </footer>
+
+    <script>
+        // Handle form submission feedback
+        document.getElementById('tradeForm').addEventListener('submit', function(e) {
+            // Formspree will handle the actual submission
+            // This provides visual feedback
+            setTimeout(function() {
+                document.getElementById('successMessage').classList.add('show');
+                window.scrollTo({ top: document.querySelector('.form-section').offsetTop, behavior: 'smooth' });
+            }, 500);
+        });
+
+        // GA4 Event Tracking for form interactions
+        document.getElementById('tradeForm').addEventListener('change', function() {
+            gtag('event', 'form_interaction', {
+                'event_category': 'engagement',
+                'event_label': 'trade_application_form'
+            });
+        });
+
+        // Track form submission
+        document.getElementById('tradeForm').addEventListener('submit', function() {
+            gtag('event', 'form_submit', {
+                'event_category': 'conversion',
+                'event_label': 'trade_application_submit'
+            });
+        });
+    </script>
+    <!-- Brevo submission (list 43 = Trade Collective Prospects) -->
+    <script>
+    (function(){
+      var form=document.getElementById('tradeForm');
+      if(!form) return;
+      form.addEventListener('submit',async function(e){
+        e.preventDefault();
+        var d=new FormData(form),o={};
+        d.forEach(function(v,k){o[k]=v;});
+        var name=o.name||o.fullName||'';
+        var firm=o.company||o.firmName||'';
+        var extras=Object.keys(o).filter(function(k){return ['name','fullName','email','phone','company','firmName'].indexOf(k)<0;})
+          .map(function(k){return k+': '+o[k];}).join('\n');
+        var message=(firm?'Firm: '+firm+'\n':'')+extras;
+        try{
+          await fetch('/api/inquiry',{method:'POST',headers:{'content-type':'application/json'},
+            body:JSON.stringify({name:name,email:o.email||'',phone:o.phone||'',message:message,source:'Trade — SVF (Apply)',listId:43})});
+          form.innerHTML='<p style="padding:2rem;text-align:center;font-size:1.1rem;">Thank you — your application has been received. We’ll be in touch shortly.</p>';
+        }catch(err){ alert('Something went wrong. Please email trade@saladovillageframer.com.'); }
+      });
+    })();
+    </script>
+</body>
+</html>
