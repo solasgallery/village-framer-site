@@ -21,11 +21,12 @@ Do not place secret values in source control.
    - Cherie's user ID;
    - `Solas Client Opportunities` pipeline ID;
    - `New inquiry` stage ID.
-4. Verify Nimble's task-creation contract for the account before canary
-   approval. Nimble's published API documents contacts and deals but does not
-   currently document task creation. `NIMBLE_TASK_ENDPOINT` is isolated for
-   this reason; the request must be checked against a non-production/test
-   contact before production approval.
+4. Nimble's current signed-in app bundle confirms task creation at
+   `/api/v1/tasks` with `subject`, `notes`, `assigned_to`,
+   `related_contacts`, `related_deals`, and a timezone-less `due_date`.
+   Nimble's published API does not currently document this endpoint, so
+   `NIMBLE_TASK_ENDPOINT` remains isolated and a preview test record must
+   confirm the response ID and relationships before production approval.
 5. Use the existing authenticated Solas sender
    `Salado Village Framer <cherie@solasgallery.com>` for the canary. This avoids
    any DNS work. Sender-domain changes require their own change sheet.
@@ -127,4 +128,3 @@ before using any rollback target.
 - Canary deployment window and observer.
 - Previous production deployment ID verified immediately before deployment.
 - Rollback owner and reconciliation owner named.
-
