@@ -258,7 +258,8 @@ export async function createNimbleTask(input: {
       body: JSON.stringify({
         subject: `Respond to ${input.inquiry.name} — SVF framing inquiry`,
         notes: `Submission ${input.inquiry.submissionId}\n${input.inquiry.sourceUrl}`,
-        due_date: input.followUpDue,
+        // Nimble's current task UI posts a timezone-less ISO value.
+        due_date: input.followUpDue.replace(/Z$/, ''),
         assigned_to: input.ownerId,
         related_contacts: [input.contactId],
         related_deals: [input.opportunityId],
