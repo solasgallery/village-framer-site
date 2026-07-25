@@ -1,106 +1,191 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { AuditStore } from '@/lib/intake/audit'
+import { getIntakeConfig } from '@/lib/intake/config'
+import { calculateFollowUpDue } from '@/lib/intake/follow-up'
+import { processRecord } from '@/lib/intake/processor'
+import { IntakeError, type AuditRecord } from '@/lib/intake/types'
+import { hashValue, parseInquiry } from '@/lib/intake/validation'
+import { verifyTurnstile } from '@/lib/intake/turnstile'
 
-const BREVO_API_KEY = process.env.BREVO_API_KEY || ''
-const NOTIFICATION_EMAIL = process.env.NOTIFICATION_EMAIL || 'info@solasgallery.com'
+export const runtime = 'nodejs'
+export const dynamic = 'force-dynamic'
 
-// Brevo list ID for website inquiries (create this list in Brevo, or use default)
-const BREVO_LIST_ID = Number(process.env.BREVO_LIST_ID) || 2
+function clientIp(request: NextRequest) {
+  return (
+    request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
+    request.headers.get('x-real-ip') ||
+    'unknown'
+  )
+}
+
+function errorResponse(error: unknown, submissionId?: string) {
+  const intakeError =
+    error instanceof IntakeError
+      ? error
+      : new IntakeError('Unexpected intake failure', true)
+  console.error('SVF intake failure', {
+    submissionId,
+    retryable: intakeError.retryable,
+    error: intakeError.message,
+  })
+  return NextResponse.json(
+    {
+      success: false,
+      submission_id: submissionId,
+      error: intakeError.publicMessage,
+      retryable: intakeError.retryable,
+    },
+    { status: intakeError.retryable ? 503 : 422 }
+  )
+}
 
 export async function POST(request: NextRequest) {
-  try {
-    const body = await request.json()
-    const { name, email, phone, message, source, listId } = body
-    const targetList = Number(listId) || BREVO_LIST_ID
+  let submissionId: string | undefined
+  let store: AuditStore | undefined
+  let lockAcquired = false
 
-    if (!email || !name) {
+  try {
+    const config = getIntakeConfig()
+    store = new AuditStore(config.redisUrl, config.redisToken)
+    const ip = clientIp(request)
+    const ipHash = hashValue(ip, config.hashSecret)
+    const contentLength = Number(request.headers.get('content-length') || '0')
+    if (contentLength > 20_000) {
+      submissionId = crypto.randomUUID()
+      await store.reject({
+        submissionId,
+        status: 'rejected',
+        reason: 'payload_too_large',
+        ipHash,
+        createdAt: new Date().toISOString(),
+      })
+      throw new IntakeError('Inquiry payload exceeds 20 KB', false)
+    }
+    const body = await request.json()
+    const parsed = parseInquiry(body)
+    const resolvedSubmissionId =
+      parsed.inquiry?.submissionId || crypto.randomUUID()
+    submissionId = resolvedSubmissionId
+    const email =
+      typeof body?.email === 'string' ? body.email.trim().toLowerCase() : ''
+
+    const rate = await store.rateLimit(ipHash)
+    if (!rate.allowed) {
+      await store.reject({
+        submissionId: resolvedSubmissionId,
+        status: 'rejected',
+        reason: 'rate_limited',
+        ipHash,
+        emailHash: email ? hashValue(email, config.hashSecret) : undefined,
+        createdAt: new Date().toISOString(),
+      })
       return NextResponse.json(
-        { error: 'Name and email are required.' },
-        { status: 400 }
+        {
+          success: false,
+          submission_id: resolvedSubmissionId,
+          error: 'Please wait a few minutes before trying again.',
+        },
+        { status: 429 }
       )
     }
 
-    // 1. Create/update contact in Brevo
-    const contactRes = await fetch('https://api.brevo.com/v3/contacts', {
-      method: 'POST',
-      headers: {
-        'accept': 'application/json',
-        'content-type': 'application/json',
-        'api-key': BREVO_API_KEY,
-      },
-      body: JSON.stringify({
-        email,
-        attributes: {
-          FIRSTNAME: name.split(' ')[0],
-          LASTNAME: name.split(' ').slice(1).join(' ') || '',
-          SMS: phone || '',
-        },
-        listIds: [targetList],
-        updateEnabled: true,
-      }),
-    })
-
-    // Contact creation might return 201 (created) or 204 (updated) — both are fine
-    if (!contactRes.ok && contactRes.status !== 409) {
-      console.error('Brevo contact error:', await contactRes.text())
+    if (parsed.honeypot || parsed.errors.length || !parsed.inquiry) {
+      await store.reject({
+        submissionId: resolvedSubmissionId,
+        status: 'rejected',
+        reason: parsed.honeypot ? 'honeypot' : parsed.errors.join(' '),
+        ipHash,
+        emailHash: email ? hashValue(email, config.hashSecret) : undefined,
+        createdAt: new Date().toISOString(),
+      })
+      throw new IntakeError(
+        parsed.honeypot ? 'Honeypot triggered' : parsed.errors.join(' '),
+        false,
+        parsed.honeypot
+          ? 'We could not verify this submission.'
+          : parsed.errors[0] || 'Please check the form and try again.'
+      )
     }
 
-    // 2. Send notification email to Tim via Brevo transactional
-    const emailRes = await fetch('https://api.brevo.com/v3/smtp/email', {
-      method: 'POST',
-      headers: {
-        'accept': 'application/json',
-        'content-type': 'application/json',
-        'api-key': BREVO_API_KEY,
-      },
-      body: JSON.stringify({
-        sender: {
-          name: 'Village Framer Website',
-          email: 'cherie@solasgallery.com',
-        },
-        to: [{ email: NOTIFICATION_EMAIL, name: 'Tim Flanagan' }],
-        subject: `New inquiry from ${name} — ${source || 'Website'}`,
-        htmlContent: `
-          <div style="font-family: Georgia, serif; max-width: 600px; margin: 0 auto; padding: 40px 20px;">
-            <h2 style="font-size: 24px; color: #1C1C1A; margin-bottom: 24px;">New Website Inquiry</h2>
-            <table style="width: 100%; border-collapse: collapse;">
-              <tr>
-                <td style="padding: 8px 0; color: #999; font-size: 12px; text-transform: uppercase; letter-spacing: 1px;">Name</td>
-                <td style="padding: 8px 0; color: #1C1C1A;">${name}</td>
-              </tr>
-              <tr>
-                <td style="padding: 8px 0; color: #999; font-size: 12px; text-transform: uppercase; letter-spacing: 1px;">Email</td>
-                <td style="padding: 8px 0; color: #1C1C1A;"><a href="mailto:${email}">${email}</a></td>
-              </tr>
-              ${phone ? `<tr>
-                <td style="padding: 8px 0; color: #999; font-size: 12px; text-transform: uppercase; letter-spacing: 1px;">Phone</td>
-                <td style="padding: 8px 0; color: #1C1C1A;"><a href="tel:${phone}">${phone}</a></td>
-              </tr>` : ''}
-              <tr>
-                <td style="padding: 8px 0; color: #999; font-size: 12px; text-transform: uppercase; letter-spacing: 1px;">Source</td>
-                <td style="padding: 8px 0; color: #1C1C1A;">${source || 'Website'}</td>
-              </tr>
-              ${message ? `<tr>
-                <td style="padding: 8px 0; color: #999; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; vertical-align: top;">Message</td>
-                <td style="padding: 8px 0; color: #1C1C1A;">${message}</td>
-              </tr>` : ''}
-            </table>
-            <hr style="border: none; border-top: 1px solid #C4AE8A; margin: 24px 0;" />
-            <p style="font-size: 12px; color: #999;">This inquiry was submitted through saladovillageframer.com</p>
-          </div>
-        `,
-      }),
-    })
-
-    if (!emailRes.ok) {
-      console.error('Brevo email error:', await emailRes.text())
+    let turnstile
+    try {
+      turnstile = await verifyTurnstile({
+        token: parsed.turnstileToken,
+        ip,
+        submissionId: resolvedSubmissionId,
+        secret: config.turnstileSecret,
+        allowedHostnames: config.allowedHostnames,
+      })
+    } catch (error) {
+      if (error instanceof IntakeError && !error.retryable) {
+        await store.reject({
+          submissionId: resolvedSubmissionId,
+          status: 'rejected',
+          reason: 'turnstile_failed',
+          ipHash,
+          emailHash: hashValue(parsed.inquiry.email, config.hashSecret),
+          createdAt: new Date().toISOString(),
+        })
+      }
+      throw error
     }
 
-    return NextResponse.json({ success: true })
+    lockAcquired = await store.acquireLock(resolvedSubmissionId)
+    if (!lockAcquired) {
+      throw new IntakeError('Submission is already processing', true)
+    }
+
+    const existing = await store.get(resolvedSubmissionId)
+    if (existing?.status === 'completed') {
+      return NextResponse.json({ success: true, submission_id: resolvedSubmissionId })
+    }
+    if (
+      existing &&
+      (existing.inquiry.email !== parsed.inquiry.email ||
+        existing.inquiry.sourceUrl !== parsed.inquiry.sourceUrl)
+    ) {
+      throw new IntakeError('Submission ID payload mismatch', false)
+    }
+
+    const now = new Date().toISOString()
+    const record: AuditRecord =
+      existing || {
+        submissionId: resolvedSubmissionId,
+        status: 'processing',
+        inquiry: parsed.inquiry,
+        ipHash,
+        turnstile: {
+          success: true,
+          hostname: turnstile.hostname,
+          action: turnstile.action,
+        },
+        createdAt: now,
+        updatedAt: now,
+        attempts: 0,
+        followUpDue: calculateFollowUpDue(
+          new Date(parsed.inquiry.submittedAt)
+        ).toISOString(),
+        steps: {
+          nimble_contact: { status: 'pending' },
+          nimble_opportunity: { status: 'pending' },
+          nimble_task: { status: 'pending' },
+          brevo_acknowledgment: { status: 'pending' },
+          brevo_notification: { status: 'pending' },
+        },
+      }
+
+    const completed = await processRecord(record, store, config)
+    return NextResponse.json({
+      success: completed.status === 'completed',
+      submission_id: resolvedSubmissionId,
+    })
   } catch (error) {
-    console.error('Inquiry API error:', error)
-    return NextResponse.json(
-      { error: 'Something went wrong. Please try again.' },
-      { status: 500 }
-    )
+    return errorResponse(error, submissionId)
+  } finally {
+    if (store && lockAcquired && submissionId) {
+      await store.releaseLock(submissionId).catch((error) => {
+        console.error('Failed to release intake lock', { submissionId, error })
+      })
+    }
   }
 }

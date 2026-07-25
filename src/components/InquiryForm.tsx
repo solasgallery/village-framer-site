@@ -1,6 +1,7 @@
 'use client'
 
-import { useState } from 'react'
+import { useCallback, useRef, useState } from 'react'
+import Turnstile from '@/components/Turnstile'
 
 interface InquiryFormProps {
   source: string
@@ -18,6 +19,12 @@ export default function InquiryForm({
   messagePlaceholder = 'Tell us what you have in mind.',
 }: InquiryFormProps) {
   const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle')
+  const [errorMessage, setErrorMessage] = useState('')
+  const [turnstileToken, setTurnstileToken] = useState('')
+  const [turnstileResetKey, setTurnstileResetKey] = useState(0)
+  const submissionId = useRef(crypto.randomUUID())
+  const startedAt = useRef(Date.now())
+  const handleTurnstileToken = useCallback((token: string) => setTurnstileToken(token), [])
 
   const textColor = dark ? 'text-cream' : 'text-charcoal'
   const mutedColor = dark ? 'text-cream/40' : 'text-charcoal/40'
@@ -27,14 +34,36 @@ export default function InquiryForm({
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
+    setErrorMessage('')
+
+    if (!turnstileToken) {
+      setStatus('error')
+      setErrorMessage('Please complete the verification and try again.')
+      return
+    }
+
     setStatus('sending')
 
     const form = e.currentTarget
     const data = {
+      submission_id: submissionId.current,
+      submitted_at: new Date().toISOString(),
+      started_at: startedAt.current,
+      brand: 'Salado Village Framer',
+      form_name: 'SVF contact',
+      inquiry_type: 'Framing inquiry',
+      source_channel: 'website',
+      source_url: window.location.href,
       name: (form.elements.namedItem('name') as HTMLInputElement).value,
       email: (form.elements.namedItem('email') as HTMLInputElement).value,
       phone: (form.elements.namedItem('phone') as HTMLInputElement)?.value || '',
       message: (form.elements.namedItem('message') as HTMLTextAreaElement)?.value || '',
+      website: (form.elements.namedItem('website') as HTMLInputElement)?.value || '',
+      turnstile_token: turnstileToken,
+      marketing_consent: false,
+      utm_source: new URLSearchParams(window.location.search).get('utm_source') || '',
+      utm_medium: new URLSearchParams(window.location.search).get('utm_medium') || '',
+      utm_campaign: new URLSearchParams(window.location.search).get('utm_campaign') || '',
       source,
     }
 
@@ -45,14 +74,24 @@ export default function InquiryForm({
         body: JSON.stringify(data),
       })
 
-      if (res.ok) {
+      const result = await res.json().catch(() => ({}))
+
+      if (res.ok && result.success === true && result.submission_id === submissionId.current) {
         setStatus('sent')
         form.reset()
       } else {
         setStatus('error')
+        setErrorMessage(
+          typeof result.error === 'string'
+            ? result.error
+            : 'We could not confirm your inquiry. Please try again.'
+        )
+        setTurnstileResetKey((key) => key + 1)
       }
     } catch {
       setStatus('error')
+      setErrorMessage('We could not confirm your inquiry. Please try again.')
+      setTurnstileResetKey((key) => key + 1)
     }
   }
 
@@ -80,6 +119,16 @@ export default function InquiryForm({
         </p>
       )}
       <form onSubmit={handleSubmit} className="space-y-6 text-left">
+        <div className="absolute left-[-10000px]" aria-hidden="true">
+          <label htmlFor="website">Website</label>
+          <input
+            id="website"
+            type="text"
+            name="website"
+            tabIndex={-1}
+            autoComplete="off"
+          />
+        </div>
         <div>
           <label className={`font-body text-xs ${mutedColor} tracking-[0.1em] uppercase block mb-2`}>
             Name
@@ -122,10 +171,15 @@ export default function InquiryForm({
             className={`w-full bg-transparent border-b ${borderColor} outline-none py-3 font-body text-sm ${inputColor} transition-colors resize-none`}
           />
         </div>
+        <Turnstile
+          action="svf_contact"
+          onToken={handleTurnstileToken}
+          resetKey={turnstileResetKey}
+        />
         <div className="text-center pt-4">
           <button
             type="submit"
-            disabled={status === 'sending'}
+            disabled={status === 'sending' || !turnstileToken}
             className={`font-display text-sm tracking-[0.12em] uppercase border-b ${btnBorder} pb-1 transition-colors disabled:opacity-50`}
           >
             {status === 'sending' ? 'Sending...' : 'Send inquiry →'}
@@ -133,7 +187,7 @@ export default function InquiryForm({
         </div>
         {status === 'error' && (
           <p className="font-body text-xs text-red-500 text-center mt-4">
-            Something went wrong. Please email us directly at info@solasgallery.com
+            {errorMessage}
           </p>
         )}
       </form>
