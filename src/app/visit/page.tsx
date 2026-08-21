@@ -1,23 +1,26 @@
 import type { Metadata } from 'next'
-import Image from 'next/image'
+import Link from 'next/link'
 
 export const metadata: Metadata = {
-  title: 'Visit Us',
-  description: 'Visit Salado Village Framer on Main Street in Salado, Texas. Hours, directions, and contact information.',
+  title: 'Visit',
+  description:
+    'Visit Salado Village Framer. Hours, address, and phone — 2 Rock Creek Dr Unit A, Salado, TX 76571.',
   alternates: {
     canonical: '/visit',
   },
   openGraph: {
-    title: 'Visit Us',
-    description: 'Visit Salado Village Framer on Main Street in Salado, Texas. Hours, directions, and contact info.',
+    title: 'Visit',
+    description:
+      'Visit Salado Village Framer. Hours, address, and phone — 2 Rock Creek Dr Unit A, Salado, TX 76571.',
     url: 'https://saladovillageframer.com/visit',
     type: 'website',
-    images: [{ url: '/og-default.jpg', width: 1200, height: 630, alt: 'Visit Us | Salado Village Framer' }],
+    images: [{ url: '/og-default.jpg', width: 1200, height: 630, alt: 'Visit | Salado Village Framer' }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Visit Us',
-    description: 'Visit Salado Village Framer on Main Street in Salado, Texas. Hours, directions, and contact info.',
+    title: 'Visit',
+    description:
+      'Visit Salado Village Framer. Hours, address, and phone — 2 Rock Creek Dr Unit A, Salado, TX 76571.',
     images: ['/og-default.jpg'],
   },
 }
@@ -25,51 +28,54 @@ export const metadata: Metadata = {
 export default function VisitPage() {
   return (
     <>
-      <section className="relative h-[50vh] min-h-[350px] w-full overflow-hidden bg-deep">
-        <Image
-          src="/images/visit/storefront.jpg"
-          alt="Salado Village Framer storefront"
-          fill
-          priority
-          className="object-cover opacity-50"
-        />
-        <div className="relative z-10 flex flex-col items-center justify-center h-full text-center px-6">
-          <h1 className="font-display text-4xl md:text-5xl text-cream tracking-[0.1em]">Visit</h1>
+      <section className="bg-deep pt-32 pb-12 px-6">
+        <div className="max-w-md mx-auto text-center">
+          <h1 className="font-display text-4xl md:text-5xl text-cream tracking-[0.1em]">
+            Visit
+          </h1>
+          <p className="font-body text-sm text-cream/60 mt-4">
+            Salado Village Framer
+          </p>
         </div>
       </section>
 
-      <section className="section-pad bg-cream">
-        <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20">
+      <section className="bg-cream px-6 py-14 md:py-20">
+        <div className="max-w-md mx-auto space-y-10 font-body text-base text-charcoal/80 leading-relaxed">
           <div>
-            <h2 className="font-display text-3xl text-charcoal mb-8">Find us</h2>
-            <div className="space-y-6 font-body text-sm text-charcoal/70 leading-relaxed">
-              <div>
-                <p className="text-xs text-stone tracking-[0.15em] uppercase mb-2">Hours</p>
-                <p>Tuesday – Saturday, 10 am – 5 pm</p>
-                <p className="text-charcoal/40 mt-1">Walk-ins welcome. No appointment needed.</p>
-              </div>
-              <div>
-                <p className="text-xs text-stone tracking-[0.15em] uppercase mb-2">Address</p>
-                <p>2 Rock Creek Dr Unit A</p>
-                <p>Salado, Texas 76571</p>
-              </div>
-              <div>
-                <p className="text-xs text-stone tracking-[0.15em] uppercase mb-2">Contact</p>
-                <p><a href="tel:+12546136123" className="hover:text-charcoal transition-colors">(254) 613-6123</a></p>
-                <p><a href="mailto:info@solasgallery.com" className="hover:text-charcoal transition-colors">info@solasgallery.com</a></p>
-              </div>
-            </div>
+            <p className="text-xs text-stone tracking-[0.15em] uppercase mb-3">Hours</p>
+            <p>Sunday: closed</p>
+            <p>Monday: sometimes</p>
+            <p>Tuesday–Saturday: 10am – 5 pm</p>
           </div>
-          <div className="relative aspect-square md:aspect-auto overflow-hidden min-h-[300px]">
-            <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3425.5!2d-97.54!3d30.94!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2sSalado%20Village%20Framer!5e0!3m2!1sen!2sus!4v1"
-              width="100%"
-              height="100%"
-              style={{ border: 0, minHeight: '300px' }}
-              allowFullScreen
-              loading="lazy"
-              className="absolute inset-0"
-            />
+
+          <div>
+            <p className="text-xs text-stone tracking-[0.15em] uppercase mb-3">Address</p>
+            <p>
+              <a
+                href="https://maps.google.com/?q=2+Rock+Creek+Dr+Unit+A,+Salado,+TX+76571"
+                className="hover:text-charcoal transition-colors"
+              >
+                2 Rock Creek Dr Unit A, Salado, TX 76571
+              </a>
+            </p>
+          </div>
+
+          <div>
+            <p className="text-xs text-stone tracking-[0.15em] uppercase mb-3">Phone</p>
+            <p>
+              <a
+                href="tel:+12546136123"
+                className="inline-block py-1 hover:text-charcoal transition-colors"
+              >
+                (254) 613-6123
+              </a>
+            </p>
+          </div>
+
+          <div className="pt-2">
+            <Link href="/contact" className="btn-quiet">
+              Start a framing project &rarr;
+            </Link>
           </div>
         </div>
       </section>
