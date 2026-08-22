@@ -12,13 +12,13 @@ export const metadata: Metadata = {
     description: 'Custom picture framing, art framing, mirror framing, shadow boxes, and restoration.',
     url: 'https://saladovillageframer.com/services',
     type: 'website',
-    images: [{ url: '/og-default.jpg', width: 1200, height: 630, alt: 'Custom Framing Services | Salado Village Framer' }],
+    images: [{ url: '/svf-og-default.jpg', width: 1200, height: 630, alt: 'Custom Framing Services | Salado Village Framer' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Custom Framing Services',
     description: 'Custom picture framing, art framing, mirror framing, shadow boxes, and restoration.',
-    images: ['/og-default.jpg'],
+    images: ['/svf-og-default.jpg'],
   },
 }
 

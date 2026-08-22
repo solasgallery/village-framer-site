@@ -14,13 +14,13 @@ export const metadata: Metadata = {
     description: 'Salado Village Framer — custom picture framing 24 minutes from Georgetown.',
     url: 'https://saladovillageframer.com/area/georgetown',
     type: 'website',
-    images: [{ url: '/og-default.jpg', width: 1200, height: 630, alt: 'Custom Framing Near Georgetown TX | Salado Village Framer' }],
+    images: [{ url: '/svf-og-default.jpg', width: 1200, height: 630, alt: 'Custom Framing Near Georgetown TX | Salado Village Framer' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Custom Framing Near Georgetown TX',
     description: 'Salado Village Framer — custom picture framing 24 minutes from Georgetown.',
-    images: ['/og-default.jpg'],
+    images: ['/svf-og-default.jpg'],
   },
 }
 

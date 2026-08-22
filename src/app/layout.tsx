@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     siteName: 'Salado Village Framer',
     images: [
       {
-        url: '/og-default.jpg',
+        url: '/svf-og-default.jpg',
         width: 1200,
         height: 630,
         alt: 'Salado Village Framer — Custom Framing & Décor, Salado, Texas',
@@ -34,7 +34,7 @@ export const metadata: Metadata = {
     title: 'Salado Village Framer — Custom Framing & Décor | Salado, TX',
     description:
       'Custom picture framing, art framing, and décor on Main Street in Salado, Texas.',
-    images: ['/og-default.jpg'],
+    images: ['/svf-og-default.jpg'],
   },
   // TODO: replace placeholder with token from search.google.com/search-console
   verification: {

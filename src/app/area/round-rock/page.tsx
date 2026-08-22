@@ -14,13 +14,13 @@ export const metadata: Metadata = {
     description: 'Salado Village Framer — custom picture framing 31 minutes from Round Rock.',
     url: 'https://saladovillageframer.com/area/round-rock',
     type: 'website',
-    images: [{ url: '/og-default.jpg', width: 1200, height: 630, alt: 'Custom Framing Near Round Rock TX | Salado Village Framer' }],
+    images: [{ url: '/svf-og-default.jpg', width: 1200, height: 630, alt: 'Custom Framing Near Round Rock TX | Salado Village Framer' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Custom Framing Near Round Rock TX',
     description: 'Salado Village Framer — custom picture framing 31 minutes from Round Rock.',
-    images: ['/og-default.jpg'],
+    images: ['/svf-og-default.jpg'],
   },
 }
 

@@ -33,7 +33,7 @@ const jsonLd = {
       closes: '17:00',
     },
   ],
-  image: 'https://saladovillageframer.com/og-default.jpg',
+  image: 'https://saladovillageframer.com/svf-og-default.jpg',
   logo: 'https://saladovillageframer.com/logo.png',
   // TODO Tim: paste real social profile URLs (Facebook, Instagram, etc.)
   sameAs: [

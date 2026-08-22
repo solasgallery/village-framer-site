@@ -14,13 +14,13 @@ export const metadata: Metadata = {
     description: 'Salado Village Framer — custom picture framing 21 minutes from Killeen.',
     url: 'https://saladovillageframer.com/area/killeen',
     type: 'website',
-    images: [{ url: '/og-default.jpg', width: 1200, height: 630, alt: 'Custom Framing Near Killeen TX | Salado Village Framer' }],
+    images: [{ url: '/svf-og-default.jpg', width: 1200, height: 630, alt: 'Custom Framing Near Killeen TX | Salado Village Framer' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Custom Framing Near Killeen TX',
     description: 'Salado Village Framer — custom picture framing 21 minutes from Killeen.',
-    images: ['/og-default.jpg'],
+    images: ['/svf-og-default.jpg'],
   },
 }
 
