@@ -36,9 +36,8 @@ export const metadata: Metadata = {
       'Custom picture framing, art framing, and décor on Main Street in Salado, Texas.',
     images: ['/svf-og-default.jpg'],
   },
-  // TODO: replace placeholder with token from search.google.com/search-console
   verification: {
-    google: 'REPLACE_WITH_GSC_TOKEN',
+    google: 'AT_R1LQkNEO23NS0uQTrc2F8UYTRxVybtN1HlyykDy4',
   },
   ...(process.env.VERCEL_ENV === 'preview' && {
     robots: { index: false, follow: false },
