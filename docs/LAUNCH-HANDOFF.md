@@ -27,3 +27,8 @@ Import actual Roma/Larson-Juhl data and licensed images. Add documented project 
 
 ## Validation
 Production build, TypeScript, mocked Brevo route tests, local HTTP route checks, and browser visual checks. See validation results recorded with launch completion. Roll back with Vercel Instant Rollback to the previous production deployment if needed; source baseline edc4d8a2105c0e5f184b4b72713ddfd6fe4c2cae.
+
+## Confirmed launch result
+Production launched through PR #4 (https://github.com/solasgallery/village-framer-site/pull/4), merge be07fe6299503836554d538ed006c25135849eef. Follow-up commit 9157d1a adds three coordinated JPEG files under public/social. Live 27-page HTTP/canonical checks and 35 image checks passed; 37 mocked inquiry tests passed. Mobile upload, frame/mat/fillet selection and room placement were exercised. A clearly labeled live test submitted from /studio succeeded after Brevo accepted contact and notification requests with concept/artwork attachments. Inbox receipt was not independently inspected. The browser download event could not be independently verified.
+
+SocialBee Content Approval contains three new, unapproved, unscheduled text drafts for the SVF Facebook and Google profiles: “The frame starts with a conversation.”, “Some pieces need a little more room.” and “Curious how your artwork might look in a new frame?” Existing Copilot posts were untouched. Image attachment was blocked by Chrome extension file-URL permission; Instagram drafts therefore remain to be added. Matching JPEGs are available at /social/workshop.jpg, /social/large-framing.jpg and /social/moulding-samples.jpg. No social post was published and no recurring posting schedule was enabled. Review at https://app.socialbee.com/content/approval.
