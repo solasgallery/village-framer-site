@@ -1,254 +1,324 @@
-import Image from 'next/image'
-import Link from 'next/link'
-
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@type': ['LocalBusiness', 'HomeGoodsStore'],
-  '@id': 'https://saladovillageframer.com/#business',
-  additionalType: 'http://www.productontology.org/id/Picture_frame',
-  name: 'Salado Village Framer',
-  description: 'Custom picture framing and décor on Main Street in Salado, Texas.',
-  url: 'https://saladovillageframer.com',
-  telephone: '+1-254-613-6123',
-  email: 'info@solasgallery.com',
-  priceRange: '$$',
-  address: {
-    '@type': 'PostalAddress',
-    streetAddress: '2 Rock Creek Dr Unit A',
-    addressLocality: 'Salado',
-    addressRegion: 'TX',
-    postalCode: '76571',
-    addressCountry: 'US',
-  },
-  geo: {
-    '@type': 'GeoCoordinates',
-    latitude: 30.9468,
-    longitude: -97.5395,
-  },
-  openingHoursSpecification: [
-    {
-      '@type': 'OpeningHoursSpecification',
-      dayOfWeek: ['Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
-      opens: '10:00',
-      closes: '17:00',
-    },
-  ],
-  image: 'https://saladovillageframer.com/svf-og-default.jpg',
-  logo: 'https://saladovillageframer.com/logo.png',
-  // TODO Tim: paste real social profile URLs (Facebook, Instagram, etc.)
-  sameAs: [
-    // 'https://www.facebook.com/saladovillageframer',
-    // 'https://www.instagram.com/saladovillageframer',
-  ],
-  // Sister business on same property — helps Google disambiguate the two GMB listings at
-  // 2 Rock Creek Dr (Solas Gallery) and 2 Rock Creek Dr Unit A (Salado Village Framer).
-  parentOrganization: {
-    '@type': 'Organization',
-    '@id': 'https://solasgallery.com/#business',
-    name: 'Solas Gallery',
-    url: 'https://solasgallery.com',
-  },
-}
-
+import Image from "next/image";
+import Link from "next/link";
+import { business, regionCities } from "@/lib/content";
 export default function Home() {
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
-      {/* Hero */}
-      <section className="relative h-screen w-full overflow-hidden bg-deep">
-        <Image
-          src="/images/home/hero.jpg"
-          alt="Salado Village Framer storefront"
-          fill
-          priority
-          className="object-cover opacity-50"
-        />
-        <div className="absolute inset-0 bg-deep/30" />
-        <div className="relative z-10 flex flex-col items-center justify-center h-full text-center px-6">
-          <h1 className="font-display text-4xl md:text-6xl text-cream tracking-[0.15em] uppercase leading-tight">
-            Salado Village Framer
+      <section className="home-hero">
+        <div className="hero-copy">
+          <p className="eyebrow">Custom framing · Salado, Texas</p>
+          <h1>
+            What you love.
+            <br />
+            <em>
+              Beautifully
+              <br />
+              framed.
+            </em>
           </h1>
-          <p className="font-body text-sm text-cream/50 tracking-[0.2em] uppercase mt-4">
-            Custom Framing & Décor &middot; Main Street, Salado
+          <p className="lede">
+            The art you found. The moment you kept. The piece that deserves a
+            little more. Bring it to people who see what you see.
           </p>
+          <div className="actions">
+            <Link href="/studio" className="button button-ink">
+              Frame your piece <span aria-hidden="true">↗</span>
+            </Link>
+            <Link href="/visit" className="text-link">
+              Visit our shop ↗
+            </Link>
+          </div>
+        </div>
+        <div className="hero-image">
+          <Image
+            src="/images/selected/hero-hands-at-work.webp"
+            alt="Two framers working together over artwork and matting at the Village Framer workbench"
+            fill
+            priority
+            sizes="(max-width:800px) 100vw, 54vw"
+          />
+          <div className="hero-caption">
+            <span>Real hands. A personal eye. Right here.</span>
+            <span>SALADO, TX</span>
+          </div>
         </div>
       </section>
-
-      {/* Intro */}
-      <section className="section-pad bg-cream">
-        <div className="max-w-3xl mx-auto text-center">
-          <h2 className="font-display text-3xl md:text-4xl text-charcoal mb-6">
-            The right frame changes everything.
-          </h2>
-          <p className="font-body text-sm text-charcoal/60 leading-relaxed">
-            Salado Village Framer is a custom framing shop on Main Street in Salado,
-            Texas. We frame art, photographs, memorabilia, mirrors, and anything
-            worth preserving — with the same care and craftsmanship that has defined
-            our work since we opened our doors.
+      <div className="trust-strip">
+        <span>30 years of experience</span>
+        <span>Your artwork stays here</span>
+        <span>Big pieces welcome</span>
+        <span>Personal design guidance</span>
+      </div>
+      <section className="wrap section">
+        <div className="section-heading">
+          <div>
+            <p className="eyebrow">Start with something you love</p>
+            <h2>What are we framing?</h2>
+          </div>
+          <p>
+            You don’t have to know the right frame.
+            <br />
+            That’s the part we do together.
           </p>
         </div>
-      </section>
-
-      {/* Services Preview */}
-      <section className="section-pad bg-cream border-t border-stone/20">
-        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="cards-3">
           {[
             {
-              title: 'Custom Framing',
-              desc: 'Museum-quality materials, hundreds of moulding options, and expert guidance for every piece.',
-              image: '/images/home/service-framing.jpg',
+              title: "Art & photographs",
+              image: "painting-framed",
+              text: "Original paintings, prints, family photos, and the pictures you keep coming back to.",
             },
             {
-              title: 'Art & Mirrors',
-              desc: 'Curated wall décor, mirrors, and ready-to-hang pieces for any room in your home.',
-              image: '/images/home/service-decor.jpg',
+              title: "Objects & memories",
+              image: "woven-artwork",
+              text: "Textiles, jerseys, keepsakes, and wonderfully hard-to-frame things.",
             },
             {
-              title: 'Restoration & Specialty',
-              desc: 'Shadow boxes, needlework, jerseys, diplomas, and heirloom restoration.',
-              image: '/images/home/service-specialty.jpg',
+              title: "Something bigger",
+              image: "large-framed-textile",
+              text: "Oversized artwork, mirrors, and pieces that make a room feel like yours.",
             },
-          ].map((s) => (
-            <Link key={s.title} href="/services" className="group">
-              <div className="relative aspect-[4/3] overflow-hidden mb-4">
+          ].map((x) => (
+            <Link href="/services" className="picture-card" key={x.title}>
+              <div className="photo">
                 <Image
-                  src={s.image}
-                  alt={s.title}
+                  src={`/images/selected/${x.image}.webp`}
+                  alt={x.title}
                   fill
-                  className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
-                  sizes="(max-width: 768px) 100vw, 33vw"
+                  sizes="(max-width:540px) 90vw, 30vw"
                 />
               </div>
-              <h3 className="font-display text-xl text-charcoal">{s.title}</h3>
-              <p className="font-body text-xs text-charcoal/50 mt-1 leading-relaxed">{s.desc}</p>
+              <h3>
+                {x.title}
+                <span aria-hidden="true">↗</span>
+              </h3>
+              <p>{x.text}</p>
             </Link>
           ))}
         </div>
-        <div className="text-center mt-14">
-          <Link href="/services" className="btn-quiet">All services &rarr;</Link>
+      </section>
+      <section className="split-feature sage">
+        <div className="feature-photo">
+          <Image
+            src="/images/selected/design-table-collaboration.webp"
+            alt="Comparing artwork and framing materials together at the design table"
+            fill
+            sizes="(max-width:800px) 100vw, 50vw"
+          />
+        </div>
+        <div className="feature-copy">
+          <p className="eyebrow">A frame is only the beginning</p>
+          <h2>
+            Your eye.
+            <br />
+            Our experience.
+            <br />
+            <em>A better fit.</em>
+          </h2>
+          <p>
+            There’s a difference between choosing a frame and finding the right
+            one. We’ll look at the piece, the room, and the details that matter
+            to you—with real samples and a personal artistic eye.
+          </p>
+          <p>
+            Thirty years of experience. Moulding from Roma and Larson-Juhl. And
+            the reassurance of knowing your work stays right here in our Salado
+            shop.
+          </p>
+          <div className="actions">
+            <Link className="text-link" href="/visit">
+              Meet us at the design table ↗
+            </Link>
+          </div>
         </div>
       </section>
-
-      {/* Gallery Preview */}
-      <section className="section-pad bg-deep text-cream">
-        <div className="max-w-6xl mx-auto text-center">
-          <h2 className="font-display text-3xl text-cream mb-14">Recent work</h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-            {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="relative aspect-square overflow-hidden">
+      <section className="wrap section">
+        <div className="section-heading">
+          <div>
+            <p className="eyebrow">Made here, with care</p>
+            <h2>
+              From possibility
+              <br />
+              to a place on your wall.
+            </h2>
+          </div>
+          <p>A closer look at one piece coming together in our workshop.</p>
+        </div>
+        <div className="process-grid">
+          {[
+            {
+              image: "portrait-process-01",
+              title: "Start with your piece.",
+              text: "Bring the artwork and the story behind it.",
+            },
+            {
+              image: "portrait-process-02",
+              title: "Find its frame.",
+              text: "Explore color, texture, matting, and those finishing details.",
+            },
+            {
+              image: "portrait-process-03",
+              title: "See it come together.",
+              text: "Framed in our shop, by the people you meet.",
+            },
+          ].map((x, i) => (
+            <figure key={x.image}>
+              <div className="process-photo reveal-photo">
                 <Image
-                  src={`/images/gallery/work-${i}.jpg`}
-                  alt={`Framed work ${i}`}
+                  src={`/images/selected/${x.image}.webp`}
+                  alt={x.title + " " + x.text}
                   fill
-                  className="object-cover"
-                  sizes="(max-width: 768px) 50vw, 25vw"
+                  sizes="(max-width:540px) 90vw, 30vw"
                 />
               </div>
-            ))}
-          </div>
-          <div className="mt-12">
-            <Link href="/gallery" className="btn-quiet text-cream border-cream/40 hover:border-cream">
-              See more &rarr;
-            </Link>
-          </div>
+              <figcaption>
+                0{i + 1}
+                <b>{x.title}</b>
+                {x.text}
+              </figcaption>
+            </figure>
+          ))}
         </div>
       </section>
-
-      {/* Rifle Paper Co. Section */}
-      <section className="section-pad bg-cream border-t border-stone/20">
-        <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-14 items-center">
-          <div>
-            <p className="font-body text-xs text-stone tracking-[0.2em] uppercase mb-4">
-              Exclusively Stocked
-            </p>
-            <h2 className="font-display text-3xl md:text-4xl text-charcoal mb-5">
-              Rifle Paper Co.
-            </h2>
-            <p className="font-body text-sm text-charcoal/60 leading-relaxed mb-4">
-              Salado Village Framer is one of the few Texas retailers carrying
-              Rifle Paper Co. stationery, journals, and gift collections. The
-              same attention to craft that defines our framing work — in something
-              you can hold in your hands.
-            </p>
-            <p className="font-body text-sm text-charcoal/60 leading-relaxed mb-8">
-              Greeting cards, notecards, wrapping paper, and seasonal
-              collections. New arrivals throughout the year. Walk in to browse —
-              stock changes with the season.
-            </p>
-            <Link href="/visit" className="btn-quiet text-charcoal">
-              Come see us &rarr;
-            </Link>
-          </div>
-          <div className="relative aspect-square bg-stone/10 flex items-center justify-center overflow-hidden">
-            <div className="text-center px-8">
-              <p className="font-display text-2xl text-charcoal/30 italic">
-                Rifle Paper Co.
-              </p>
-              <p className="font-body text-xs text-charcoal/20 mt-2 tracking-widest uppercase">
-                In store now
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Boxo Memories Cross-Sell */}
-      <section className="section-pad bg-deep text-cream">
-        <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-14 items-center">
-          <div className="relative aspect-[4/3] bg-charcoal/50 flex items-center justify-center">
-            <div className="text-center px-8">
-              <p className="font-display text-xl text-cream/30 italic">
-                BoxoMemories
-              </p>
-              <p className="font-body text-xs text-cream/20 mt-2 tracking-widest uppercase">
-                Inside this shop
-              </p>
-            </div>
-          </div>
-          <div>
-            <p className="font-body text-xs text-stone tracking-[0.2em] uppercase mb-4">
-              Also Inside Salado Village Framer
-            </p>
-            <h2 className="font-display text-3xl md:text-4xl text-cream mb-5">
-              BoxoMemories
-            </h2>
-            <p className="font-body text-sm text-cream/60 leading-relaxed mb-4">
-              Your family&rsquo;s photographs deserve a future. BoxoMemories —
-              our in-house digitization studio — converts photos, slides,
-              negatives, VHS tapes, and film reels into permanent digital
-              archives.
-            </p>
-            <p className="font-body text-sm text-cream/60 leading-relaxed mb-8">
-              Walk in during business hours. No appointment needed. We&rsquo;ll
-              assess your collection and give you a quote on the spot.
-            </p>
-            <a
-              href="https://www.boxomemories.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-quiet text-cream border-stone/40 hover:border-cream"
-            >
-              Learn about BoxoMemories &rarr;
-            </a>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section className="section-pad bg-cream text-center">
-        <div className="max-w-2xl mx-auto">
-          <h2 className="font-display text-3xl text-charcoal mb-4">
-            Bring it in. We will take care of it.
+      <section className="split-feature ink">
+        <div className="feature-copy">
+          <p className="eyebrow">A little imagination goes a long way</p>
+          <h2>
+            Try your art.
+            <br />
+            Find a direction.
           </h2>
-          <p className="font-body text-sm text-charcoal/50 mb-8">
-            Walk-ins welcome. Consultations always free.
+          <p className="lede">
+            Upload a photo. Explore frame finishes, mats, and a fillet detail.
+            You can even try the piece on a photo of your own wall.
           </p>
-          <Link href="/contact" className="btn-quiet">Get in touch &rarr;</Link>
+          <p>
+            Save what speaks to you, or send it to us. We’ll take it from an
+            idea to the real thing together.
+          </p>
+          <div className="actions">
+            <Link href="/studio" className="button button-gold">
+              Open the framing studio ↗
+            </Link>
+          </div>
+        </div>
+        <div className="feature-photo">
+          <Image
+            src="/images/selected/gallery-wall.webp"
+            alt="A grouping of framed pieces displayed together in the gallery"
+            fill
+            sizes="(max-width:800px) 100vw, 50vw"
+          />
+        </div>
+      </section>
+      <section className="wrap section">
+        <div className="budget-panel">
+          <div>
+            <p className="eyebrow">A starting point for your budget</p>
+            <h2>
+              Beautifully considered.
+              <br />
+              Clearly discussed.
+            </h2>
+          </div>
+          <div>
+            <p>{business.budget}</p>
+            <div className="actions">
+              <Link href="/contact" className="text-link">
+                Tell us about your piece ↗
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section className="wrap section centered" style={{ paddingTop: 0 }}>
+        <p className="eyebrow">Salado roots. A Central Texas welcome.</p>
+        <h2>Your artwork deserves the trip.</h2>
+        <p className="lede">
+          From Temple and Killeen to Georgetown, North Austin, and Waco, come
+          for a personal framing experience—and spend a little time in Salado.
+        </p>
+        <div className="region-links" style={{ justifyContent: "center" }}>
+          {regionCities.map((city) => (
+            <Link
+              key={city}
+              href={`/area/${city === "North Austin" ? "austin" : city.toLowerCase().replaceAll(" ", "-")}`}
+            >
+              {city}
+            </Link>
+          ))}
+        </div>
+        <div className="actions">
+          <Link className="text-link" href="/visit">
+            Plan your visit ↗
+          </Link>
+        </div>
+      </section>
+      <section className="sage">
+        <div className="wrap section">
+          <div className="section-heading">
+            <div>
+              <p className="eyebrow">Notes from the frame shop</p>
+              <h2>A little inspiration.</h2>
+            </div>
+            <Link href="/journal" className="text-link">
+              Visit the journal ↗
+            </Link>
+          </div>
+          <div className="cards-3">
+            <Link
+              href="/journal/choosing-a-frame-and-mat"
+              className="picture-card journal-card"
+            >
+              <div className="photo">
+                <Image
+                  src="/images/selected/moulding-wall.webp"
+                  alt="Rows of moulding samples in the shop"
+                  fill
+                  sizes="(max-width:540px) 90vw, 30vw"
+                />
+              </div>
+              <h3>Find a frame direction before you visit.</h3>
+              <p>
+                A few things to notice about your artwork and the room it
+                belongs in.
+              </p>
+            </Link>
+            <Link
+              href="/journal/framing-oversized-art"
+              className="picture-card journal-card"
+            >
+              <div className="photo">
+                <Image
+                  src="/images/selected/cherie-large-frame.webp"
+                  alt="Cherie working with a large framed piece"
+                  fill
+                  sizes="(max-width:540px) 90vw, 30vw"
+                />
+              </div>
+              <h3>A little planning for a much larger piece.</h3>
+              <p>
+                What to gather before bringing oversized artwork to the shop.
+              </p>
+            </Link>
+            <Link href="/gallery" className="picture-card journal-card">
+              <div className="photo">
+                <Image
+                  src="/images/selected/textile-frame-detail.webp"
+                  alt="Detail of a framed textile"
+                  fill
+                  sizes="(max-width:540px) 90vw, 30vw"
+                />
+              </div>
+              <h3>Not everything starts on paper.</h3>
+              <p>
+                See the textures, objects, and meaningful pieces that pass
+                through our hands.
+              </p>
+            </Link>
+          </div>
         </div>
       </section>
     </>
-  )
+  );
 }

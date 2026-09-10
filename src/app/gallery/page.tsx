@@ -1,61 +1,63 @@
-import type { Metadata } from 'next'
-import Image from 'next/image'
-
+import Image from "next/image";
+import Link from "next/link";
+import type { Metadata } from "next";
 export const metadata: Metadata = {
-  title: 'Gallery — Recent Framing Work',
-  description: 'Custom framing examples from Salado Village Framer. Art framing, shadow boxes, mirrors, and more.',
-  alternates: {
-    canonical: '/gallery',
-  },
-  openGraph: {
-    title: 'Gallery — Recent Framing Work',
-    description: 'Custom framing examples from Salado Village Framer — art, shadow boxes, mirrors, and more.',
-    url: 'https://saladovillageframer.com/gallery',
-    type: 'website',
-    images: [{ url: '/svf-og-default.jpg', width: 1200, height: 630, alt: 'Gallery — Recent Framing Work | Salado Village Framer' }],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Gallery — Recent Framing Work',
-    description: 'Custom framing examples from Salado Village Framer — art, shadow boxes, mirrors, and more.',
-    images: ['/svf-og-default.jpg'],
-  },
-}
-
-export default function GalleryPage() {
+  title: "Framing gallery & a look inside our workshop",
+  description:
+    "Real artwork, textiles, photographs, and process images from Salado Village Framer. Find a little inspiration for your own piece.",
+  alternates: { canonical: "/gallery" },
+};
+const work = [
+  ["painting-framed", "A painting, beautifully presented."],
+  ["woven-artwork", "Texture deserves a thoughtful frame."],
+  ["memorabilia-display", "The things that hold a story."],
+  ["papyrus-artwork", "An artwork with its own character."],
+  ["large-framed-textile", "Room for something larger."],
+  ["historic-photo-framed", "A photograph ready for the wall."],
+  ["document-framing", "A piece of history, on display."],
+  ["poster-frame-detail", "Color, detail, and a strong edge."],
+  ["photo-arrangement", "A collection brought together."],
+  ["textile-display", "A closer look at textile work."],
+  ["graphic-artwork", "A bold piece, a considered finish."],
+  ["small-artwork-consultation", "It begins with a conversation."],
+  ["colorful-artwork", "Color that catches your eye."],
+  ["red-artwork", "A little drama on the wall."],
+  ["finished-piece-at-table", "The finishing touches."],
+];
+export default function Gallery() {
   return (
     <>
-      <section className="relative h-[50vh] min-h-[350px] w-full overflow-hidden bg-deep">
-        <Image
-          src="/images/gallery/hero.jpg"
-          alt="Framed pieces on display"
-          fill
-          priority
-          className="object-cover opacity-40"
-        />
-        <div className="relative z-10 flex flex-col items-center justify-center h-full text-center px-6">
-          <h1 className="font-display text-4xl md:text-5xl text-cream tracking-[0.1em]">Gallery</h1>
-          <p className="font-body text-sm text-cream/50 tracking-[0.15em] uppercase mt-4">
-            Recent custom framing work
-          </p>
-        </div>
-      </section>
-
-      <section className="section-pad bg-cream">
-        <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {[1,2,3,4,5,6,7,8,9,11,12,13,14,15,16].map((n) => (
-            <div key={n} className="relative aspect-square overflow-hidden group">
-              <Image
-                src={`/images/gallery/frame-${String(n).padStart(2, '0')}.jpg`}
-                alt={`Custom framing example ${n}`}
-                fill
-                className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-                sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
-              />
-            </div>
+      <header className="page-intro">
+        <p className="eyebrow">From our hands to your walls</p>
+        <h1>Every piece has a story.</h1>
+        <p className="lede">
+          Here are a few that have passed through our shop. Paintings,
+          photographs, textiles, and the unexpected—each with a design of its
+          own.
+        </p>
+      </header>
+      <section className="wrap section" style={{ paddingTop: 0 }}>
+        <div className="gallery-grid">
+          {work.map(([image, caption]) => (
+            <figure key={image}>
+              <div className="gallery-photo">
+                <Image
+                  src={`/images/selected/${image}.webp`}
+                  alt={caption}
+                  fill
+                  sizes="(max-width:540px) 90vw, (max-width:800px) 45vw, 30vw"
+                />
+              </div>
+              <figcaption>{caption}</figcaption>
+            </figure>
           ))}
+        </div>
+        <div className="actions">
+          <Link href="/studio" className="button button-ink">
+            Now try your own piece ↗
+          </Link>
         </div>
       </section>
     </>
-  )
+  );
 }

@@ -1,118 +1,116 @@
-import type { Metadata } from 'next'
-import Image from 'next/image'
-
+import Image from "next/image";
+import Link from "next/link";
+import type { Metadata } from "next";
+import { business } from "@/lib/content";
 export const metadata: Metadata = {
-  title: 'Custom Framing Services',
-  description: 'Custom picture framing, art framing, mirror framing, shadow boxes, and restoration at Salado Village Framer in Salado, Texas.',
-  alternates: {
-    canonical: '/services',
-  },
-  openGraph: {
-    title: 'Custom Framing Services',
-    description: 'Custom picture framing, art framing, mirror framing, shadow boxes, and restoration.',
-    url: 'https://saladovillageframer.com/services',
-    type: 'website',
-    images: [{ url: '/svf-og-default.jpg', width: 1200, height: 630, alt: 'Custom Framing Services | Salado Village Framer' }],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Custom Framing Services',
-    description: 'Custom picture framing, art framing, mirror framing, shadow boxes, and restoration.',
-    images: ['/svf-og-default.jpg'],
-  },
-}
-
+  title: "Custom framing, artwork, textiles & oversized pieces",
+  description:
+    "Explore personal custom framing for paintings, photographs, textiles, keepsakes, and larger pieces at Salado Village Framer.",
+  alternates: { canonical: "/services" },
+};
 const services = [
   {
-    title: 'Custom Picture Framing',
-    desc: 'Hundreds of moulding options from classic wood to contemporary metal. Conservation-grade glass and archival matting available on every order. We frame art, photographs, prints, posters, and anything you want on a wall.',
+    title: "Art & photographs",
+    image: "painting-framed",
+    copy: "Original paintings, prints, photographs, and the pieces you have been meaning to put on the wall. We’ll look at the artwork first, then find the frame and matting that let it shine.",
   },
   {
-    title: 'Mirror Framing',
-    desc: 'Custom-framed mirrors in any size and style. Bring us your mirror or choose from our selection — we build the frame to fit.',
+    title: "Textiles & keepsakes",
+    image: "woven-artwork",
+    copy: "Jerseys, needlework, meaningful objects, and collections of memories. Bring the piece or send a photo so we can talk through its depth, materials, and presentation.",
   },
   {
-    title: 'Shadow Boxes & Display Cases',
-    desc: 'Jerseys, medals, memorabilia, keepsakes, and three-dimensional pieces preserved and displayed behind museum-quality glass.',
+    title: "Larger pieces",
+    image: "large-framed-textile",
+    copy: "A bigger canvas, an oversized print, a statement piece. Larger work is welcome. Send approximate dimensions and a photo before transporting anything particularly large or awkward.",
   },
-  {
-    title: 'Needlework & Textile Framing',
-    desc: 'Cross-stitch, embroidery, quilts, and textiles mounted and framed with archival methods that protect the fabric.',
-  },
-  {
-    title: 'Diplomas & Credentials',
-    desc: 'The degree took years. The frame should last longer. Acid-free materials, conservation glass, and mouldings that do justice to what it represents.',
-  },
-  {
-    title: 'Restoration & Repair',
-    desc: 'Damaged frames repaired or rebuilt. Faded mats replaced. Older pieces re-framed with modern conservation materials.',
-  },
-]
-
-export default function ServicesPage() {
+];
+export default function Services() {
   return (
     <>
-      {/* Hero */}
-      <section className="relative h-[60vh] min-h-[400px] w-full overflow-hidden bg-deep">
-        <Image
-          src="/images/services/hero.jpg"
-          alt="Custom framing workspace"
-          fill
-          priority
-          className="object-cover opacity-40"
-        />
-        <div className="relative z-10 flex flex-col items-center justify-center h-full text-center px-6">
-          <h1 className="font-display text-4xl md:text-5xl text-cream tracking-[0.1em]">
-            What We Frame
-          </h1>
-          <p className="font-body text-sm text-cream/50 tracking-[0.15em] uppercase mt-4">
-            Built by hand &middot; Finished in Salado
+      <header className="page-intro">
+        <p className="eyebrow">Custom framing, personally considered</p>
+        <h1>
+          If it matters to you,
+          <br />
+          let’s give it a place.
+        </h1>
+        <p className="lede">
+          From a favorite photograph to a wonderfully unusual object, we help
+          you find a presentation that feels right.
+        </p>
+      </header>
+      {services.map((x, i) => (
+        <section
+          key={x.title}
+          className={`split-feature ${i % 2 === 0 ? "sage" : ""}`}
+        >
+          <div className="feature-photo">
+            <Image
+              src={`/images/selected/${x.image}.webp`}
+              alt={x.title + " framed at Village Framer"}
+              fill
+              sizes="(max-width:800px) 100vw, 50vw"
+            />
+          </div>
+          <div className="feature-copy">
+            <p className="eyebrow">0{i + 1} / What we frame</p>
+            <h2>{x.title}</h2>
+            <p>{x.copy}</p>
+            <div className="actions">
+              <Link href="/studio" className="text-link">
+                Explore your piece ↗
+              </Link>
+            </div>
+          </div>
+        </section>
+      ))}
+      <section className="wrap section">
+        <div className="section-heading">
+          <div>
+            <p className="eyebrow">The details make the difference</p>
+            <h2>More than a short menu.</h2>
+          </div>
+          <p>
+            Compare real samples from Roma Moulding, Larson-Juhl, and our wider
+            selection in the shop.
           </p>
         </div>
-      </section>
-
-      {/* Services Grid */}
-      <section className="section-pad bg-cream">
-        <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
-          {services.map((s) => (
-            <div key={s.title} className="border border-stone/30 p-8 hover:border-stone/60 transition-colors">
-              <h3 className="font-display text-xl text-charcoal mb-3">{s.title}</h3>
-              <p className="font-body text-sm text-charcoal/50 leading-relaxed">{s.desc}</p>
+        <div className="cards-3">
+          {[
+            {
+              title: "Moulding with character",
+              copy: "Quiet and clean, richly textured, traditional, or a little unexpected. We’ll explore profiles and finishes beside your artwork.",
+            },
+            {
+              title: "Matting with purpose",
+              copy: "Color and space change how a piece feels. Compare mat treatments in person, including layered details when they suit the work.",
+            },
+            {
+              title: "A finishing touch",
+              copy: "A fillet adds a narrow decorative detail inside a mat or frame. We can show you how this subtle element changes the design.",
+            },
+          ].map((x) => (
+            <div key={x.title}>
+              <h3>{x.title}</h3>
+              <p className="lede">{x.copy}</p>
             </div>
           ))}
         </div>
       </section>
-
-      {/* Process */}
-      <section className="section-pad bg-deep text-cream">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="font-display text-3xl text-cream mb-14">How it works</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-            {[
-              { step: '01', title: 'Bring it in', desc: 'Walk in with your piece. No appointment needed. We will look at it together and talk through options.' },
-              { step: '02', title: 'Choose materials', desc: 'We guide you through mouldings, mats, and glass. You see real samples on your actual piece before you commit.' },
-              { step: '03', title: 'Pick it up', desc: 'Most orders ready in two weeks. We call when it is done. You take home something worth hanging.' },
-            ].map((s) => (
-              <div key={s.step}>
-                <p className="font-body text-xs text-stone tracking-[0.2em] uppercase mb-3">{s.step}</p>
-                <h3 className="font-display text-xl text-cream mb-2">{s.title}</h3>
-                <p className="font-body text-xs text-cream/50 leading-relaxed">{s.desc}</p>
-              </div>
-            ))}
+      <section className="sage">
+        <div className="wrap section budget-panel">
+          <h2>Let’s start with your budget.</h2>
+          <div>
+            <p>{business.budget}</p>
+            <div className="actions">
+              <Link href="/visit" className="button button-ink">
+                Visit the shop ↗
+              </Link>
+            </div>
           </div>
         </div>
       </section>
-
-      {/* Sister business nod */}
-      <section className="section-pad bg-cream text-center">
-        <p className="font-body text-sm text-charcoal/50">
-          Looking for fine art or portraits to frame? Visit{' '}
-          <a href="https://solasgallery.com" className="text-stone hover:text-charcoal transition-colors border-b border-stone/40 hover:border-charcoal pb-px">
-            Solas Gallery
-          </a>{' '}
-          next door.
-        </p>
-      </section>
     </>
-  )
+  );
 }

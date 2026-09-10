@@ -1,50 +1,55 @@
-import type { Metadata } from 'next'
-import Script from 'next/script'
-import Nav from '@/components/Nav'
-import Footer from '@/components/Footer'
-import './globals.css'
+import type { Metadata } from "next";
+import Script from "next/script";
+import Nav from "@/components/Nav";
+import Footer from "@/components/Footer";
+import Analytics from "@/components/Analytics";
+import "./globals.css";
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://saladovillageframer.com'),
+  metadataBase: new URL("https://saladovillageframer.com"),
   title: {
-    default: 'Salado Village Framer — Custom Framing & Décor | Salado, TX',
-    template: '%s | Salado Village Framer \u2014 Salado, TX',
+    default: "Salado Village Framer — Personal Custom Framing | Salado, TX",
+    template: "%s | Salado Village Framer \u2014 Salado, TX",
   },
   description:
-    'Custom picture framing, art framing, and décor on Main Street in Salado, Texas. Sister business to Solas Gallery.',
+    "Personal custom framing with 30 years of experience. Explore artwork, textiles, photographs, and oversized pieces at our Salado shop, welcoming Central Texas.",
   alternates: {
-    canonical: '/',
+    canonical: "/",
   },
   openGraph: {
-    type: 'website',
-    locale: 'en_US',
-    url: 'https://saladovillageframer.com',
-    siteName: 'Salado Village Framer',
+    type: "website",
+    locale: "en_US",
+    url: "https://saladovillageframer.com",
+    siteName: "Salado Village Framer",
     images: [
       {
-        url: '/svf-og-default.jpg',
+        url: "/svf-og-default.jpg",
         width: 1200,
         height: 630,
-        alt: 'Salado Village Framer — Custom Framing & Décor, Salado, Texas',
+        alt: "Salado Village Framer — Custom Framing & Décor, Salado, Texas",
       },
     ],
   },
   twitter: {
-    card: 'summary_large_image',
-    title: 'Salado Village Framer — Custom Framing & Décor | Salado, TX',
+    card: "summary_large_image",
+    title: "Salado Village Framer — Personal Custom Framing | Salado, TX",
     description:
-      'Custom picture framing, art framing, and décor on Main Street in Salado, Texas.',
-    images: ['/svf-og-default.jpg'],
+      "Personal custom framing, artistic guidance, and work that stays in our Salado shop. Serving Central Texas.",
+    images: ["/svf-og-default.jpg"],
   },
   verification: {
-    google: 'AT_R1LQkNEO23NS0uQTrc2F8UYTRxVybtN1HlyykDy4',
+    google: "AT_R1LQkNEO23NS0uQTrc2F8UYTRxVybtN1HlyykDy4",
   },
-  ...(process.env.VERCEL_ENV === 'preview' && {
+  ...(process.env.VERCEL_ENV === "preview" && {
     robots: { index: false, follow: false },
   }),
-}
+};
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en">
       <head>
@@ -85,13 +90,60 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             src="https://www.googletagmanager.com/ns.html?id=GTM-TCJR9HV"
             height="0"
             width="0"
-            style={{ display: 'none', visibility: 'hidden' }}
+            style={{ display: "none", visibility: "hidden" }}
           />
         </noscript>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Store",
+              "@id": "https://saladovillageframer.com/#shop",
+              name: "Salado Village Framer",
+              url: "https://saladovillageframer.com",
+              image:
+                "https://saladovillageframer.com/images/selected/shop-at-dusk.webp",
+              logo: "https://saladovillageframer.com/brand/village-framer-logo.svg",
+              telephone: "+1-254-613-6123",
+              email: "info@solasgallery.com",
+              description:
+                "Personal custom picture framing with 30 years of experience. Framing work stays in our Salado shop.",
+              address: {
+                "@type": "PostalAddress",
+                streetAddress: "2 Rock Creek Dr, Unit A",
+                addressLocality: "Salado",
+                addressRegion: "TX",
+                postalCode: "76571",
+                addressCountry: "US",
+              },
+              openingHoursSpecification: [
+                {
+                  "@type": "OpeningHoursSpecification",
+                  dayOfWeek: [
+                    "Monday",
+                    "Tuesday",
+                    "Wednesday",
+                    "Thursday",
+                    "Friday",
+                    "Saturday",
+                  ],
+                  opens: "10:00",
+                  closes: "17:00",
+                },
+              ],
+              sameAs: [
+                "https://www.instagram.com/saladovillageframer/",
+                "https://www.facebook.com/103998722673775",
+              ],
+            }),
+          }}
+        />
+        <Analytics />
         <Nav />
-        <main>{children}</main>
+        <main id="main-content">{children}</main>
         <Footer />
       </body>
     </html>
-  )
+  );
 }
