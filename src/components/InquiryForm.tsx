@@ -1,142 +1,133 @@
-'use client'
-
-import { useState } from 'react'
-
-interface InquiryFormProps {
-  source: string
-  dark?: boolean
-  headline?: string
-  subtext?: string
-  messagePlaceholder?: string
-}
-
+"use client";
+import { FormEvent, useState } from "react";
 export default function InquiryForm({
-  source,
-  dark = false,
-  headline = 'Begin here.',
-  subtext,
-  messagePlaceholder = 'Tell us what you have in mind.',
-}: InquiryFormProps) {
-  const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle')
-
-  const textColor = dark ? 'text-cream' : 'text-charcoal'
-  const mutedColor = dark ? 'text-cream/40' : 'text-charcoal/40'
-  const inputColor = dark ? 'text-cream' : 'text-charcoal'
-  const borderColor = dark ? 'border-cream/20 focus:border-cream/60' : 'border-stone/30 focus:border-stone'
-  const btnBorder = dark ? 'border-cream/40 hover:border-cream text-cream' : 'border-stone hover:border-charcoal text-charcoal'
-
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault()
-    setStatus('sending')
-
-    const form = e.currentTarget
-    const data = {
-      name: (form.elements.namedItem('name') as HTMLInputElement).value,
-      email: (form.elements.namedItem('email') as HTMLInputElement).value,
-      phone: (form.elements.namedItem('phone') as HTMLInputElement)?.value || '',
-      message: (form.elements.namedItem('message') as HTMLTextAreaElement)?.value || '',
-      source,
-    }
-
+  source = "contact",
+  compact = false,
+}: {
+  source?: string;
+  compact?: boolean;
+}) {
+  const [busy, setBusy] = useState(false),
+    [sent, setSent] = useState(false),
+    [error, setError] = useState("");
+  async function submit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    if (busy) return;
+    setBusy(true);
+    setError("");
+    const data = new FormData(e.currentTarget);
+    const abort = new AbortController();
+    const timer = setTimeout(() => abort.abort(), 30000);
     try {
-      const res = await fetch('/api/inquiry', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-      })
-
-      if (res.ok) {
-        setStatus('sent')
-        form.reset()
-      } else {
-        setStatus('error')
-      }
-    } catch {
-      setStatus('error')
+      const res = await fetch("/api/inquiry", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        signal: abort.signal,
+        body: JSON.stringify({
+          name: data.get("name"),
+          email: data.get("email"),
+          phone: data.get("phone"),
+          message: data.get("message"),
+          website: data.get("website"),
+          source,
+        }),
+      });
+      const result = await res.json();
+      if (!res.ok || !result.success)
+        throw new Error(result.error || "Please try again or call the shop.");
+      setSent(true);
+      window.dispatchEvent(
+        new CustomEvent("svf-inquiry-success", { detail: { source } }),
+      );
+    } catch (e) {
+      setError(
+        e instanceof Error && e.name !== "AbortError"
+          ? e.message
+          : "We could not confirm delivery. Please call (254) 613-6123 before resending.",
+      );
+    } finally {
+      clearTimeout(timer);
+      setBusy(false);
     }
   }
-
-  if (status === 'sent') {
+  if (sent)
     return (
-      <div className="text-center py-12">
-        <h3 className={`font-display text-2xl ${textColor} mb-4`}>Thank you.</h3>
-        <p className={`font-body text-sm ${dark ? 'text-cream/50' : 'text-charcoal/50'}`}>
-          We received your inquiry and will be in touch shortly.
-        </p>
-      </div>
-    )
-  }
-
-  return (
-    <div className="max-w-xl mx-auto">
-      {headline && (
-        <h2 className={`font-display text-3xl ${textColor} text-center mb-4`}>
-          {headline}
+      <div className="form-success" role="status">
+        <p className="eyebrow">Thank you</p>
+        <h2>
+          {compact ? "You’re on the list." : "Let’s make something beautiful."}
         </h2>
-      )}
-      {subtext && (
-        <p className={`font-body text-sm ${dark ? 'text-cream/50' : 'text-charcoal/50'} text-center mb-10`}>
-          {subtext}
+        <p>
+          {compact
+            ? "We look forward to sharing shop news and inspiration with you."
+            : "Your message is with us. We’ll use the details you provided to help plan your visit."}
+        </p>
+        <a className="text-link" href="/studio">
+          Explore a framing idea ↗
+        </a>
+      </div>
+    );
+  return (
+    <form className="inquiry-form" onSubmit={submit}>
+      <fieldset disabled={busy}>
+        <legend className="sr-only">Your contact details</legend>
+        <div className="form-row">
+          <label>
+            Your name
+            <input name="name" required autoComplete="name" maxLength={120} />
+          </label>
+          <label>
+            Email address
+            <input
+              name="email"
+              required
+              type="email"
+              autoComplete="email"
+              maxLength={254}
+            />
+          </label>
+        </div>
+        <label>
+          Phone <span>(optional)</span>
+          <input name="phone" type="tel" autoComplete="tel" maxLength={40} />
+        </label>
+        {!compact && (
+          <label>
+            Tell us about your piece
+            <textarea
+              name="message"
+              rows={5}
+              maxLength={3000}
+              placeholder="What are you framing? Approximate size, your ideas, and where you’re coming from…"
+            />
+          </label>
+        )}
+        <div className="honeypot" aria-hidden="true">
+          <label>
+            Leave this blank
+            <input name="website" tabIndex={-1} autoComplete="off" />
+          </label>
+        </div>
+        <button className="button button-ink" type="submit">
+          {busy
+            ? "Sending…"
+            : compact
+              ? "Keep me inspired"
+              : "Send your message"}{" "}
+          <span aria-hidden="true">↗</span>
+        </button>
+        <p className="form-note">
+          {compact
+            ? "Sign up for occasional shop news and framing inspiration. You can unsubscribe from marketing emails anytime."
+            : "We’ll use your details to respond to your inquiry."}{" "}
+          <a href="/privacy">Privacy</a>
+        </p>
+      </fieldset>
+      {error && (
+        <p className="form-error" role="alert">
+          {error}
         </p>
       )}
-      <form onSubmit={handleSubmit} className="space-y-6 text-left">
-        <div>
-          <label className={`font-body text-xs ${mutedColor} tracking-[0.1em] uppercase block mb-2`}>
-            Name
-          </label>
-          <input
-            type="text"
-            name="name"
-            required
-            className={`w-full bg-transparent border-b ${borderColor} outline-none py-3 font-body text-sm ${inputColor} transition-colors`}
-          />
-        </div>
-        <div>
-          <label className={`font-body text-xs ${mutedColor} tracking-[0.1em] uppercase block mb-2`}>
-            Email
-          </label>
-          <input
-            type="email"
-            name="email"
-            required
-            className={`w-full bg-transparent border-b ${borderColor} outline-none py-3 font-body text-sm ${inputColor} transition-colors`}
-          />
-        </div>
-        <div>
-          <label className={`font-body text-xs ${mutedColor} tracking-[0.1em] uppercase block mb-2`}>
-            Phone
-          </label>
-          <input
-            type="tel"
-            name="phone"
-            className={`w-full bg-transparent border-b ${borderColor} outline-none py-3 font-body text-sm ${inputColor} transition-colors`}
-          />
-        </div>
-        <div>
-          <label className={`font-body text-xs ${mutedColor} tracking-[0.1em] uppercase block mb-2`}>
-            {messagePlaceholder}
-          </label>
-          <textarea
-            name="message"
-            rows={4}
-            className={`w-full bg-transparent border-b ${borderColor} outline-none py-3 font-body text-sm ${inputColor} transition-colors resize-none`}
-          />
-        </div>
-        <div className="text-center pt-4">
-          <button
-            type="submit"
-            disabled={status === 'sending'}
-            className={`font-display text-sm tracking-[0.12em] uppercase border-b ${btnBorder} pb-1 transition-colors disabled:opacity-50`}
-          >
-            {status === 'sending' ? 'Sending...' : 'Send inquiry →'}
-          </button>
-        </div>
-        {status === 'error' && (
-          <p className="font-body text-xs text-red-500 text-center mt-4">
-            Something went wrong. Please email us directly at info@solasgallery.com
-          </p>
-        )}
-      </form>
-    </div>
-  )
+    </form>
+  );
 }

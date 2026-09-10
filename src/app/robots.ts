@@ -1,15 +1,15 @@
-import type { MetadataRoute } from 'next'
+import type { MetadataRoute } from "next";
 
 export default function robots(): MetadataRoute.Robots {
   return {
     rules: [
       {
-        userAgent: '*',
-        allow: '/',
-        disallow: ['/api/'],
+        userAgent: "*",
+        allow: "/",
+        disallow: ["/api/"],
       },
     ],
-    sitemap: 'https://saladovillageframer.com/sitemap.xml',
-    host: 'https://saladovillageframer.com',
-  }
+    sitemap: "https://saladovillageframer.com/sitemap.xml",
+    host: "https://saladovillageframer.com",
+  };
 }

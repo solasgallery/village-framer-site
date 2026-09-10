@@ -1,0 +1,328 @@
+.studio {
+  --studio-ink: #202b2a;
+  --studio-cream: #faf7f0;
+  --studio-gold: #d8ac54;
+  color: var(--studio-ink);
+  padding: clamp(30px, 5vw, 80px) max(20px, calc((100vw - 1360px) / 2));
+  background: var(--studio-cream);
+}
+.studio * {
+  box-sizing: border-box;
+}
+.studio-intro {
+  max-width: 780px;
+  margin-bottom: 38px;
+}
+.studio h1,
+.studio h2 {
+  font-family: Georgia, serif;
+  font-weight: 400;
+  letter-spacing: -0.045em;
+  line-height: 1.08;
+  margin: 12px 0 22px;
+}
+.studio h1 {
+  font-size: clamp(38px, 5vw, 66px);
+}
+.studio h2 {
+  font-size: clamp(32px, 4vw, 46px);
+}
+.studio p {
+  line-height: 1.65;
+  margin: 12px 0;
+}
+.studio-eyebrow {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-weight: 700;
+}
+.studio-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(300px, 1fr);
+  gap: 38px;
+  align-items: start;
+}
+.studio-visual {
+  position: sticky;
+  top: 90px;
+}
+.studio-canvas-wrap {
+  background: #e9e5da;
+  border: 1px solid #d6d4ca;
+  border-radius: 4px;
+  overflow: hidden;
+}
+.studio canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 680px;
+  object-fit: contain;
+}
+.studio .studio-note {
+  font-size: 13px;
+  line-height: 1.55;
+  color: #59625b;
+}
+.studio button,
+.studio input,
+.studio select,
+.studio textarea {
+  font: inherit;
+  font-size: 16px;
+}
+.studio button {
+  cursor: pointer;
+  min-height: 44px;
+  transition:
+    background 0.15s,
+    color 0.15s;
+}
+.studio button:disabled,
+.studio fieldset:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.studio fieldset {
+  border: 0;
+  padding: 0;
+  margin: 0 0 25px;
+  min-width: 0;
+}
+.studio legend {
+  font:
+    24px Georgia,
+    serif;
+  margin: 0 0 16px;
+  padding: 0;
+}
+.studio label,
+.studio-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 14px;
+}
+.studio input:not([type="range"]):not([type="checkbox"]):not([type="file"]),
+.studio select,
+.studio textarea {
+  display: block;
+  width: 100%;
+  border: 1px solid #a6aca2;
+  background: #fff;
+  color: var(--studio-ink);
+  border-radius: 2px;
+  padding: 12px;
+  margin-top: 7px;
+  min-height: 46px;
+}
+.studio textarea {
+  resize: vertical;
+}
+.studio input[type="range"] {
+  display: block;
+  width: 100%;
+  accent-color: var(--studio-ink);
+  margin: 12px 0;
+  min-height: 24px;
+}
+.studio-upload {
+  display: flex !important;
+  flex-direction: column;
+  gap: 10px;
+  border: 1px dashed #8a9587;
+  padding: 17px;
+  background: #fff;
+}
+.studio input[type="file"] {
+  display: block;
+  width: 100%;
+  font-size: 13px;
+  font-weight: 400;
+}
+.studio input[type="file"]::file-selector-button {
+  border: 0;
+  padding: 9px 12px;
+  margin-right: 10px;
+  background: #e9ecdf;
+  color: var(--studio-ink);
+  cursor: pointer;
+}
+.studio-options {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 6px;
+  margin: 0 0 20px;
+}
+.studio-options button {
+  border: 1px solid #c9cfc1;
+  background: transparent;
+  border-radius: 2px;
+  font-size: 12px;
+  padding: 10px 4px;
+  color: var(--studio-ink);
+}
+.studio-options .is-selected {
+  border: 2px solid var(--studio-ink);
+  background: #e9ecdf;
+  padding: 9px 3px;
+}
+.studio-options i {
+  display: block;
+  width: 26px;
+  height: 26px;
+  border: 1px solid #0002;
+  border-radius: 50%;
+  margin: 0 auto 7px;
+}
+.studio-dimensions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.studio .studio-check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.studio input[type="checkbox"] {
+  width: 19px;
+  height: 19px;
+  accent-color: var(--studio-ink);
+}
+.studio-room {
+  border-top: 1px solid #c9cfc1;
+  border-bottom: 1px solid #c9cfc1;
+  padding: 18px 0;
+}
+.studio-room summary {
+  cursor: pointer;
+  font-size: 18px;
+  min-height: 30px;
+}
+.studio-room summary span {
+  font-size: 12px;
+  color: #59625b;
+  margin-left: 6px;
+}
+.studio-room fieldset {
+  margin-top: 18px;
+  margin-bottom: 0;
+}
+.studio-primary,
+.studio-secondary {
+  padding: 13px 21px;
+  border: 1px solid var(--studio-ink);
+  font-weight: 600;
+}
+.studio-primary {
+  background: var(--studio-ink);
+  color: white;
+  width: 100%;
+}
+.studio-secondary {
+  background: transparent;
+  color: var(--studio-ink);
+}
+.studio-primary:hover:not(:disabled) {
+  background: #3d4b3d;
+}
+.studio-secondary:hover:not(:disabled) {
+  background: #e9ecdf;
+}
+.studio-text-button {
+  border: 0;
+  padding: 4px 0;
+  text-decoration: underline;
+  background: transparent;
+  color: var(--studio-ink);
+}
+.studio-consult {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(30px, 8vw, 110px);
+  border-top: 1px solid #c9cfc1;
+  margin-top: 60px;
+  padding-top: 50px;
+}
+.studio-consult > div {
+  max-width: 470px;
+}
+.studio a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.studio-success {
+  padding: 20px;
+  background: #e3ecdc;
+  border-left: 4px solid #597348;
+}
+.studio-error {
+  background: #fff3ec;
+  border: 1px solid #a94732;
+  color: #792b1b;
+  padding: 18px;
+  position: fixed;
+  bottom: 18px;
+  left: 20px;
+  right: 20px;
+  max-width: 780px;
+  margin: 0 auto;
+  z-index: 100;
+  box-shadow: 0 4px 30px #0002;
+}
+.studio :focus-visible {
+  outline: 3px solid #a94732;
+  outline-offset: 4px;
+}
+.studio-sr-only,
+.studio-honey {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+.studio-honey {
+  left: -9999px;
+}
+.studio [disabled] {
+  cursor: default;
+}
+@media (max-width: 800px) {
+  .studio-layout,
+  .studio-consult {
+    grid-template-columns: 1fr;
+    gap: 26px;
+  }
+  .studio-visual {
+    position: static;
+  }
+  .studio canvas {
+    max-height: 500px;
+  }
+  .studio-consult {
+    margin-top: 35px;
+    padding-top: 30px;
+  }
+  .studio-controls {
+    max-width: none;
+  }
+  .studio h1 {
+    font-size: 40px;
+  }
+  .studio-error {
+    font-size: 14px;
+    bottom: 10px;
+    left: 10px;
+    right: 10px;
+  }
+}
+
+.studio-error .studio-text-button {
+  display: block;
+  margin-top: 4px;
+}
