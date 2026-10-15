@@ -44,7 +44,7 @@ export default function Home() {
       </section>
       <p className="services-strip">
         Custom framing · Conservation framing · Restoration · Archival printing
-        · Delivery &amp; installation · Rifle Paper Co. gifts &amp; goods
+        · Delivery &amp; installation · Rifle Paper Co. retail gifts &amp; goods
       </p>
       <div className="trust-strip">
         <span>30 years of experience</span>
@@ -288,8 +288,12 @@ export default function Home() {
           Our promise: every piece is inspected before it leaves the shop. If
           it&apos;s not right, we make it right.
         </p>
-        {/* TODO(Tim): replace "#" with the shop's Google Business reviews URL */}
-        <a href="#" className="text-link">
+        <a
+          href="https://www.google.com/maps/search/?api=1&query=Salado+Village+Framer+Salado+Texas"
+          className="text-link"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           Read Google reviews ↗
         </a>
         <CtaPair />

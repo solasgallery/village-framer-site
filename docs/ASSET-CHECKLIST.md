@@ -39,6 +39,6 @@ Append an object to `src/data/mouldings.json` and drop its image in `public/moul
 
 ## Still needed from the shop (not images)
 
-- Google reviews link → `href="#"` in the trust block, `src/app/page.tsx` (marked `TODO(Tim)`).
+- Google reviews link currently opens a Google Maps search for the shop. Swap in the direct Google Business review URL (`g.page/...` / `search.google.com/local/reviews?placeid=...`) in the trust block, `src/app/page.tsx`, when available.
 - Pricing: the estimate rates in `src/lib/design/pricing.ts` are calibrated to the brief (16×20 mid-tier ≈ $445, 36×48 ≈ $1,135), not to the shop's real price list. Cherie should sanity-check them.
 - Wording on the new Services list (`src/app/services/page.tsx`) is a neutral placeholder for Cherie to approve.
