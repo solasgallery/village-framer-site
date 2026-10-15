@@ -81,18 +81,19 @@ async function invalid(name, body, status = 400, options) {
   });
 }
 (async () => {
-  await test("capture creates server-list contact and styled notification", async () => {
+  await test("capture sends styled notification FIRST, then server-list contact", async () => {
     const r = await run({ ...good, listId: 999 });
     assert.equal(r.status, 200);
     assert.equal(r.data.success, true);
     assert.equal(r.calls.length, 2);
-    assert.equal(r.calls[0].url, "https://api.brevo.com/v3/contacts");
-    assert.deepEqual(r.calls[0].body.listIds, [2]);
-    assert.equal(r.calls[0].body.email, "test@example.invalid");
-    assert.equal(r.calls[0].body.attributes.SMS, "+12545550101");
-    assert.equal(r.calls[1].body.to[0].email, "info@solasgallery.com");
-    assert.equal(r.calls[1].body.replyTo.email, "test@example.invalid");
-    assert.match(r.calls[1].body.subject, /In-person QR/);
+    assert.equal(r.calls[0].url, "https://api.brevo.com/v3/smtp/email");
+    assert.equal(r.calls[1].url, "https://api.brevo.com/v3/contacts");
+    assert.deepEqual(r.calls[1].body.listIds, [2]);
+    assert.equal(r.calls[1].body.email, "test@example.invalid");
+    assert.equal(r.calls[1].body.attributes.SMS, "+12545550101");
+    assert.equal(r.calls[0].body.to[0].email, "info@solasgallery.com");
+    assert.equal(r.calls[0].body.replyTo.email, "test@example.invalid");
+    assert.match(r.calls[0].body.subject, /In-person QR/);
   });
   await test("studio attachments and project directions passed to notification", async () => {
     const r = await run({
@@ -112,11 +113,11 @@ async function invalid(name, body, status = 400, options) {
       ],
     });
     assert.equal(r.status, 200);
-    assert.equal(r.calls[1].body.attachment.length, 2);
-    assert.equal(r.calls[1].body.attachment[0].content, jpeg);
-    assert.equal(r.calls[1].body.attachment[0].name, "framing-concept.jpg");
-    assert.match(r.calls[1].body.htmlContent, /24 × 36 inches/);
-    assert.match(r.calls[1].body.htmlContent, /Gold fillet requested/);
+    assert.equal(r.calls[0].body.attachment.length, 2);
+    assert.equal(r.calls[0].body.attachment[0].content, jpeg);
+    assert.equal(r.calls[0].body.attachment[0].name, "framing-concept.jpg");
+    assert.match(r.calls[0].body.htmlContent, /24 × 36 inches/);
+    assert.match(r.calls[0].body.htmlContent, /Gold fillet requested/);
   });
   await test("visitor strings HTML escaped and subject newlines removed", async () => {
     const r = await run({
@@ -126,7 +127,7 @@ async function invalid(name, body, status = 400, options) {
       project: { frame: "<b>gold</b>", city: "<img src=x>" },
     });
     assert.equal(r.status, 200);
-    const e = r.calls[1].body;
+    const e = r.calls[0].body;
     assert(!e.htmlContent.includes("<script>"));
     assert(!e.htmlContent.includes("<img src=x>"));
     assert(e.htmlContent.includes("&lt;script&gt;"));
@@ -138,19 +139,25 @@ async function invalid(name, body, status = 400, options) {
       { ...good, listId: 99 },
       { env: { BREVO_LIST_ID: "7" } },
     );
-    assert.deepEqual(r.calls[0].body.listIds, [7]);
+    assert.deepEqual(r.calls[1].body.listIds, [7]);
   });
-  await test("contact failure never reports success or sends notification", async () => {
-    const r = await run(good, { statuses: [400] });
+  await test("list-add failure (400, bad list id) is NON-FATAL: notification already sent, request succeeds", async () => {
+    const r = await run(good, { statuses: [201, 400] });
+    assert.equal(r.status, 200);
+    assert.equal(r.data.success, true);
+    assert.equal(r.calls.length, 2);
+    assert.equal(r.calls[0].url, "https://api.brevo.com/v3/smtp/email");
+  });
+  await test("list-add network error is NON-FATAL", async () => {
+    const r = await run(good, { throwAt: 2 });
+    assert.equal(r.status, 200);
+    assert.equal(r.data.success, true);
+  });
+  await test("notification failure never reports success and skips the list add", async () => {
+    const r = await run(good, { statuses: [503] });
     assert.equal(r.status, 502);
     assert.notEqual(r.data.success, true);
     assert.equal(r.calls.length, 1);
-  });
-  await test("notification failure never reports success", async () => {
-    const r = await run(good, { statuses: [201, 503] });
-    assert.equal(r.status, 502);
-    assert.notEqual(r.data.success, true);
-    assert.equal(r.calls.length, 2);
   });
   await test("upstream network error returns failure", async () => {
     const r = await run(good, { throwAt: 1 });
@@ -158,7 +165,7 @@ async function invalid(name, body, status = 400, options) {
     assert.notEqual(r.data.success, true);
   });
   await test("contact update 204 accepted", async () => {
-    const r = await run(good, { statuses: [204, 201] });
+    const r = await run(good, { statuses: [201, 204] });
     assert.equal(r.data.success, true);
   });
   await invalid("missing API key", good, 503, { env: { BREVO_API_KEY: "" } });
@@ -233,9 +240,9 @@ async function invalid(name, body, status = 400, options) {
       project: { frame: "W".repeat(1000), city: "T".repeat(1000) },
     });
     assert.equal(r.status, 200);
-    assert(!r.calls[1].body.htmlContent.includes("W".repeat(121)));
-    assert(!r.calls[1].body.htmlContent.includes("T".repeat(121)));
-    assert.match(r.calls[1].body.subject, /Website inquiry/);
+    assert(!r.calls[0].body.htmlContent.includes("W".repeat(121)));
+    assert(!r.calls[0].body.htmlContent.includes("T".repeat(121)));
+    assert.match(r.calls[0].body.subject, /Website inquiry/);
   });
   console.log(
     `\n${pass} passed; ${fail} failed. All upstream traffic mocked; zero external requests.`,

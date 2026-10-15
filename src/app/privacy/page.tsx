@@ -14,7 +14,7 @@ export default function Privacy() {
       </p>
       <h2>Photos and framing previews</h2>
       <p>
-        Photos selected in the framing studio are processed in your browser.
+        Photos you upload in the frame designer are processed in your browser.
         When you choose “Send my concept to the shop,” a reduced-size artwork
         reference and your concept are sent with your contact details. If you
         included a room photo, it appears in the concept. Please share only

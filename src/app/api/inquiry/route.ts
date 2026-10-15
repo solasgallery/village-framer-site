@@ -154,25 +154,6 @@ export async function POST(request: NextRequest) {
     if (digits.length === 10) attributes.SMS = "+1" + digits;
     else if (digits.length === 11 && digits.startsWith("1"))
       attributes.SMS = "+" + digits;
-    // Keep the established Brevo list; clients cannot select another list.
-    const contactRes = await fetch("https://api.brevo.com/v3/contacts", {
-      method: "POST",
-      headers,
-      signal: AbortSignal.timeout(12000),
-      body: JSON.stringify({
-        email,
-        attributes,
-        listIds: [Number(process.env.BREVO_LIST_ID) || 2],
-        updateEnabled: true,
-      }),
-    });
-    if (!contactRes.ok) {
-      console.error("Brevo contact request failed:", contactRes.status);
-      return fail(
-        "We could not save your inquiry. Please try again or call (254) 613-6123.",
-        502,
-      );
-    }
     const emailRes = await fetch("https://api.brevo.com/v3/smtp/email", {
       method: "POST",
       headers,
@@ -208,6 +189,26 @@ export async function POST(request: NextRequest) {
         "We could not confirm delivery. Please call (254) 613-6123 before resending.",
         502,
       );
+    }
+    // Keep the established Brevo list; clients cannot select another list.
+    // The notification above is the lead; a list-add failure must never fail
+    // the request, so it is logged and swallowed.
+    try {
+      const contactRes = await fetch("https://api.brevo.com/v3/contacts", {
+        method: "POST",
+        headers,
+        signal: AbortSignal.timeout(12000),
+        body: JSON.stringify({
+          email,
+          attributes,
+          listIds: [Number(process.env.BREVO_LIST_ID) || 2],
+          updateEnabled: true,
+        }),
+      });
+      if (!contactRes.ok)
+        console.error("Brevo contact request failed:", contactRes.status);
+    } catch {
+      console.error("Brevo contact request errored");
     }
     return NextResponse.json({ success: true });
   } catch {
