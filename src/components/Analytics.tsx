@@ -18,6 +18,7 @@ export default function Analytics() {
       else if (href.includes("google.com/maps/dir"))
         push("svf_directions_click");
       else if (href === "/studio") push("svf_studio_open");
+      else if (href === "/design") push("svf_design_cta_click");
     };
     window.addEventListener("svf-inquiry-success", success);
     document.addEventListener("click", click);

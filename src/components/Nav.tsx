@@ -47,11 +47,11 @@ export default function Nav() {
             ))}
           </div>
           <Link
-            href="/studio"
+            href="/design"
             className="button button-ink nav-cta"
             onClick={() => setOpen(false)}
           >
-            Frame your piece <span aria-hidden="true">↗</span>
+            Design your frame <span aria-hidden="true">↗</span>
           </Link>
           <button
             className="menu-toggle"
@@ -71,7 +71,7 @@ export default function Nav() {
           >
             {[
               ...links,
-              { href: "/studio", label: "Frame your piece" },
+              { href: "/design", label: "Design your frame" },
               { href: "/contact", label: "Contact us" },
             ].map((l) => (
               <Link key={l.href} href={l.href} onClick={() => setOpen(false)}>

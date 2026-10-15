@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { business, regionCities } from "@/lib/content";
+import CtaPair from "@/components/CtaPair";
 export default function Home() {
   return (
     <>
@@ -16,14 +17,12 @@ export default function Home() {
               framed.
             </em>
           </h1>
+          <CtaPair className="hero-cta" />
           <p className="lede">
             The art you found. The moment you kept. The piece that deserves a
             little more. Bring it to people who see what you see.
           </p>
           <div className="actions">
-            <Link href="/studio" className="button button-ink">
-              Frame your piece <span aria-hidden="true">↗</span>
-            </Link>
             <Link href="/visit" className="text-link">
               Visit our shop ↗
             </Link>
@@ -43,6 +42,10 @@ export default function Home() {
           </div>
         </div>
       </section>
+      <p className="services-strip">
+        Custom framing · Conservation framing · Restoration · Archival printing
+        · Delivery &amp; installation · Rifle Paper Co. gifts &amp; goods
+      </p>
       <div className="trust-strip">
         <span>30 years of experience</span>
         <span>Your artwork stays here</span>
@@ -96,6 +99,50 @@ export default function Home() {
             </Link>
           ))}
         </div>
+        <CtaPair />
+      </section>
+      <section className="large-piece ink" id="large-pieces">
+        <div className="wrap section large-grid">
+          <div className="large-copy">
+            <p className="eyebrow">Our specialty</p>
+            <h2>Big pieces are our specialty.</h2>
+            <p className="lede">
+              Oversized art is where the big-box framers tap out — and where we
+              do our best work. Large canvas, estate pieces, mirrors, the thing
+              that&apos;s been leaning against your wall for a year because
+              nobody would touch it. Bring it in. If it fits through our door,
+              we can frame it.
+            </p>
+            <div className="actions">
+              <Link href="/design" className="button button-gold">
+                Start with your piece <span aria-hidden="true">↗</span>
+              </Link>
+              <a href={business.phoneHref} className="button button-light">
+                Call {business.phone}
+              </a>
+            </div>
+          </div>
+          {/* PLACEHOLDER before/after — asset #5-6 in docs/ASSET-CHECKLIST.md */}
+          <div className="before-after">
+            <figure>
+              <div className="ba-before" role="img" aria-label="Placeholder: a large artwork leaning unframed against a wall">
+                <span>Unframed</span>
+              </div>
+              <figcaption>Before</figcaption>
+            </figure>
+            <figure>
+              <div className="ba-photo">
+                <Image
+                  src="/images/selected/cherie-large-frame.webp"
+                  alt="Cherie holding a large framed piece with a wide mat in the shop"
+                  fill
+                  sizes="(max-width:800px) 45vw, 22vw"
+                />
+              </div>
+              <figcaption>After — framed &amp; ready to hang</figcaption>
+            </figure>
+          </div>
+        </div>
       </section>
       <section className="split-feature sage">
         <div className="feature-photo">
@@ -130,6 +177,34 @@ export default function Home() {
               Meet us at the design table ↗
             </Link>
           </div>
+        </div>
+      </section>
+      <section className="wrap section cherie-block" id="meet-cherie">
+        <div className="cherie-photo">
+          {/* PLACEHOLDER portrait — asset #1 in docs/ASSET-CHECKLIST.md */}
+          <Image
+            src="/images/selected/cherie-portrait.webp"
+            alt="Portrait of Cherie Flanagan, certified picture framer"
+            fill
+            sizes="(max-width:800px) 90vw, 44vw"
+          />
+        </div>
+        <div className="cherie-copy">
+          <p className="eyebrow">Meet your framer</p>
+          <h2>Framed by Cherie.</h2>
+          <p className="lede">
+            Cherie Flanagan has been framing for 30 years. She&apos;s a
+            certified picture framer, which means your piece is designed by
+            someone trained in conservation — not handed to a Saturday crew.
+            Every frame is built right here in our Salado shop, by people
+            you&apos;ll meet when you walk in.
+          </p>
+          <div className="actions">
+            <a href="#visit" className="text-link">
+              Meet us in the shop ↗
+            </a>
+          </div>
+          <CtaPair />
         </div>
       </section>
       <section className="wrap section">
@@ -179,6 +254,7 @@ export default function Home() {
             </figure>
           ))}
         </div>
+        <CtaPair />
       </section>
       <section className="split-feature ink">
         <div className="feature-copy">
@@ -189,18 +265,14 @@ export default function Home() {
             Find a direction.
           </h2>
           <p className="lede">
-            Upload a photo. Explore frame finishes, mats, and a fillet detail.
-            You can even try the piece on a photo of your own wall.
+            Upload a photo. See it live in real mouldings and mats, hung on a
+            wall to scale, with an estimate along the way.
           </p>
           <p>
             Save what speaks to you, or send it to us. We’ll take it from an
             idea to the real thing together.
           </p>
-          <div className="actions">
-            <Link href="/studio" className="button button-gold">
-              Open the framing studio ↗
-            </Link>
-          </div>
+          <CtaPair onDark />
         </div>
         <div className="feature-photo">
           <Image
@@ -211,7 +283,18 @@ export default function Home() {
           />
         </div>
       </section>
-      <section className="wrap section">
+      <section className="wrap section trust-block">
+        <p className="promise">
+          Our promise: every piece is inspected before it leaves the shop. If
+          it&apos;s not right, we make it right.
+        </p>
+        {/* TODO(Tim): replace "#" with the shop's Google Business reviews URL */}
+        <a href="#" className="text-link">
+          Read Google reviews ↗
+        </a>
+        <CtaPair />
+      </section>
+      <section className="wrap section" style={{ paddingTop: 0 }}>
         <div className="budget-panel">
           <div>
             <p className="eyebrow">A starting point for your budget</p>
@@ -228,10 +311,11 @@ export default function Home() {
                 Tell us about your piece ↗
               </Link>
             </div>
+            <CtaPair className="budget-cta" />
           </div>
         </div>
       </section>
-      <section className="wrap section centered" style={{ paddingTop: 0 }}>
+      <section className="wrap section centered" id="visit" style={{ paddingTop: 0 }}>
         <p className="eyebrow">Salado roots. A Central Texas welcome.</p>
         <h2>Your artwork deserves the trip.</h2>
         <p className="lede">
@@ -248,11 +332,17 @@ export default function Home() {
             </Link>
           ))}
         </div>
-        <div className="actions">
+        <address className="visit-line">
+          {business.address}
+          <br />
+          {business.hours} · <a href={business.phoneHref}>{business.phone}</a>
+        </address>
+        <div className="actions" style={{ justifyContent: "center" }}>
           <Link className="text-link" href="/visit">
             Plan your visit ↗
           </Link>
         </div>
+        <CtaPair className="centered-cta" />
       </section>
       <section className="sage">
         <div className="wrap section">
@@ -317,6 +407,7 @@ export default function Home() {
               </p>
             </Link>
           </div>
+          <CtaPair />
         </div>
       </section>
     </>
