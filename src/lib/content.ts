@@ -37,7 +37,7 @@ export const regionCities = [
   "North Austin",
 ];
 const links = [
-  { label: "Explore your framing idea", href: "/studio" },
+  { label: "Explore your framing idea", href: "/design" },
   { label: "Plan your visit to Salado", href: "/visit" },
   { label: "See our work", href: "/gallery" },
 ];
@@ -221,7 +221,7 @@ export const articles: EditorialPage[] = [
       },
     ],
     relatedLinks: [
-      { label: "Start with a photo", href: "/studio" },
+      { label: "Start with a photo", href: "/design" },
       { label: "Talk about your project", href: "/visit" },
       { label: "Explore framing services", href: "/services" },
     ],
@@ -256,7 +256,7 @@ export const articles: EditorialPage[] = [
       },
     ],
     relatedLinks: [
-      { label: "Explore a framing direction", href: "/studio" },
+      { label: "Explore a framing direction", href: "/design" },
       { label: "See finished projects", href: "/gallery" },
       { label: "Visit the shop", href: "/visit" },
     ],

@@ -22,7 +22,7 @@ export default function Editorial({
         <p className="lede">{page.intro}</p>
         {kind === "area" && (
           <div className="actions">
-            <Link href="/studio" className="button button-ink">
+            <Link href="/design" className="button button-ink">
               Start with your artwork ↗
             </Link>
             <Link href="/visit" className="text-link">

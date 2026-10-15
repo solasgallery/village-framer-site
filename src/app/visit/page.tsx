@@ -82,7 +82,7 @@ export default function Visit() {
             Bring approximate dimensions, a room photo if helpful, and a sense
             of your budget.
           </p>
-          <Link href="/studio" className="text-link">
+          <Link href="/design" className="text-link">
             Send a framing idea ↗
           </Link>
         </div>

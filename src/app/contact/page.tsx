@@ -36,8 +36,8 @@ export default function Contact() {
             <br />2 Rock Creek Dr, Unit A<br />
             Salado, Texas 76571
           </p>
-          <a href="/studio" className="text-link" style={{ marginTop: 24 }}>
-            Want to send a visual idea? Try the studio ↗
+          <a href="/design" className="text-link" style={{ marginTop: 24 }}>
+            Want to send a visual idea? Design your frame ↗
           </a>
         </div>
         <InquiryForm />
