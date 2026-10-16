@@ -1,7 +1,7 @@
 import type { EditorialPage } from "./content";
 
 const relatedLinks = [
-  { label: "Explore your framing idea", href: "/studio" },
+  { label: "Explore your framing idea", href: "/design" },
   { label: "Plan your visit to Salado", href: "/visit" },
   { label: "See our work", href: "/gallery" },
 ];

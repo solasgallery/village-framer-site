@@ -1,0 +1,5 @@
+[
+  { "id": "living-room", "name": "Living room", "image": "/rooms/living-room.svg", "width": 1600, "height": 1000, "pxPerInch": 10, "anchor": { "x": 800, "y": 340 }, "alt": "Placeholder living room wall with a sofa and plant" },
+  { "id": "hallway", "name": "Hallway", "image": "/rooms/hallway.svg", "width": 1600, "height": 1000, "pxPerInch": 10, "anchor": { "x": 800, "y": 340 }, "alt": "Placeholder hallway wall with a console table" },
+  { "id": "office", "name": "Office", "image": "/rooms/office.svg", "width": 1600, "height": 1000, "pxPerInch": 10, "anchor": { "x": 800, "y": 330 }, "alt": "Placeholder office wall with a desk and monitor" }
+]

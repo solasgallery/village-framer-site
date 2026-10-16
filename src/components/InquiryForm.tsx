@@ -62,7 +62,7 @@ export default function InquiryForm({
             ? "We look forward to sharing shop news and inspiration with you."
             : "Your message is with us. We’ll use the details you provided to help plan your visit."}
         </p>
-        <a className="text-link" href="/studio">
+        <a className="text-link" href="/design">
           Explore a framing idea ↗
         </a>
       </div>

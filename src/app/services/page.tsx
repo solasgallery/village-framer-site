@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { business } from "@/lib/content";
+import CtaPair from "@/components/CtaPair";
 export const metadata: Metadata = {
   title: "Custom framing, artwork, textiles & oversized pieces",
   description:
@@ -58,13 +59,38 @@ export default function Services() {
             <h2>{x.title}</h2>
             <p>{x.copy}</p>
             <div className="actions">
-              <Link href="/studio" className="text-link">
-                Explore your piece ↗
+              <Link href="/design" className="text-link">
+                Design your frame ↗
               </Link>
             </div>
           </div>
         </section>
       ))}
+      {/* Service one-liners are placeholders for Cherie to review/replace. */}
+      <section className="wrap section">
+        <div className="section-heading">
+          <div>
+            <p className="eyebrow">Everything the shop does</p>
+            <h2>More than a frame.</h2>
+          </div>
+        </div>
+        <div className="cards-3">
+          {[
+            ["Custom framing", "Designed with you, built in our Salado shop."],
+            ["Conservation framing", "Cherie is a certified picture framer, trained in conservation."],
+            ["Restoration", "Ask us about a piece that needs some care."],
+            ["Archival printing", "Ask us about archival prints of your artwork."],
+            ["Delivery & installation", "Ask us about delivery and installation."],
+            ["Rifle Paper Co. gifts & goods", "Gifts and goods from Rifle Paper Co., in the shop."],
+          ].map(([title, copy]) => (
+            <div key={title}>
+              <h3>{title}</h3>
+              <p className="lede">{copy}</p>
+            </div>
+          ))}
+        </div>
+        <CtaPair />
+      </section>
       <section className="wrap section">
         <div className="section-heading">
           <div>
@@ -97,6 +123,7 @@ export default function Services() {
             </div>
           ))}
         </div>
+        <CtaPair />
       </section>
       <section className="sage">
         <div className="wrap section budget-panel">

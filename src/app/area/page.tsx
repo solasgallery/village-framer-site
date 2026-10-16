@@ -33,7 +33,7 @@ export default function Region() {
           </h2>
           <p>{regionalHub.body}</p>
           <div className="actions">
-            <Link href="/studio" className="button button-ink">
+            <Link href="/design" className="button button-ink">
               Share your framing idea ↗
             </Link>
           </div>

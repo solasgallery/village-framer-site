@@ -10,8 +10,8 @@ export default function Footer() {
             <br />
             <em>a beautiful frame.</em>
           </h2>
-          <Link href="/studio" className="button button-gold">
-            Explore your framing idea <span aria-hidden="true">↗</span>
+          <Link href="/design" className="button button-gold">
+            Design your frame <span aria-hidden="true">↗</span>
           </Link>
         </div>
         <div className="footer-contact">

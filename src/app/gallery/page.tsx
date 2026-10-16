@@ -53,7 +53,7 @@ export default function Gallery() {
           ))}
         </div>
         <div className="actions">
-          <Link href="/studio" className="button button-ink">
+          <Link href="/design" className="button button-ink">
             Now try your own piece ↗
           </Link>
         </div>

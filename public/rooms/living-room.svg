@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000">
+<defs>
+<linearGradient id="w" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e9e1d3"/><stop offset="1" stop-color="#d9cfbd"/></linearGradient>
+<linearGradient id="f" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b69470"/><stop offset="1" stop-color="#8d6c49"/></linearGradient>
+<linearGradient id="v" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#000" stop-opacity=".12"/><stop offset=".25" stop-color="#000" stop-opacity="0"/><stop offset=".75" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".14"/></linearGradient>
+</defs>
+<rect width="1600" height="860" fill="url(#w)"/>
+<rect y="860" width="1600" height="140" fill="url(#f)"/>
+<rect y="808" width="1600" height="52" fill="#fff" fill-opacity=".55"/>
+<rect y="858" width="1600" height="4" fill="#000" fill-opacity=".12"/>
+<path d="M0 880H1600" stroke="#000" stroke-opacity=".07"/><path d="M0 897H1600" stroke="#000" stroke-opacity=".07"/><path d="M0 914H1600" stroke="#000" stroke-opacity=".07"/><path d="M0 931H1600" stroke="#000" stroke-opacity=".07"/><path d="M0 948H1600" stroke="#000" stroke-opacity=".07"/><path d="M0 965H1600" stroke="#000" stroke-opacity=".07"/><path d="M0 982H1600" stroke="#000" stroke-opacity=".07"/><path d="M0 999H1600" stroke="#000" stroke-opacity=".07"/>
+<g><rect x="380" y="640" width="840" height="130" rx="40" fill="#7d8a86"/><rect x="340" y="690" width="90" height="170" rx="30" fill="#7d8a86"/><rect x="1170" y="690" width="90" height="170" rx="30" fill="#7d8a86"/><rect x="420" y="730" width="760" height="130" rx="22" fill="#7d8a86"/><rect x="420" y="730" width="760" height="130" rx="22" fill="#000" fill-opacity=".10"/><path d="M800 735v125" stroke="#000" stroke-opacity=".18" stroke-width="3"/><rect x="460" y="858" width="14" height="14" fill="#2a1d12"/><rect x="1126" y="858" width="14" height="14" fill="#2a1d12"/></g><g><rect x="1330" y="760" width="80" height="100" rx="12" fill="#b4764a"/><path d="M1370 760C1290 600 1300 560 1340 520M1370 760C1450 620 1460 580 1420 540M1370 760C1370 620 1370 560 1370 500" stroke="#5a7a4a" stroke-width="10" fill="none" stroke-linecap="round"/></g>
+<rect width="1600" height="1000" fill="url(#v)"/>
+</svg>

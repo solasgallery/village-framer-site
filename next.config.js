@@ -3,6 +3,10 @@ const nextConfig = {
   images: {
     formats: ['image/avif', 'image/webp'],
   },
+  async redirects() {
+    // The old /studio visualizer is retired; /design replaces it.
+    return [{ source: '/studio', destination: '/design', permanent: true }]
+  },
   async rewrites() {
     return [
       { source: '/trade', destination: '/trade/index.html' },

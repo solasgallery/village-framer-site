@@ -4,7 +4,7 @@ import { moreCityPages } from "@/lib/more-cities";
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
     "",
-    "/studio",
+    "/design",
     "/services",
     "/gallery",
     "/visit",
