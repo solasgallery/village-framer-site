@@ -125,7 +125,7 @@ export default function Home() {
               to a place on your wall.
             </h2>
           </div>
-          <p>Three steps. Nothing is charged until you agree on the design and the price.</p>
+          <p>Three steps, from a photo to a finished frame.</p>
         </div>
         <div className="process-grid">
           {how.map((x) => (

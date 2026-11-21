@@ -5,13 +5,13 @@ const OPTIONS: { id: Delivery; title: string; text: string; next: string }[] = [
   {
     id: "dropoff",
     title: "Drop it off",
-    text: "Bring the piece to the shop in Salado. We look at it with you, show you actual mouldings and mats beside it, and confirm the price before we start.",
+    text: "Bring the piece to the shop in Salado. We look at it with you, show you actual mouldings and mats beside it. Cherie will confirm the details with you before any work starts.",
     next: "Best for most projects, and for anything you would rather not mail.",
   },
   {
     id: "ship",
     title: "Ship it to us",
-    text: "Can’t make the drive? Send your request and we will reply with how to pack and send the piece.",
+    text: "Can’t make the drive? Send your request and Cherie will reply about the next steps.",
     next: "Please don’t ship anything until you have heard back from us.",
   },
   {
@@ -34,7 +34,7 @@ export default function DeliveryStep({
   return (
     <div className="step-body narrow">
       <h1 className="step-title">How would you like to get started?</h1>
-      <p className="step-sub">No payment, no commitment. This just tells us what to expect.</p>
+      <p className="step-sub">This just tells us what to expect.</p>
       <fieldset className="delivery-list">
         <legend className="sr-only">Choose how to get your piece to us</legend>
         {OPTIONS.map((o) => (

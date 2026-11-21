@@ -13,6 +13,10 @@ const code = ts.transpileModule(input, {
     target: ts.ScriptTarget.ES2020,
   },
 }).outputText;
+const rlCode = ts.transpileModule(
+  fs.readFileSync(require("node:path").join(__dirname, "../src/lib/rateLimit.ts"), "utf8"),
+  { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020 } },
+).outputText;
 const good = {
   name: "Test Visitor",
   email: "TEST@example.invalid",
@@ -33,8 +37,13 @@ async function run(body, options = {}) {
     Uint8Array,
     AbortSignal,
     console: { error() {} },
-    process: { env: { BREVO_API_KEY: "mock-only", ...options.env } },
+    process: { env: { BREVO_API_KEY: "mock-only", VERCEL_ENV: "production", ...options.env } },
     require(id) {
+      if (id === "@/lib/rateLimit") {
+        const rl = { exports: {} };
+        vm.runInNewContext(rlCode, { module: rl, exports: rl.exports, Map, Date, Headers }, { filename: "rateLimit.js" });
+        return rl.exports;
+      }
       assert.equal(id, "next/server");
       return {
         NextResponse: {
@@ -122,7 +131,7 @@ async function invalid(name, body, status = 400, options) {
   await test("visitor strings HTML escaped and subject newlines removed", async () => {
     const r = await run({
       ...good,
-      name: "Test <img src=x>\r\nBcc:evil",
+      name: "Test <img src=x> Bcc:evil",
       message: '<script>alert("x")</script> & it\'s',
       project: { frame: "<b>gold</b>", city: "<img src=x>" },
     });
@@ -133,6 +142,28 @@ async function invalid(name, body, status = 400, options) {
     assert(e.htmlContent.includes("&lt;script&gt;"));
     assert(e.htmlContent.includes("&amp;"));
     assert(!/[\r\n]/.test(e.subject));
+  });
+  await test("CR/LF and control characters in name, email or phone are rejected (header injection)", async () => {
+    for (const bad of [{ name: "A\r\nBcc: evil@x.com" }, { name: "A\nB" }, { email: "a@b.com\r\nBcc: x@y.com" }, { phone: "254\n555" }, { name: "A\u2028B" }]) {
+      const r = await run({ ...good, ...bad });
+      assert.equal(r.status, 400, JSON.stringify(bad));
+      assert.equal(r.calls.length, 0);
+    }
+  });
+  await test("over-long name/message rejected, not silently cut", async () => {
+    assert.equal((await run({ ...good, name: "x".repeat(121) })).status, 400);
+    assert.equal((await run({ ...good, message: "x".repeat(3001) })).status, 400);
+    assert.equal((await run({ ...good, message: "x".repeat(3000) })).status, 200);
+  });
+  await test("per-IP rate limit: 9th request in the window gets 429 and sends nothing", async () => {
+    const rlmod = { exports: {} };
+    vm.runInNewContext(rlCode, { module: rlmod, exports: rlmod.exports, Map, Date, Headers }, { filename: "rl.js" });
+    const { allow } = rlmod.exports;
+    const res = [];
+    for (let i = 0; i < 10; i++) res.push(allow("inquiry", "1.2.3.4", 8, 600000, 1000 + i));
+    assert.deepEqual(res, [true, true, true, true, true, true, true, true, false, false]);
+    assert.equal(allow("inquiry", "1.2.3.4", 8, 600000, 1000 + 600001), true);
+    assert.equal(allow("inquiry", "5.6.7.8", 8, 600000, 1010), true);
   });
   await test("server list override respected; client list ignored", async () => {
     const r = await run(

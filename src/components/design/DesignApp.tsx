@@ -100,7 +100,7 @@ export default function DesignApp() {
               setDesign((d) => {
                 const same =
                   d.art && art && Math.abs(d.art.width / d.art.height - art.width / art.height) < 0.02;
-                return { ...d, art, ...(same ? {} : { artW: 0, artH: 0 }) };
+                return { ...d, art, ...(same ? {} : { artW: 0, artH: 0, rawW: "", rawH: "" }) };
               });
             }}
             onNext={() => go(2)}
@@ -111,9 +111,11 @@ export default function DesignApp() {
             art={design.art}
             artW={design.artW}
             artH={design.artH}
+            rawW={design.rawW}
+            rawH={design.rawH}
             measured={design.measured}
             onMeasured={(measured) => update({ measured })}
-            onSize={(artW, artH) => update({ artW, artH })}
+            onSize={(artW, artH, rawW, rawH) => update({ artW, artH, rawW, rawH })}
             onNext={() => go(3)}
           />
         )}

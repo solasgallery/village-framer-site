@@ -18,17 +18,17 @@ const NEXT: Record<string, string[]> = {
   dropoff: [
     "Cherie looks at your photo and replies by email, usually within one business day.",
     "Bring the piece to the shop, Monday to Saturday, 10 to 5. Call first if it is large.",
-    "We confirm the design and your exact price together before any work begins.",
+    "Cherie will confirm the details with you before any work starts.",
   ],
   ship: [
-    "Cherie replies by email, usually within one business day, with how to pack and send the piece.",
+    "Cherie replies by email, usually within one business day, about how to get the piece to her.",
     "Please wait for her reply before you ship anything.",
-    "We confirm the design and your exact price with you before any work begins.",
+    "Cherie will confirm the details with you before any work starts.",
   ],
   consult: [
     "Cherie replies by email, usually within one business day, to set a time for your design consult.",
     "Have the piece, a photo of the wall and a budget in mind if you can.",
-    "Nothing is ordered until you say so.",
+    "Cherie will confirm the details with you before any work starts.",
   ],
 };
 const LABEL = { dropoff: "Drop off at the shop", ship: "Ship to us", consult: "Book a design consult" } as const;
@@ -156,7 +156,7 @@ export default function DetailsStep({ design, onDone }: { design: Design; onDone
   return (
     <div className="step-body quote">
       <h1 className="step-title">Where should we reach you?</h1>
-      <p className="step-sub">Nothing is charged.</p>
+      <p className="step-sub">So Cherie knows where to reply.</p>
       <div className="quote-layout">
         <aside className="summary" aria-label="Your request">
           <div className="summary-preview">

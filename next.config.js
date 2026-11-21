@@ -19,13 +19,6 @@ const nextConfig = {
       r("/trade/events", "/trade"),
     ];
   },
-  async rewrites() {
-    return [
-      { source: '/trade', destination: '/trade/index.html' },
-      { source: '/trade/apply', destination: '/trade/apply.html' },
-      { source: '/trade/faq', destination: '/trade/faq.html' },
-    ]
-  },
 }
 
 module.exports = nextConfig

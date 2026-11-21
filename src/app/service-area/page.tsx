@@ -38,7 +38,7 @@ export default function ServiceArea() {
         <ul>
           <li>Upload a photo and the size in <Link href="/start-framing">Start framing</Link>, preview frame styles and get a ballpark.</li>
           <li>Drop the piece off when you are in Salado. Call first for anything large.</li>
-          <li>Choose to ship it to us. We reply with how to pack it before you send anything.</li>
+          <li>Choose to ship it to us. Cherie replies before you send anything.</li>
         </ul>
         <h2>Before you come</h2>
         <p>

@@ -18,11 +18,15 @@ export type Design = {
   art: HTMLCanvasElement | null;
   artW: number;
   artH: number;
+  /** exactly what the customer typed (or picked), sent to Cherie beside the parsed value */
+  rawW: string;
+  rawH: string;
   mouldingId: string | null;
   matStyle: MatStyle;
   matWidth: MatWidthKey;
   matColorId: string;
-  measured: Measured;
+  /** null until the customer answers; sent as "not answered" */
+  measured: Measured | null;
   delivery: Delivery | null;
 };
 
@@ -30,11 +34,13 @@ export const initialDesign: Design = {
   art: null,
   artW: 0,
   artH: 0,
+  rawW: "",
+  rawH: "",
   mouldingId: null,
   matStyle: "classic",
   matWidth: "standard",
   matColorId: defaultMat.id,
-  measured: "art",
+  measured: null,
   delivery: null,
 };
 

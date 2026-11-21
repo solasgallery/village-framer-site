@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { allow, clientIp, hasCtl } from "@/lib/rateLimit";
 
 export const runtime = "nodejs";
 const MAX_BODY = 2_000_000;
@@ -6,6 +7,11 @@ const fail = (error: string, status = 400) =>
   NextResponse.json({ error }, { status });
 const clean = (value: unknown, max: number) =>
   typeof value === "string" ? value.trim().slice(0, max) : "";
+/** Strict: null when not a string or over the cap (the cap is enforced, not silently cut). */
+const strict = (value: unknown, max: number): string | null =>
+  value == null ? "" : typeof value === "string" && value.trim().length <= max ? value.trim() : null;
+// Per IP, best-effort and in-memory (see src/lib/rateLimit.ts). Trade applications are longer, so allow a few.
+const RATE = { max: 8, windowMs: 10 * 60_000 };
 const escape = (value: string) =>
   value.replace(
     /[&<>"']/g,
@@ -20,10 +26,17 @@ const sourceNames: Record<string, string> = {
   capture: "In-person QR",
   "in-person-qr": "In-person QR",
   website: "Website inquiry",
+  trade: "Trade application",
 };
 
 export async function POST(request: NextRequest) {
   try {
+    // Gate before any parsing, Blob/Brevo call or email.
+    if (!allow("inquiry", clientIp(request.headers), RATE.max, RATE.windowMs))
+      return NextResponse.json(
+        { error: "Too many requests from this connection. Please wait a few minutes or call (254) 613-6123." },
+        { status: 429, headers: { "Retry-After": "600" } },
+      );
     if (Number(request.headers.get("content-length") || 0) > MAX_BODY)
       return fail("Your images are too large. Please try smaller photos.", 413);
     // Bound streamed requests too; do not rely on a client-supplied Content-Length.
@@ -53,11 +66,18 @@ export async function POST(request: NextRequest) {
     if (!body || typeof body !== "object" || Array.isArray(body))
       return fail("Please send a valid inquiry.");
     if (body.website) return NextResponse.json({ success: true });
-    const name = clean(body.name, 120),
-      email = clean(body.email, 254).toLowerCase(),
-      phone = clean(body.phone, 40),
-      message = clean(body.message, 3000);
-    if (!name || !/^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]+$/.test(email))
+    const nameS = strict(body.name, 120),
+      emailS = strict(body.email, 254),
+      phone = strict(body.phone, 40),
+      messageS = strict(body.message, 3000);
+    if (nameS === null || emailS === null || phone === null || messageS === null)
+      return fail("One of your answers is too long. Please shorten it and try again.");
+    if (hasCtl(nameS) || hasCtl(emailS) || hasCtl(phone))
+      return fail("Please remove line breaks from your name, email and phone.");
+    const name = nameS,
+      email = emailS.toLowerCase(),
+      message = messageS.replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f]/g, "");
+    if (!name || !/^[^\s@<>",;:()\[\]\\]+@[^\s@<>",;:()\[\]\\]+\.[^\s@<>",;:()\[\]\\]+$/.test(email))
       return fail("Please enter your name and a valid email address.");
     const source = sourceNames[clean(body.source, 60)] || "Website inquiry";
     const project =
@@ -135,6 +155,9 @@ export async function POST(request: NextRequest) {
         });
       }
     }
+    // Test hook for local/preview curl tests: validate, send nothing. Never active in production.
+    if (process.env.VERCEL_ENV !== "production" && process.env.SVF_DRY_RUN === "1")
+      return NextResponse.json({ success: true, dryRun: true });
     const apiKey = process.env.BREVO_API_KEY;
     if (!apiKey)
       return fail(

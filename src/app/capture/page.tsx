@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
+import { meta } from "@/lib/seo";
 import InquiryForm from "@/components/InquiryForm";
-export const metadata: Metadata = {
-  title: "Stay inspired",
-  alternates: { canonical: "/capture" },
-  robots: { index: false, follow: true },
-};
+export const metadata: Metadata = meta({
+  title: "Stay Inspired | Salado Village Framer Shop News and Ideas",
+  description:
+    "Leave your name and email to get occasional news and framing ideas from Salado Village Framer, the custom frame shop on Rock Creek Drive in Salado, Texas.",
+  path: "/capture",
+  noindex: true,
+});
 export default function Capture() {
   return (
     <section className="wrap section capture-page">

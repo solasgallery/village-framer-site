@@ -226,7 +226,7 @@ export const services: Article[] = [
       {
         h: "Take the time you need",
         p: [
-          "You can start with a photo and a note about what you have, or simply come by. Nothing is ordered until you say so, and we will confirm the design and price with you first.",
+          "You can start with a photo and a note about what you have, or simply come by. Cherie will confirm the details with you before any work starts.",
         ],
       },
     ],
@@ -306,7 +306,7 @@ export const guides: Article[] = [
         list: [
           "Lay the piece flat. Do not measure a rolled print until it has been flattened.",
           "Measure the width, edge to edge, then the height. Write them as width by height.",
-          "Round to the nearest quarter inch.",
+          "Round to the nearest 1/8 inch.",
           "Measure the art itself, not an old mat or border.",
           "For canvas, objects or anything with thickness, measure the depth, front to back, at its thickest point.",
         ],

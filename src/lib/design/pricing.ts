@@ -7,7 +7,9 @@ import type { DesignSelection, MatStyle, MatWidthKey } from "./types";
  * dollar figure. The band is built only from the two anchors in the brief
  * (src/lib/site.ts pricing): most framing starts around $350; large pieces $1,000+.
  */
-export const MAX_LONG_SIDE_IN = 72;
+export const MAX_LONG_SIDE_IN = 120;
+/** Above this the flow still works, with a note that Cherie will want to see the piece. */
+export const BIG_PIECE_IN = 72;
 export const MIN_SIDE_IN = 2;
 
 export const MAT_WIDTH_LABEL: Record<MatWidthKey, string> = {

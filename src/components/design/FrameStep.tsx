@@ -2,6 +2,7 @@
 import { useMemo, useState } from "react";
 import { colorFamilies, defaultMat, mouldings } from "@/lib/design/catalog";
 import { makeProxy } from "@/lib/design/frameRenderer";
+import { formatInches } from "@/lib/design/parseSize";
 import { matWidthIn } from "@/lib/design/pricing";
 import FrameCanvas from "./FrameCanvas";
 
@@ -55,7 +56,7 @@ export default function FrameStep({
         {group("Color", colorFamilies, family, setFamily)}
       </div>
       <p className="hint" aria-live="polite">
-        {shown.length} sample{shown.length === 1 ? "" : "s"} for your {artW}×{artH}″ piece
+        {shown.length} sample{shown.length === 1 ? "" : "s"} for your {formatInches(artW)}×{formatInches(artH)}″ piece
       </p>
       <ul className="frame-grid">
         {shown.map((m) => {
