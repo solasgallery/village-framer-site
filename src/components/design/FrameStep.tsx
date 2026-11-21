@@ -49,7 +49,7 @@ export default function FrameStep({
     <div className="step-body">
       <h1 className="step-title">Pick your frame.</h1>
       <p className="step-sub">
-        These are sample swatches of the kinds of mouldings we frame with, shown with your art and a mat.
+        These are drawn sample swatches (illustrations, not photos) of the kinds of mouldings we frame with, shown with your art and a mat.
         Cherie will show you the actual mouldings in the shop.
       </p>
       <div className="filters">
@@ -77,7 +77,7 @@ export default function FrameStep({
                   label={`Your art with a sample moulding: ${m.name}`}
                 />
                 <span className="frame-name">{m.name}</span>
-                <span className="frame-desc">Sample · about {m.railWidthIn}″ wide</span>
+                <span className="frame-desc">Drawn sample · about {m.railWidthIn}″ wide</span>
               </button>
             </li>
           );

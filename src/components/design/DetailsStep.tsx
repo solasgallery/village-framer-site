@@ -171,6 +171,7 @@ export default function DetailsStep({ design, onDone }: { design: Design; onDone
               label={`Your art with a sample moulding: ${sel.moulding.name}`} className="preview-canvas"
             />
           </div>
+          <p className="hint" style={{ padding: "0 16px" }}>Illustration — drawn sample frame, not a photo of a real moulding.</p>
           <dl>
             <div><dt>Artwork</dt><dd><ArtCanvas source={art} alt="Your artwork thumbnail" maxDim={120} className="mini-art" /> {fmtIn(sel.artW)} × {fmtIn(sel.artH)}</dd></div>
             <div><dt>Frame</dt><dd>{sel.moulding.name} (sample)</dd></div>

@@ -82,7 +82,7 @@ export const services: Article[] = [
       {
         h: "Glazing for large frames",
         p: [
-          "Glass is heavy and unforgiving at size. For many large pieces acrylic glazing is the better answer: it weighs much less, and if it is ever struck it does not shatter into sharp pieces. Acrylic attracts dust and scratches more easily, so it needs gentle cleaning. We talk through the trade-offs for the piece in front of us.",
+          "Glass is heavy and unforgiving at size. For many large pieces acrylic glazing is the better answer: it weighs much less than glass and is less likely to break into sharp pieces. Acrylic attracts dust and scratches more easily, so it needs gentle cleaning. We talk through the trade-offs for the piece in front of us.",
           "Standard mat board is sold in sheets of about 32 by 40 or 40 by 60 inches. Pieces larger than that need a planned approach to the mat, which is one reason to start the conversation early.",
         ],
       },
@@ -172,7 +172,7 @@ export const services: Article[] = [
       {
         h: "Bathroom and entry mirrors",
         p: [
-          "In a bathroom, moisture reaches the edge of the mirror and the back of the frame. A sealed finish and a frame that holds the glass without trapping water against it help the pair last. For an entry or hall mirror, the frame can carry more of the style, and a mirror hung at eye level reads best when the frame is not much wider than the wall space allows.",
+          "In a bathroom, moisture reaches the edge of the mirror and the back of the frame. A sealed finish and a frame that holds the glass without trapping water against it help the pair last. For an entry or hall mirror, the frame can carry more of the style.",
         ],
       },
       {
@@ -213,7 +213,7 @@ export const services: Article[] = [
       {
         h: "Protecting what cannot be replaced",
         p: [
-          "Originals deserve the same protection as any treasured piece: archival materials, hinges that can be undone, and glazing that filters ultraviolet light. Newsprint, programs and some old photographs are acidic and fade fast, so we keep them from touching better paper and we may suggest a copy of the original for display, so the original can be kept safe.",
+          "Originals deserve the same protection as any treasured piece: archival materials, hinges that can be undone, and glazing that filters ultraviolet light. Newspaper clippings are acidic and yellow quickly, and many old photographs fade in light. We keep clippings from touching better paper, and we may suggest displaying a copy so the original can be kept safe.",
           "Please do not tape, glue or laminate anything before you come in. Those steps are hard or impossible to reverse.",
         ],
       },
@@ -245,7 +245,7 @@ export const guides: Article[] = [
       "What drives the price of custom picture framing: size, moulding, mat, glass and mounting. A Texas framer explains where the money goes and how to plan a budget.",
     h1: "How much does custom framing cost?",
     intro:
-      "Most custom framing projects at our shop start around $350, and large pieces run $1,000 and up. Here is what moves the number, so you can decide where to spend and where to save.",
+      "Most custom framing projects at our shop start around $350, and large pieces often run $1,000 and up. Here is what moves the number, so you can decide where to spend and where to save.",
     image: "moulding-wall",
     imageAlt: "Rows of moulding samples on the shop wall",
     blocks: [
@@ -264,7 +264,7 @@ export const guides: Article[] = [
         h: "Where to spend and where to save",
         p: [
           "Spend on glazing if the piece will hang in sun, and on mounting if it is an original or a photograph you cannot replace. Save by choosing a simpler moulding or a single mat. A good mat and a quiet frame often beat an elaborate one.",
-          "Be wary of a price that seems far below others for the same size. It usually means standard glass, a standard mat that will yellow, or permanent mounting.",
+          "Be wary of a price that seems far below others for the same size. It can mean standard glass, a standard mat that will yellow, or permanent mounting.",
         ],
       },
       {
@@ -366,7 +366,7 @@ export const guides: Article[] = [
           "Original work on paper with a deckled or torn edge: float it, so the edge can be seen.",
           "Irregular or hand-cut shapes: float.",
           "Anything you want protected from touching the glass: both can do it; a mat does it automatically and a float needs a spacer.",
-          "Tight budget: a single mat is usually the less expensive of the two, because a float takes more labor to build well.",
+          "Tight budget: ask us to price both for your piece before you decide.",
         ],
       },
       {

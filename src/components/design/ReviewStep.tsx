@@ -89,12 +89,15 @@ export default function ReviewStep({
                 ))}
               </div>
               <p className="hint">
-                Illustration — generated image, scale approximate.
+                Illustration — generated room image and drawn sample frame, scale approximate.
                 {scaled
                   ? " Your piece is bigger than these room scenes, so it is shown on a plain wall with a height ruler."
                   : ""}
               </p>
             </div>
+          )}
+          {view !== "wall" && (
+            <p className="hint">Illustration — a drawn sample frame and mat around your photo, not a photo of a real moulding.</p>
           )}
           <ul className="thumb-strip">
             {VIEWS.map((v) => (

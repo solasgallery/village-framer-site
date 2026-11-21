@@ -156,7 +156,7 @@ export async function POST(request: NextRequest) {
       ["Email", email],
       ["Phone", phone],
       ["How they want to start", DELIVERY[delivery]],
-      ["Size the customer typed", `width "${rawW || "(not recorded)"}" × height "${rawH || "(not recorded)"}"`],
+      ["Size the customer typed", `width: ${rawW || "(not recorded)"} · height: ${rawH || "(not recorded)"}`],
       ["Size we read (nearest 1/8 inch)", `${formatInches(artW)} × ${formatInches(artH)} inches (${artW} × ${artH})`],
       ["What they measured", measuredLabel],
       ...(Math.max(artW, artH) > BIG_PIECE_IN
