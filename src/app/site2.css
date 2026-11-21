@@ -29,7 +29,7 @@
 .article-cta{margin:56px 0 24px;padding:32px;background:var(--sage)}
 .article-cta h2{font-size:clamp(1.8rem,3vw,2.4rem)}
 .town-list{columns:2;list-style:none;padding:0;max-width:420px}
-.editorial-hero{position:relative;aspect-ratio:16/7;overflow:hidden}
+.editorial-hero{overflow:hidden}
 .editorial-hero img{object-fit:cover}
 .measure-help{border:1px solid var(--line);padding:14px 16px;background:#fff;margin:4px 0 16px}
 .measure-help summary{cursor:pointer;font-weight:600}
@@ -53,3 +53,8 @@
 }
 .design-loading{text-align:center}
 .design-loading h1{font-size:clamp(2.4rem,6vw,4rem)}
+@media (max-width:480px){
+  .crumbs{font-size:10px;letter-spacing:.03em}
+  .crumbs li+li::before{margin:0 4px}
+  .crumbs span,.crumbs button{padding:10px 1px 11px}
+}
