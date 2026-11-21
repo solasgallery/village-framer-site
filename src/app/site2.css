@@ -97,8 +97,9 @@ a[href^="mailto:"]{display:inline-block;padding:12px 2px;min-height:44px;box-siz
 .area-photo{margin:32px 0;max-width:680px}
 .area-photo-tall{max-width:440px}
 .area-photo img{display:block;width:100%;height:auto}
-.area-links{list-style:none;padding:0;margin:24px 0;display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:4px 24px;max-width:680px}
-.area-links li{margin:0}
+.prose .area-links{list-style:none;padding:0;margin:24px 0;display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:0 24px;max-width:680px}
+.prose .area-links li{margin:0}
 .area-links a{display:inline-block;padding:10px 0;min-height:44px}
-.area-cta{margin:32px 0 8px}
 .news-line{font-size:.95em;color:var(--muted,#5b625f)}
+/* Edna's town headlines run long; keep them to a few lines so the copy starts on the first phone screen. */
+.area-intro h1{font-size:clamp(34px,5.2vw,56px);line-height:1.08;max-width:22ch}

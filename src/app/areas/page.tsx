@@ -29,7 +29,7 @@ export default function Areas() {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
-      <header className="page-intro">
+      <header className="page-intro area-intro">
         <p className="eyebrow">Areas we serve</p>
         <h1>{hubCopy.headline}</h1>
         <StartCta />

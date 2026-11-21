@@ -80,7 +80,7 @@ export default function AreaPage({ slug }: { slug: string }) {
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(crumbs) }} />
-      <header className="page-intro">
+      <header className="page-intro area-intro">
         <p className="eyebrow">Areas we serve · {c.town}, TX</p>
         <h1>{c.headline}</h1>
         <StartCta />
@@ -92,7 +92,6 @@ export default function AreaPage({ slug }: { slug: string }) {
         {rest.map((t) => (
           <p key={t}>{t}</p>
         ))}
-        <StartCta className="area-cta" />
         <NewsLine />
         <p>
           <Link href="/areas" className="text-link">
