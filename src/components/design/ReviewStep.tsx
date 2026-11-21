@@ -174,7 +174,7 @@ export default function ReviewStep({
           </fieldset>
 
           <div className="estimate" aria-live="polite">
-            <span className="opt-label">Ballpark for this design</span>
+            <span className="opt-label">Ballpark</span>
             <p className="estimate-line">
               <b>{d.band.headline}</b>
             </p>

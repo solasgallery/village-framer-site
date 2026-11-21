@@ -92,6 +92,7 @@ export async function POST(request: NextRequest) {
       ["Phone", phone],
       ["Source", source],
       ["Message", message],
+      ["Newsletter opt-in", body.newsletter === true ? "Yes" : "No"],
     ];
     if (project) {
       for (const [label, key] of [
@@ -217,7 +218,8 @@ export async function POST(request: NextRequest) {
     // The notification above is the lead; a list-add failure must never fail
     // the request, so it is logged and swallowed.
     try {
-      if (process.env.VERCEL_ENV !== "production") return NextResponse.json({ success: true });
+      // Marketing list: only with an explicit, unticked-by-default opt-in.
+      if (process.env.VERCEL_ENV !== "production" || body.newsletter !== true) return NextResponse.json({ success: true });
       const listId = Number(process.env.BREVO_LIST_ID);
       if (!listId) {
         console.error("Brevo list add skipped: BREVO_LIST_ID is not set");

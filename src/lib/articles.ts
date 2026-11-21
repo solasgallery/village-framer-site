@@ -274,9 +274,9 @@ export const guides: Article[] = [
         ],
       },
       {
-        h: "Get a ballpark in two minutes",
+        h: "See your piece in sample frames",
         p: [
-          "Our Start framing preview shows your own photo in sample frames and gives a range for your size, frame and mat. It is a ballpark, not a quote. The exact price comes after we have seen the piece.",
+          "Our Start framing preview shows your own photo in sample frames. It gives a ballpark, not a quote: most framing starts around $350, and large pieces often run $1,000 and up. Cherie quotes exactly after she sees the piece.",
         ],
       },
     ],

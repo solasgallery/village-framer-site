@@ -42,6 +42,7 @@ export default function TradeForm({ full = false }: { full?: boolean }) {
           phone: v("phone"),
           message: lines.join("\n"),
           website: v("hp"),
+          newsletter: v("news") === "on",
           source: "trade",
         }),
       });
@@ -174,6 +175,10 @@ export default function TradeForm({ full = false }: { full?: boolean }) {
             maxLength={2000}
             placeholder="Your studio, your clients, and what you are looking for in a framer."
           />
+        </label>
+        <label className="check">
+          <input type="checkbox" name="news" />
+          Send me occasional shop news (optional)
         </label>
         <div className="honeypot" aria-hidden="true">
           <label>

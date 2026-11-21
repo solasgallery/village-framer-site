@@ -9,7 +9,7 @@ import Reviews from "@/components/Reviews";
 export const metadata: Metadata = meta({
   title: "Custom Picture Framing in Salado, TX | Village Framer",
   description:
-    "Custom framing in Salado, Texas for art, photographs, shadow boxes and oversized pieces. Upload a photo, preview frame styles and get a ballpark price.",
+    "Custom framing in Salado, Texas for art, photographs, shadow boxes and oversized pieces. Upload a photo, preview frame styles and see where pricing starts.",
   path: "/",
 });
 
@@ -186,7 +186,7 @@ export default function Home() {
               <Link href={START} className="inline-link">
                 Start framing preview
               </Link>{" "}
-              gives you a ballpark for your piece, and our{" "}
+              is a ballpark, not a quote: most framing starts around $350, large pieces often run $1,000 and up, and Cherie quotes exactly after she sees it. Our{" "}
               <Link href="/guides/how-much-does-custom-framing-cost" className="inline-link">
                 framing cost guide
               </Link>{" "}

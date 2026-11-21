@@ -94,8 +94,10 @@ export async function POST(request: NextRequest) {
     if (!d || typeof d !== "object") return fail("Please include your design.");
     const artW = Math.round(Number(d.artW) * 8) / 8;
     const artH = Math.round(Number(d.artH) * 8) / 8;
-    const rawW = freeText(str(d.rawW, 60) ?? "").replace(/[\r\n]/g, " ");
-    const rawH = freeText(str(d.rawH, 60) ?? "").replace(/[\r\n]/g, " ");
+    const note = (v: unknown) => freeText(str(v, 60) ?? "").replace(/[\r\n]/g, " ");
+    const withNote = (raw: string, n: string) => (raw && n ? `${raw} (${n})` : raw);
+    const rawW = withNote(note(d.rawW), note(d.noteW));
+    const rawH = withNote(note(d.rawH), note(d.noteH));
     if (!Number.isFinite(artW) || !Number.isFinite(artH) || Math.min(artW, artH) < MIN_SIDE_IN || Math.max(artW, artH) > MAX_LONG_SIDE_IN)
       return fail(`Please enter art sizes between ${MIN_SIDE_IN}″ and ${MAX_LONG_SIDE_IN}″.`);
     const moulding = mouldings.find((m) => m.id === d.mouldingId);

@@ -33,7 +33,35 @@ const NEXT: Record<string, string[]> = {
 };
 const LABEL = { dropoff: "Drop off at the shop", ship: "Ship to us", consult: "Book a design consult" } as const;
 
-export default function DetailsStep({ design, onDone }: { design: Design; onDone: () => void }) {
+export type SentInfo = { ref: string; testMode: boolean; confirmationSent: boolean; firstName: string; email: string; delivery: keyof typeof NEXT };
+
+export function Confirmation({ info }: { info: SentInfo }) {
+  return (
+    <div className="step-body narrow quote-done" role="status">
+      <p className="eyebrow">Request received</p>
+      <h1 className="step-title">Thank you, {info.firstName}.</h1>
+      <p className="step-sub">
+        Your photo and details are with us. Reference <b>{info.ref}</b>.{" "}
+        {info.confirmationSent
+          ? `We sent a copy to ${info.email}. If it doesn't arrive, Cherie still has your request.`
+          : "We couldn't send your copy. Cherie still has your request."}
+      </p>
+      <h2 className="next-title">What happens next</h2>
+      <ol className="next-steps">
+        {NEXT[info.delivery].map((t) => (
+          <li key={t}>{t}</li>
+        ))}
+      </ol>
+      <div className="actions">
+        <a className="button button-ink" href={business.phoneHref}>Call {business.phone}</a>
+        <a className="button button-line" href="/start-framing">Start another request</a>
+        <a className="text-link" href="/">Back to the homepage</a>
+      </div>
+    </div>
+  );
+}
+
+export default function DetailsStep({ design, onDone }: { design: Design; onDone: (info: SentInfo) => void }) {
   const sel = selectionOf(design)!;
   const art = design.art!;
   const d = derived(sel);
@@ -43,7 +71,6 @@ export default function DetailsStep({ design, onDone }: { design: Design; onDone
   const [errs, setErrs] = useState<Record<string, string>>({});
   const [busy, setBusy] = useState(false);
   const [serverError, setServerError] = useState("");
-  const [sent, setSent] = useState<{ ref: string; testMode: boolean; confirmationSent: boolean } | null>(null);
   const delivery = design.delivery!;
 
   const validate = () => {
@@ -87,7 +114,7 @@ export default function DetailsStep({ design, onDone }: { design: Design; onDone
           delivery,
           measured: design.measured,
           design: {
-            artW: sel.artW, artH: sel.artH, rawW: design.rawW, rawH: design.rawH, mouldingId: sel.moulding.id, matStyle: sel.matStyle,
+            artW: sel.artW, artH: sel.artH, rawW: design.rawW, rawH: design.rawH, noteW: design.noteW, noteH: design.noteH, mouldingId: sel.moulding.id, matStyle: sel.matStyle,
             matWidth: sel.matWidth, matColorId: mat.id,
           },
         }),
@@ -102,8 +129,10 @@ export default function DetailsStep({ design, onDone }: { design: Design; onDone
         frame_id: sel.moulding.id, delivery,
         art_long_side_in: Math.max(sel.artW, sel.artH),
       });
-      setSent({ ref: data.ref, testMode: !!data.testMode, confirmationSent: data.confirmationSent === true });
-      onDone();
+      onDone({
+        ref: data.ref, testMode: !!data.testMode, confirmationSent: data.confirmationSent === true,
+        firstName: f.name.trim().split(" ")[0], email: f.email.trim(), delivery,
+      });
       window.scrollTo({ top: 0, behavior: "smooth" });
     } catch {
       setServerError(`We couldn't send your request. Please check your connection or call ${business.phone}.`);
@@ -111,30 +140,6 @@ export default function DetailsStep({ design, onDone }: { design: Design; onDone
       setBusy(false);
     }
   }
-
-  if (sent)
-    return (
-      <div className="step-body narrow quote-done" role="status">
-        <p className="eyebrow">Request received</p>
-        <h1 className="step-title">Thank you, {f.name.trim().split(" ")[0]}.</h1>
-        <p className="step-sub">
-          Your photo and details are with us. Reference <b>{sent.ref}</b>.{" "}
-          {sent.confirmationSent
-            ? `We sent a copy to ${f.email.trim()}. If it doesn't arrive, Cherie still has your request.`
-            : "We couldn't send your copy. Cherie still has your request."}
-        </p>
-        <h2 className="next-title">What happens next</h2>
-        <ol className="next-steps">
-          {NEXT[delivery].map((t) => (
-            <li key={t}>{t}</li>
-          ))}
-        </ol>
-        <div className="actions">
-          <a className="button button-ink" href={business.phoneHref}>Call {business.phone}</a>
-          <a className="text-link" href="/">Back to the homepage</a>
-        </div>
-      </div>
-    );
 
   const field = (id: "name" | "email" | "phone", label: string, props: React.InputHTMLAttributes<HTMLInputElement>) => (
     <label className="field" htmlFor={`q-${id}`}>

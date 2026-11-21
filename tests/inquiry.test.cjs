@@ -24,6 +24,7 @@ const good = {
   source: "capture",
   website: "",
   message: "A family photograph",
+  newsletter: true,
 };
 const jpeg = Buffer.from([255, 216, 255, 224, 0, 4, 0, 0, 255, 217]).toString(
   "base64",
@@ -37,7 +38,7 @@ async function run(body, options = {}) {
     Uint8Array,
     AbortSignal,
     console: { error() {} },
-    process: { env: { BREVO_API_KEY: "mock-only", VERCEL_ENV: "production", ...options.env } },
+    process: { env: { BREVO_API_KEY: "mock-only", VERCEL_ENV: "production", BREVO_LIST_ID: "2", ...options.env } },
     require(id) {
       if (id === "@/lib/rateLimit") {
         const rl = { exports: {} };
@@ -178,6 +179,15 @@ async function invalid(name, body, status = 400, options) {
     assert.equal(r.data.success, true);
     assert.equal(r.calls.length, 2);
     assert.equal(r.calls[0].url, "https://api.brevo.com/v3/smtp/email");
+  });
+  await test("no opt-in: submitter is NOT added to the marketing list", async () => {
+    const r = await run({ ...good, newsletter: false });
+    assert.equal(r.status, 200);
+    assert.equal(r.calls.length, 1);
+    const r2 = await run({ ...good, newsletter: undefined });
+    assert.equal(r2.calls.length, 1);
+    const r3 = await run({ ...good, newsletter: "true" });
+    assert.equal(r3.calls.length, 1);
   });
   await test("list-add network error is NON-FATAL", async () => {
     const r = await run(good, { throwAt: 2 });

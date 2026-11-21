@@ -9,14 +9,14 @@ import SizeStep from "./SizeStep";
 import FrameStep from "./FrameStep";
 import ReviewStep from "./ReviewStep";
 import DeliveryStep from "./DeliveryStep";
-import DetailsStep from "./DetailsStep";
+import DetailsStep, { Confirmation, type SentInfo } from "./DetailsStep";
 
 export default function DesignApp() {
   const [step, setStep] = useState<Step>(1);
   const [reached, setReached] = useState<Step>(1);
   const [design, setDesign] = useState<Design>(initialDesign);
   const [leaving, setLeaving] = useState(false);
-  const [done, setDone] = useState(false);
+  const [done, setDone] = useState<SentInfo | null>(null);
   const router = useRouter();
   const pathname = usePathname();
   const top = useRef<HTMLDivElement>(null);
@@ -81,6 +81,7 @@ export default function DesignApp() {
             <span aria-hidden="true">×</span>
           </button>
         </div>
+        {!done && (
         <nav aria-label="Design steps">
           <ol className="crumbs">
             {STEPS.map((label, i) => {
@@ -98,23 +99,25 @@ export default function DesignApp() {
             })}
           </ol>
         </nav>
+        )}
       </header>
 
       <div ref={top} tabIndex={-1} className="design-main">
-        {safe === 1 && (
+        {done && <Confirmation info={done} />}
+        {!done && safe === 1 && (
           <UploadStep
             art={design.art}
             onArt={(art) => {
               setDesign((d) => {
                 const same =
                   d.art && art && Math.abs(d.art.width / d.art.height - art.width / art.height) < 0.02;
-                return { ...d, art, ...(same ? {} : { artW: 0, artH: 0, rawW: "", rawH: "" }) };
+                return { ...d, art, ...(same ? {} : { artW: 0, artH: 0, rawW: "", rawH: "", noteW: "", noteH: "" }) };
               });
             }}
             onNext={() => go(2)}
           />
         )}
-        {safe === 2 && design.art && (
+        {!done && safe === 2 && design.art && (
           <SizeStep
             art={design.art}
             artW={design.artW}
@@ -123,11 +126,13 @@ export default function DesignApp() {
             rawH={design.rawH}
             measured={design.measured}
             onMeasured={(measured) => update({ measured })}
-            onSize={(artW, artH, rawW, rawH) => update({ artW, artH, rawW, rawH })}
+            noteW={design.noteW}
+            noteH={design.noteH}
+            onSize={(artW, artH, rawW, rawH, noteW, noteH) => update({ artW, artH, rawW, rawH, noteW, noteH })}
             onNext={() => go(3)}
           />
         )}
-        {safe === 3 && design.art && (
+        {!done && safe === 3 && design.art && (
           <FrameStep
             art={design.art}
             artW={design.artW}
@@ -143,17 +148,17 @@ export default function DesignApp() {
             }}
           />
         )}
-        {safe === 4 && (
+        {!done && safe === 4 && (
           <ReviewStep design={design} update={update} goto={(s) => go(s)} onNext={() => go(5)} />
         )}
-        {safe === 5 && (
+        {!done && safe === 5 && (
           <DeliveryStep
             design={design}
             onPick={(delivery) => update({ delivery })}
             onNext={() => go(6)}
           />
         )}
-        {safe === 6 && <DetailsStep design={design} onDone={() => setDone(true)} />}
+        {!done && safe === 6 && <DetailsStep design={design} onDone={(info) => setDone(info)} />}
       </div>
 
       {leaving && (

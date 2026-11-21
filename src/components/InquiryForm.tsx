@@ -29,6 +29,7 @@ export default function InquiryForm({
           phone: data.get("phone"),
           message: data.get("message"),
           website: data.get("website"),
+          newsletter: data.get("news") === "on",
           source,
         }),
       });
@@ -102,6 +103,10 @@ export default function InquiryForm({
             />
           </label>
         )}
+        <label className="check">
+          <input type="checkbox" name="news" />
+          Send me occasional shop news (optional)
+        </label>
         <div className="honeypot" aria-hidden="true">
           <label>
             Leave this blank

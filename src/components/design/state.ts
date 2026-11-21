@@ -21,6 +21,9 @@ export type Design = {
   /** exactly what the customer typed (or picked), sent to Cherie beside the parsed value */
   rawW: string;
   rawH: string;
+  /** how the size was entered ("common-size button", "filled in from the photo's proportions"); email only, never shown in inputs */
+  noteW: string;
+  noteH: string;
   mouldingId: string | null;
   matStyle: MatStyle;
   matWidth: MatWidthKey;
@@ -36,6 +39,8 @@ export const initialDesign: Design = {
   artH: 0,
   rawW: "",
   rawH: "",
+  noteW: "",
+  noteH: "",
   mouldingId: null,
   matStyle: "classic",
   matWidth: "standard",

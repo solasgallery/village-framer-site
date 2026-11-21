@@ -28,6 +28,8 @@ function plainInches(s: string): Part {
   if ((m = s.match(/^(?:(\d+) ?)?(\d+)\/(\d+)$/))) {
     const den = parseInt(m[3], 10);
     if (!den) return { ok: false, reason: "zero denominator" };
+    // tape-measure fractions only: "7 1/812" must never be read as 7
+    if (![2, 4, 8, 16, 32].includes(den)) return { ok: false, reason: "unrecognised" };
     // "16 5/4" is not a tape-measure reading; a bare "5/4" is left alone
     if (m[1] && parseInt(m[2], 10) >= den) return { ok: false, reason: "unrecognised" };
     return { ok: true, value: (m[1] ? parseInt(m[1], 10) : 0) + parseInt(m[2], 10) / den };

@@ -15,6 +15,8 @@ const trim = (n: number) => formatInches(n);
 const COMMON: [number, number][] = [[8, 10], [11, 14], [16, 20], [24, 36], [36, 48], [48, 60]];
 
 const toEighth = (n: number) => Math.round(n * 8) / 8;
+const COMMON_NOTE = "common-size button";
+const FILLED_NOTE = "filled in from the photo’s proportions";
 
 export default function SizeStep({
   art,
@@ -22,6 +24,8 @@ export default function SizeStep({
   artH,
   rawW,
   rawH,
+  noteW,
+  noteH,
   onSize,
   onNext,
   measured,
@@ -34,7 +38,9 @@ export default function SizeStep({
   artH: number;
   rawW: string;
   rawH: string;
-  onSize: (w: number, h: number, rawW: string, rawH: string) => void;
+  noteW: string;
+  noteH: string;
+  onSize: (w: number, h: number, rawW: string, rawH: string, noteW: string, noteH: string) => void;
   onNext: () => void;
 }) {
   const ratio = art.width / art.height;
@@ -44,8 +50,11 @@ export default function SizeStep({
   const [lock, setLock] = useState(false);
   const typedW = useRef(!!artW);
   const typedH = useRef(!!artH);
-  const filledW = useRef(false);
-  const filledH = useRef(false);
+  const filledW = useRef(noteW === FILLED_NOTE);
+  const filledH = useRef(noteH === FILLED_NOTE);
+  // email-only notes, kept beside (never inside) the typed values
+  const nW = useRef(noteW);
+  const nH = useRef(noteH);
   const nw = parse(w);
   const nh = parse(h);
 
@@ -69,15 +78,22 @@ export default function SizeStep({
   })();
   const ok = nw > 0 && nh > 0 && !problem;
 
-  const commit = (cw: number, ch: number, rw: string, rh: string) => {
+  // rw/rh are exactly what is in the inputs; nw/nh are email-only notes about how the value got there.
+  const commit = (cw: number, ch: number, rw: string, rh: string, nw_ = "", nh_ = "") => {
     const valid =
       cw >= MIN_SIDE_IN && ch >= MIN_SIDE_IN && Math.max(cw, ch) <= MAX_LONG_SIDE_IN;
-    onSize(valid ? cw : 0, valid ? ch : 0, valid ? rw : "", valid ? rh : "");
+    onSize(valid ? cw : 0, valid ? ch : 0, valid ? rw : "", valid ? rh : "", valid ? nw_ : "", valid ? nh_ : "");
   };
-  const FILLED = " (filled in from the photo’s proportions)";
-  const setWidth = (v: string) => {
+  const FILLED = FILLED_NOTE;
+
+  // A value the lock filled in is a suggestion: typing into it replaces it, never appends to it.
+  const fromFill = (v: string, was: boolean, cur: string) =>
+    was && cur && v.length > cur.length && v.startsWith(cur) ? v.slice(cur.length) : v;
+  const setWidth = (raw: string) => {
+    const v = fromFill(raw, filledW.current, w);
     typedW.current = v.trim() !== ""; // a cleared field counts as empty again
     filledW.current = false;
+    nW.current = "";
     setW(v);
     const cw = parse(v);
     let ch = nh;
@@ -87,12 +103,15 @@ export default function SizeStep({
       rh = trim(ch);
       setH(rh);
       filledH.current = true;
+      nH.current = FILLED;
     }
-    commit(cw, ch, v, filledH.current && !typedH.current ? rh + FILLED : rh);
+    commit(cw, ch, v, rh, nW.current, nH.current);
   };
-  const setHeight = (v: string) => {
+  const setHeight = (raw: string) => {
+    const v = fromFill(raw, filledH.current, h);
     typedH.current = v.trim() !== ""; // a cleared field counts as empty again
     filledH.current = false;
+    nH.current = "";
     setH(v);
     const ch = parse(v);
     let cw = nw;
@@ -102,8 +121,9 @@ export default function SizeStep({
       rw = trim(cw);
       setW(rw);
       filledW.current = true;
+      nW.current = FILLED;
     }
-    commit(cw, ch, filledW.current && !typedW.current ? rw + FILLED : rw, v);
+    commit(cw, ch, rw, v, nW.current, nH.current);
   };
   const toggleLock = (on: boolean) => {
     setLock(on);
@@ -114,13 +134,15 @@ export default function SizeStep({
       const rh = trim(ch);
       setH(rh);
       filledH.current = true;
-      commit(nw, ch, w, rh + FILLED);
+      nH.current = FILLED;
+      commit(nw, ch, w, rh, nW.current, FILLED);
     } else if (nh && !w.trim()) {
       const cw = toEighth(nh * ratio);
       const rw = trim(cw);
       setW(rw);
       filledW.current = true;
-      commit(cw, nh, rw + FILLED, h);
+      nW.current = FILLED;
+      commit(cw, nh, rw, h, FILLED, nH.current);
     }
   };
   const preset = ([a, b]: [number, number]) => {
@@ -128,9 +150,10 @@ export default function SizeStep({
     const [pw, ph] = ratio >= 1 ? [Math.max(a, b), Math.min(a, b)] : [Math.min(a, b), Math.max(a, b)];
     typedW.current = typedH.current = true;
     filledW.current = filledH.current = false;
+    nW.current = nH.current = COMMON_NOTE;
     setW(trim(pw));
     setH(trim(ph));
-    commit(pw, ph, `${trim(pw)} (common-size button)`, `${trim(ph)} (common-size button)`);
+    commit(pw, ph, trim(pw), trim(ph), COMMON_NOTE, COMMON_NOTE);
   };
 
   return (
@@ -159,6 +182,7 @@ export default function SizeStep({
                 autoComplete="off"
                 value={w}
                 onChange={(e) => setWidth(e.target.value)}
+                onFocus={(e) => filledW.current && e.target.select()}
                 aria-invalid={!!problem}
                 aria-describedby="size-help"
               />
@@ -171,6 +195,7 @@ export default function SizeStep({
                 autoComplete="off"
                 value={h}
                 onChange={(e) => setHeight(e.target.value)}
+                onFocus={(e) => filledH.current && e.target.select()}
                 aria-invalid={!!problem}
                 aria-describedby="size-help"
               />
