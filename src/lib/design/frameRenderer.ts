@@ -263,29 +263,34 @@ export function renderStudio(
   });
 }
 
-/** Wall view: framed piece hung to true scale on a room scene. */
+/** Pieces taller/wider than this (outer inches) do not fit the room scenes above the furniture. */
+const ROOM_MAX_H_IN = 36;
+const ROOM_MAX_W_IN = 54;
+
+/**
+ * Wall view. Normal pieces hang on the room scene at approximate scale
+ * (pxPerInch is estimated from furniture, not measured). Pieces too big for
+ * those scenes fall back to a plain wall with a floor line and a height ruler,
+ * so a 48x60 never looks wrong against a sofa. Returns plain=true for that case.
+ */
 export function renderWall(
   canvas: HTMLCanvasElement,
   f: FrameInput,
   room: Room,
   roomImg: HTMLImageElement,
-): { scaledToFit: boolean } {
+): { plain: boolean } {
   const ctx = canvas.getContext("2d")!;
   const W = canvas.width;
   const H = Math.round((canvas.width * room.height) / room.width);
   if (canvas.height !== H) canvas.height = H;
+  const o = outerInches(f);
+  if (o.h > ROOM_MAX_H_IN || o.w > ROOM_MAX_W_IN) {
+    renderPlainWall(ctx, f, W, H, o);
+    return { plain: true };
+  }
   ctx.drawImage(roomImg, 0, 0, W, H);
   const k = W / room.width;
-  let ppi = room.pxPerInch * k;
-  const o = outerInches(f);
-  // keep the piece on the wall: ~80 inches of wall above the floor line
-  const maxH = 80 * room.pxPerInch * k;
-  const maxW = 0.9 * W;
-  let scaledToFit = false;
-  if (o.h * ppi > maxH || o.w * ppi > maxW) {
-    ppi = Math.min(maxH / o.h, maxW / o.w);
-    scaledToFit = true;
-  }
+  const ppi = room.pxPerInch * k;
   const Ow = o.w * ppi;
   const Oh = o.h * ppi;
   const cx = room.anchor.x * k;
@@ -298,7 +303,82 @@ export function renderWall(
     dx: 0.18 * ppi,
     dy: 0.5 * ppi,
   });
-  return { scaledToFit };
+  return { plain: false };
+}
+
+/** Plain 8-foot wall with a floor line and a 1-ft-step height ruler. Scale approximate. */
+function renderPlainWall(
+  ctx: CanvasRenderingContext2D,
+  f: FrameInput,
+  W: number,
+  H: number,
+  o: { w: number; h: number },
+) {
+  const wallIn = 96;
+  const floorY = H * 0.94;
+  const ppi = (floorY - H * 0.03) / wallIn;
+  ctx.fillStyle = "#ece6d9";
+  ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = "#c9bfae";
+  ctx.fillRect(0, floorY, W, H - floorY);
+  ctx.fillStyle = "#b3a893";
+  ctx.fillRect(0, floorY - 2, W, 3);
+  // hang the centre near eye level (~60 in), but keep 8 in clear of floor and ceiling
+  const centreIn = Math.min(wallIn - 8 - o.h / 2, Math.max(8 + o.h / 2, 60));
+  const cx = W * 0.55;
+  const cy = floorY - centreIn * ppi;
+  const box: Box = { x0: cx - (o.w * ppi) / 2, y0: cy - (o.h * ppi) / 2, ppi, minRailPx: 2 };
+  drawPiece(ctx, f, box, { x0: 0, y0: 0, x1: W, y1: H }, {
+    color: "rgba(30,20,10,.3)",
+    blur: Math.max(6, 0.7 * ppi),
+    dx: 0.18 * ppi,
+    dy: 0.5 * ppi,
+  });
+  // ruler: tick every foot, label every 2 ft
+  const rx = W * 0.06;
+  ctx.strokeStyle = "#4a4a44";
+  ctx.fillStyle = "#4a4a44";
+  ctx.lineWidth = 2;
+  ctx.font = `${Math.max(12, Math.round(H * 0.026))}px sans-serif`;
+  ctx.textBaseline = "middle";
+  ctx.beginPath();
+  ctx.moveTo(rx, floorY);
+  ctx.lineTo(rx, floorY - wallIn * ppi);
+  ctx.stroke();
+  for (let ft = 0; ft <= 8; ft++) {
+    const y = floorY - ft * 12 * ppi;
+    ctx.beginPath();
+    ctx.moveTo(rx, y);
+    ctx.lineTo(rx + (ft % 2 === 0 ? 16 : 9), y);
+    ctx.stroke();
+    if (ft % 2 === 0 && ft > 0) ctx.fillText(`${ft} ft`, rx + 22, y);
+  }
+}
+
+/** Thickness (px) of an L-shaped band along the top and left edges that covers `frac` of a W x H canvas. */
+export function cornerBand(W: number, H: number, frac: number) {
+  return (W + H - Math.sqrt((W + H) ** 2 - 4 * frac * W * H)) / 2;
+}
+
+/**
+ * Pixels per inch for the corner close-up. The band from the canvas edge to the
+ * art (margin + rail + mat) stays between 36% and 44% of the canvas area. Inside
+ * that range it zooms in until the piece runs off the right and bottom edges,
+ * so it reads as a close-up of one corner, not the whole frame.
+ */
+export function cornerPpi(
+  W: number,
+  H: number,
+  pad: number,
+  f: Pick<FrameInput, "railIn" | "matIn" | "artW" | "artH">,
+) {
+  const edge = Math.max(0.25, f.railIn + f.matIn);
+  const lo = (cornerBand(W, H, 0.36) - pad) / edge;
+  const hi = (cornerBand(W, H, 0.44) - pad) / edge;
+  const ow = f.artW + 2 * (f.matIn + f.railIn);
+  const oh = f.artH + 2 * (f.matIn + f.railIn);
+  const runOff = Math.max((W - pad) / ow, (H - pad) / oh) * 1.02;
+  return Math.min(420, Math.max(lo, Math.min(runOff, hi)));
 }
 
 /** Close-up of the top-left mitred corner: rail, mat edge and art. */
@@ -308,9 +388,11 @@ export function renderCorner(canvas: HTMLCanvasElement, f: FrameInput) {
   const H = canvas.height;
   ctx.fillStyle = "#cfc8ba";
   ctx.fillRect(0, 0, W, H);
-  // show the rail, the whole mat edge and a little of the art
-  const ppi = Math.min(420, Math.max(40, (H * 0.86) / (f.railIn + f.matIn + 1.2)));
-  const pad = H * 0.07;
+  // The top-left corner band (margin + rail + mat) covers roughly 36-44% of the
+  // picture; the art gets the rest. Before, the zoom was set so rail + mat filled
+  // most of the height, which left a dark moulding with a sliver of art.
+  const pad = H * 0.04;
+  const ppi = cornerPpi(W, H, pad, f);
   const box: Box = { x0: pad, y0: pad, ppi, minRailPx: 0 };
   drawPiece(ctx, f, box, { x0: 0, y0: 0, x1: W, y1: H }, {
     color: "rgba(30,20,10,.4)",

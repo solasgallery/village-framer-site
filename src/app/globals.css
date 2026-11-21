@@ -199,6 +199,9 @@ a:hover {
   padding: 9px 20px;
 }
 .announcement a {
+  display: inline-block;
+  min-height: 24px;
+  line-height: 24px;
   margin-left: 26px;
   text-decoration: underline;
   text-underline-offset: 3px;
@@ -829,8 +832,7 @@ a:hover {
   background: var(--sage);
 }
 .gallery-photo img {
-  object-fit: contain;
-  padding: 8px;
+  object-fit: cover;
 }
 .gallery-grid figcaption {
   font-size: 14px;
@@ -841,8 +843,11 @@ a:hover {
   grid-template-columns: repeat(3, 1fr);
   gap: 50px;
 }
-.visit-details h3 {
+.visit-details h3,
+.visit-details .visit-h {
   margin-bottom: 20px;
+  font-size: 2rem;
+  letter-spacing: normal;
 }
 .visit-details p {
   color: var(--muted);
@@ -1071,3 +1076,11 @@ a:hover {
     flex: 1 1 100%;
   }
 }
+
+/* Gate 1 fix: tap targets of at least 44px */
+.menu-toggle { min-height: 44px; padding: 0 4px; }
+.footer-contact > a,
+.footer-bottom a,
+.site-footer a:not(.button) { display: inline-flex; align-items: center; min-height: 44px; }
+.footer-contact > a { display: flex; margin-top: 0; }
+.text-link { min-height: 44px; box-sizing: border-box; padding-block: 11px; }

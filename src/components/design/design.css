@@ -2,12 +2,18 @@
 body:has(.design-app) .announcement,
 body:has(.design-app) .site-header,
 body:has(.design-app) .site-footer,
-body:has(.design-app) .skip-link {
+body:has(.design-app) .skip-link,
+body:has(.design-loading) .announcement,
+body:has(.design-loading) .site-header,
+body:has(.design-loading) .site-footer,
+body:has(.design-loading) .sticky-cta,
+body:has(.design-app) .sticky-cta {
   display: none;
 }
 .design-loading {
-  min-height: 70vh;
+  min-height: 100dvh;
   display: grid;
+  align-content: center;
   place-items: center;
   font-family: var(--serif);
   font-size: 1.6rem;
@@ -357,7 +363,7 @@ body:has(.design-app) .skip-link {
   white-space: nowrap;
 }
 .dim-h span { left: 50%; top: 6px; transform: translateX(-50%); }
-.dim-v span { top: 50%; left: 10px; transform: translateY(-50%); }
+.dim-v span { top: 50%; left: 50%; transform: translate(-50%, -50%); writing-mode: vertical-rl; padding: 8px 2px; }
 .big-note {
   color: var(--rust);
   font-weight: 600;
@@ -623,10 +629,10 @@ body:has(.design-app) .skip-link {
 }
 .estimate-line b {
   font-family: var(--serif);
-  font-size: 1.9rem;
+  font-size: 1.4rem;
   font-weight: 400;
   display: block;
-  line-height: 1.1;
+  line-height: 1.25;
 }
 .estimate small {
   color: var(--muted);
@@ -746,3 +752,27 @@ body:has(.design-app) .skip-link {
   .quote-layout { grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
   .step-body { padding-bottom: 140px; }
 }
+
+/* Gate 1 fixes: crumbs fit at 375, 44px tap targets */
+.crumbs { overflow-x: auto; justify-content: flex-start; scrollbar-width: none; font-size: 10.5px; letter-spacing: 0.02em; }
+.crumbs::-webkit-scrollbar { display: none; }
+.crumbs li { flex: none; }
+.crumbs li:first-child { margin-left: auto; }
+.crumbs li:last-child { margin-right: auto; }
+.crumbs li + li::before { margin: 0 3px; }
+.crumbs span, .crumbs button { min-height: 44px; display: inline-flex; align-items: center; padding-block: 0; }
+.chip { min-height: 44px; }
+@media (min-width: 640px) {
+  .crumbs { font-size: 13px; letter-spacing: 0.08em; }
+  .crumbs li + li::before { margin: 0 14px; }
+}
+/* G9-02: below 360px every step label stays whole (was clipped to "DET" at 320).
+   Tighter spacing fits one line; wrapping is the fallback, never clipping. */
+@media (max-width: 359px) {
+  .crumbs { letter-spacing: 0; flex-wrap: wrap; justify-content: center; overflow-x: visible; }
+  .crumbs li:first-child, .crumbs li:last-child { margin-inline: 0; }
+  .crumbs li + li::before { margin: 0 1px; font-size: 13px; }
+  .crumbs span, .crumbs button { padding-inline: 1px; }
+}
+.review-bar-price b { font-size: 1.1rem; white-space: nowrap; }
+.review-bar .wide { min-width: 150px; }

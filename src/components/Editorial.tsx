@@ -62,7 +62,7 @@ export default function Editorial({
             href={kind === "journal" ? "/journal" : "/area"}
             className="text-link"
           >
-            {kind === "journal" ? "All journal notes" : "Across Central Texas"}{" "}
+            {kind === "journal" ? "All journal notes" : "Towns around Salado"}{" "}
             ↗
           </Link>
         </nav>

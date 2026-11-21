@@ -61,7 +61,17 @@ export default function FrameCanvas(p: FrameCanvasProps) {
   useEffect(() => {
     const canvas = ref.current;
     if (!canvas) return;
-    if (mode === "wall" && !roomImg) return;
+    if (mode === "wall" && !roomImg) {
+      // room photo still loading: paint the neutral studio tone, never a blank white box
+      canvas.width = width;
+      canvas.height = height;
+      const c = canvas.getContext("2d");
+      if (c) {
+        c.fillStyle = "#efeae0";
+        c.fillRect(0, 0, width, height);
+      }
+      return;
+    }
     const f: FrameInput = {
       art,
       profile,
@@ -78,7 +88,7 @@ export default function FrameCanvas(p: FrameCanvasProps) {
     canvas.height = height;
     if (mode === "wall" && room && roomImg) {
       const r = renderWall(canvas, f, room, roomImg);
-      onScaled?.(r.scaledToFit);
+      onScaled?.(r.plain);
     } else if (mode === "corner") renderCorner(canvas, f);
     else
       renderStudio(canvas, f, {

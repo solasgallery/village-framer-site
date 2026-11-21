@@ -4,39 +4,12 @@ import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import Analytics from "@/components/Analytics";
 import "./globals.css";
+import "./site2.css";
+import { business, SITE_URL } from "@/lib/site";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://saladovillageframer.com"),
-  title: {
-    default: "Salado Village Framer — Personal Custom Framing | Salado, TX",
-    template: "%s | Salado Village Framer \u2014 Salado, TX",
-  },
-  description:
-    "Personal custom framing with 30 years of experience. Explore artwork, textiles, photographs, and oversized pieces at our Salado shop, welcoming Central Texas.",
-  alternates: {
-    canonical: "/",
-  },
-  openGraph: {
-    type: "website",
-    locale: "en_US",
-    url: "https://saladovillageframer.com",
-    siteName: "Salado Village Framer",
-    images: [
-      {
-        url: "/svf-og-default.jpg",
-        width: 1200,
-        height: 630,
-        alt: "Salado Village Framer — Custom Framing & Décor, Salado, Texas",
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Salado Village Framer — Personal Custom Framing | Salado, TX",
-    description:
-      "Personal custom framing, artistic guidance, and work that stays in our Salado shop. Serving Central Texas.",
-    images: ["/svf-og-default.jpg"],
-  },
+  metadataBase: new URL(SITE_URL),
+  icons: { icon: "/brand/village-framer-mini.svg" },
   verification: {
     google: "AT_R1LQkNEO23NS0uQTrc2F8UYTRxVybtN1HlyykDy4",
   },
@@ -44,6 +17,11 @@ export const metadata: Metadata = {
     robots: { index: false, follow: false },
   }),
 };
+
+/** Trackers load on production only, so preview/local/audit traffic never reaches production analytics. */
+const TRACK = process.env.VERCEL_ENV === "production";
+
+export const viewport = { width: "device-width", initialScale: 1, themeColor: "#faf7f0" };
 
 export default function RootLayout({
   children,
@@ -53,6 +31,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        {TRACK && (
+          <>
         {/*
           Google Tag Manager
           Container: GTM-TCJR9HV
@@ -83,8 +63,11 @@ export default function RootLayout({
           {`window.Brevo = window.Brevo || [];
           Brevo.push(["init", { client_key: "9u1hsxe9gvu5e6i2ar4j28q2" }]);`}
         </Script>
+          </>
+        )}
       </head>
       <body>
+        {TRACK && (
         <noscript>
           <iframe
             src="https://www.googletagmanager.com/ns.html?id=GTM-TCJR9HV"
@@ -93,49 +76,40 @@ export default function RootLayout({
             style={{ display: "none", visibility: "hidden" }}
           />
         </noscript>
+        )}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               "@context": "https://schema.org",
-              "@type": "Store",
-              "@id": "https://saladovillageframer.com/#shop",
-              name: "Salado Village Framer",
-              url: "https://saladovillageframer.com",
-              image:
-                "https://saladovillageframer.com/images/selected/shop-at-dusk.webp",
-              logo: "https://saladovillageframer.com/brand/village-framer-logo.svg",
-              telephone: "+1-254-613-6123",
-              email: "info@solasgallery.com",
+              "@type": "LocalBusiness",
+              "@id": `${SITE_URL}/#shop`,
+              name: business.name,
+              url: SITE_URL,
+              image: `${SITE_URL}/images/selected/shop-at-dusk.webp`,
+              logo: `${SITE_URL}/brand/village-framer-logo.svg`,
+              telephone: business.phoneE164,
               description:
-                "Personal custom picture framing with 30 years of experience. Framing work stays in our Salado shop.",
+                "Custom picture framing in Salado, Texas, plus Rifle Paper Co. gifts. Every piece is framed in the shop.",
               address: {
                 "@type": "PostalAddress",
-                streetAddress: "2 Rock Creek Dr, Unit A",
-                addressLocality: "Salado",
-                addressRegion: "TX",
-                postalCode: "76571",
+                streetAddress: business.streetAddress,
+                addressLocality: business.locality,
+                addressRegion: business.region,
+                postalCode: business.postalCode,
                 addressCountry: "US",
               },
+              geo: { "@type": "GeoCoordinates", latitude: 30.9481788, longitude: -97.5363989 },
+              hasMap: business.mapsReviews,
               openingHoursSpecification: [
                 {
                   "@type": "OpeningHoursSpecification",
-                  dayOfWeek: [
-                    "Monday",
-                    "Tuesday",
-                    "Wednesday",
-                    "Thursday",
-                    "Friday",
-                    "Saturday",
-                  ],
+                  dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
                   opens: "10:00",
                   closes: "17:00",
                 },
               ],
-              sameAs: [
-                "https://www.instagram.com/saladovillageframer/",
-                "https://www.facebook.com/103998722673775",
-              ],
+              sameAs: [business.instagram, business.facebook],
             }),
           }}
         />

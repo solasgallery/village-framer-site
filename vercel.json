@@ -8,7 +8,7 @@
           "value": "village-framer.com"
         }
       ],
-      "destination": "https://saladovillageframer.com/:path*",
+      "destination": "https://www.saladovillageframer.com/:path*",
       "permanent": true
     },
     {
@@ -19,7 +19,7 @@
           "value": "www.village-framer.com"
         }
       ],
-      "destination": "https://saladovillageframer.com/:path*",
+      "destination": "https://www.saladovillageframer.com/:path*",
       "permanent": true
     }
   ]

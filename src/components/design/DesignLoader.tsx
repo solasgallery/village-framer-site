@@ -1,16 +1,8 @@
 "use client";
-import dynamic from "next/dynamic";
 import "./design.css";
+import DesignApp from "./DesignApp";
 
-// The visualizer (canvas engine, crop tool, catalog) is only loaded on /design.
-const DesignApp = dynamic(() => import("./DesignApp"), {
-  ssr: false,
-  loading: () => (
-    <div className="design-loading" role="status">
-      Setting up your design table…
-    </div>
-  ),
-});
+// Server-rendered: step 1 paints with the HTML, and hydration keeps those nodes.
 export default function DesignLoader() {
   return <DesignApp />;
 }

@@ -9,8 +9,8 @@ export default function NotFound() {
         <Link href="/" className="button button-ink">
           Back to the homepage
         </Link>
-        <Link href="/design" className="text-link">
-          Design your frame ↗
+        <Link href="/start-framing" className="text-link">
+          Start framing →
         </Link>
       </div>
     </section>

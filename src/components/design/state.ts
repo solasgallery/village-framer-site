@@ -1,5 +1,6 @@
 import { defaultMat, matColors, mouldings } from "@/lib/design/catalog";
-import { estimate, matWidthIn } from "@/lib/design/pricing";
+import { ballpark, layout } from "@/lib/design/pricing";
+import { formatInches } from "@/lib/design/parseSize";
 import type {
   DesignSelection,
   MatColor,
@@ -8,27 +9,44 @@ import type {
   Moulding,
 } from "@/lib/design/types";
 
-export type Step = 1 | 2 | 3 | 4 | 5;
-export const STEPS = ["Upload", "Size", "Frame", "Review", "Quote"] as const;
+export type Step = 1 | 2 | 3 | 4 | 5 | 6;
+export const STEPS = ["Photo", "Size", "Frame", "Preview", "Delivery", "Details"] as const;
+export type Delivery = "dropoff" | "ship" | "consult";
+export type Measured = "art" | "frame" | "unsure";
 
 export type Design = {
   art: HTMLCanvasElement | null;
   artW: number;
   artH: number;
+  /** exactly what the customer typed (or picked), sent to Cherie beside the parsed value */
+  rawW: string;
+  rawH: string;
+  /** how the size was entered ("common-size button", "filled in from the photo's proportions"); email only, never shown in inputs */
+  noteW: string;
+  noteH: string;
   mouldingId: string | null;
   matStyle: MatStyle;
   matWidth: MatWidthKey;
   matColorId: string;
+  /** null until the customer answers; sent as "not answered" */
+  measured: Measured | null;
+  delivery: Delivery | null;
 };
 
 export const initialDesign: Design = {
   art: null,
   artW: 0,
   artH: 0,
+  rawW: "",
+  rawH: "",
+  noteW: "",
+  noteH: "",
   mouldingId: null,
   matStyle: "classic",
   matWidth: "standard",
   matColorId: defaultMat.id,
+  measured: null,
+  delivery: null,
 };
 
 export const findMoulding = (id: string | null): Moulding | undefined =>
@@ -50,11 +68,7 @@ export function selectionOf(d: Design): DesignSelection | null {
 }
 
 export function derived(sel: DesignSelection) {
-  return {
-    ...estimate(sel),
-    matIn: matWidthIn(sel.matWidth, sel.artW, sel.artH, sel.matStyle),
-  };
+  return { ...layout(sel), band: ballpark() };
 }
 
-export const fmtIn = (n: number) =>
-  `${Number.isInteger(n) ? n : Number(n.toFixed(2))}″`;
+export const fmtIn = (n: number) => `${formatInches(n)}″`;

@@ -1,3 +1,5 @@
+> HISTORICAL (September 2026). Not used by the current site: samples are unbranded and no supplier is named anywhere on it. Kept only as a to-do for a possible later catalog pass.
+
 # Supplier resources for the next catalog pass
 
 Official resources located September 10, 2026:

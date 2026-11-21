@@ -9,7 +9,7 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ["/api/"],
       },
     ],
-    sitemap: "https://saladovillageframer.com/sitemap.xml",
-    host: "https://saladovillageframer.com",
+    sitemap: "https://www.saladovillageframer.com/sitemap.xml",
+    host: "https://www.saladovillageframer.com",
   };
 }

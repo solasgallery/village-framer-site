@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
-export const metadata: Metadata = {
-  title: "Privacy",
-  alternates: { canonical: "/privacy" },
-};
+import { meta } from "@/lib/seo";
+export const metadata: Metadata = meta({
+  title: "Privacy Policy | Salado Village Framer, Salado, Texas",
+  description:
+    "How Salado Village Framer handles the photos, contact details and framing requests you send us, including private photo storage and shop news sign-ups.",
+  path: "/privacy",
+});
 export default function Privacy() {
   return (
     <article className="wrap section prose">
@@ -12,13 +15,12 @@ export default function Privacy() {
         We use the information you share to respond to your inquiry and help
         with your framing project.
       </p>
-      <h2>Photos and framing previews</h2>
+      <h2>Photos and framing requests</h2>
       <p>
-        Photos you upload in the frame designer are processed in your browser.
-        When you choose “Send my concept to the shop,” a reduced-size artwork
-        reference and your concept are sent with your contact details. If you
-        included a room photo, it appears in the concept. Please share only
-        images you have permission to share.
+        When you send a request through Start framing, your photo, a preview image, the size and your contact
+        details are stored in a private store and emailed to the shop. Photos are not public. We use them only to
+        answer your request. Please share only images you have permission to share. Ask us to delete your photo at
+        any time.
       </p>
       <h2>Contact details</h2>
       <p>
@@ -38,7 +40,7 @@ export default function Privacy() {
       <p>
         Email <a href="mailto:info@solasgallery.com">info@solasgallery.com</a>{" "}
         or call <a href="tel:+12546136123">(254) 613-6123</a>. Our shop is at 2
-        Rock Creek Dr, Unit A, Salado, TX 76571.
+        Rock Creek Dr Unit A, Salado, TX 76571.
       </p>
     </article>
   );

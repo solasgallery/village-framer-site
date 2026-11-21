@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { allow, clientIp, hasCtl } from "@/lib/rateLimit";
 
 export const runtime = "nodejs";
 const MAX_BODY = 2_000_000;
@@ -6,6 +7,11 @@ const fail = (error: string, status = 400) =>
   NextResponse.json({ error }, { status });
 const clean = (value: unknown, max: number) =>
   typeof value === "string" ? value.trim().slice(0, max) : "";
+/** Strict: null when not a string or over the cap (the cap is enforced, not silently cut). */
+const strict = (value: unknown, max: number): string | null =>
+  value == null ? "" : typeof value === "string" && value.trim().length <= max ? value.trim() : null;
+// Per IP, best-effort and in-memory (see src/lib/rateLimit.ts). Trade applications are longer, so allow a few.
+const RATE = { max: 8, windowMs: 10 * 60_000 };
 const escape = (value: string) =>
   value.replace(
     /[&<>"']/g,
@@ -20,10 +26,17 @@ const sourceNames: Record<string, string> = {
   capture: "In-person QR",
   "in-person-qr": "In-person QR",
   website: "Website inquiry",
+  trade: "Trade application",
 };
 
 export async function POST(request: NextRequest) {
   try {
+    // Gate before any parsing, Blob/Brevo call or email.
+    if (!allow("inquiry", clientIp(request.headers), RATE.max, RATE.windowMs))
+      return NextResponse.json(
+        { error: "Too many requests from this connection. Please wait a few minutes or call (254) 613-6123." },
+        { status: 429, headers: { "Retry-After": "600" } },
+      );
     if (Number(request.headers.get("content-length") || 0) > MAX_BODY)
       return fail("Your images are too large. Please try smaller photos.", 413);
     // Bound streamed requests too; do not rely on a client-supplied Content-Length.
@@ -53,11 +66,18 @@ export async function POST(request: NextRequest) {
     if (!body || typeof body !== "object" || Array.isArray(body))
       return fail("Please send a valid inquiry.");
     if (body.website) return NextResponse.json({ success: true });
-    const name = clean(body.name, 120),
-      email = clean(body.email, 254).toLowerCase(),
-      phone = clean(body.phone, 40),
-      message = clean(body.message, 3000);
-    if (!name || !/^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]+$/.test(email))
+    const nameS = strict(body.name, 120),
+      emailS = strict(body.email, 254),
+      phone = strict(body.phone, 40),
+      messageS = strict(body.message, 3000);
+    if (nameS === null || emailS === null || phone === null || messageS === null)
+      return fail("One of your answers is too long. Please shorten it and try again.");
+    if (hasCtl(nameS) || hasCtl(emailS) || hasCtl(phone))
+      return fail("Please remove line breaks from your name, email and phone.");
+    const name = nameS,
+      email = emailS.toLowerCase(),
+      message = messageS.replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f]/g, "");
+    if (!name || !/^[^\s@<>",;:()\[\]\\]+@[^\s@<>",;:()\[\]\\]+\.[^\s@<>",;:()\[\]\\]+$/.test(email))
       return fail("Please enter your name and a valid email address.");
     const source = sourceNames[clean(body.source, 60)] || "Website inquiry";
     const project =
@@ -66,12 +86,15 @@ export async function POST(request: NextRequest) {
       !Array.isArray(body.project)
         ? (body.project as Record<string, unknown>)
         : null;
+    // Filled in after the list add below, so the notification says what really happened (G8-02).
+    const newsletterRow: [string, string] = ["Newsletter", ""];
     const rows: [string, string][] = [
       ["Name", name],
       ["Email", email],
       ["Phone", phone],
       ["Source", source],
       ["Message", message],
+      newsletterRow,
     ];
     if (project) {
       for (const [label, key] of [
@@ -135,6 +158,9 @@ export async function POST(request: NextRequest) {
         });
       }
     }
+    // Test hook for local/preview curl tests: validate, send nothing. Never active in production.
+    if (process.env.VERCEL_ENV !== "production" && process.env.SVF_DRY_RUN === "1")
+      return NextResponse.json({ success: true, dryRun: true, list: body.newsletter === true ? "preview" : "none" });
     const apiKey = process.env.BREVO_API_KEY;
     if (!apiKey)
       return fail(
@@ -154,6 +180,46 @@ export async function POST(request: NextRequest) {
     if (digits.length === 10) attributes.SMS = "+1" + digits;
     else if (digits.length === 11 && digits.startsWith("1"))
       attributes.SMS = "+" + digits;
+    // Keep the established Brevo list; clients cannot select another list.
+    // The list add runs BEFORE the notification so the notification can say
+    // what actually happened (G8-02). The notification is the lead; a list-add
+    // failure must never fail the request. The response says what happened to
+    // the list add so the page never claims a sign-up that did not happen:
+    //   none    = no opt-in, nothing attempted
+    //   preview = opt-in, but this is not production (list adds are skipped)
+    //   added   = Brevo accepted the contact
+    //   failed  = opt-in in production, but the add did not go through
+    let list: "none" | "preview" | "added" | "failed" = "none";
+    // Marketing list: only with an explicit opt-in (unticked box, or the /capture submit itself).
+    if (body.newsletter === true) {
+      if (process.env.VERCEL_ENV !== "production") list = "preview";
+      else {
+        list = "failed";
+        try {
+          const listId = Number(process.env.BREVO_LIST_ID);
+          if (!listId) console.error("Brevo list add skipped: BREVO_LIST_ID is not set");
+          else {
+            const contactRes = await fetch("https://api.brevo.com/v3/contacts", {
+              method: "POST",
+              headers,
+              signal: AbortSignal.timeout(12000),
+              body: JSON.stringify({ email, attributes, listIds: [listId], updateEnabled: true }),
+            });
+            if (contactRes.ok) list = "added";
+            else
+              console.error("Brevo contact request failed:", contactRes.status, await contactRes.text().catch(() => ""));
+          }
+        } catch {
+          console.error("Brevo contact request errored");
+        }
+      }
+    }
+    newsletterRow[1] = {
+      none: "not requested (not added)",
+      preview: "would be added in production (preview: not added)",
+      added: "added to list",
+      failed: "opted in, but the list add failed (not added; please add by hand)",
+    }[list];
     const emailRes = await fetch("https://api.brevo.com/v3/smtp/email", {
       method: "POST",
       headers,
@@ -170,8 +236,8 @@ export async function POST(request: NextRequest) {
           },
         ],
         replyTo: { email, name },
-        subject: `${source}: ${name.replace(/[\r\n]/g, " ")}`,
-        htmlContent: `<div style="font-family:Arial,sans-serif;max-width:640px;margin:auto;padding:32px;color:#202b2a"><h1 style="font-family:Georgia,serif">A new framing conversation</h1><table style="width:100%;border-collapse:collapse">${rows
+        subject: `${process.env.VERCEL_ENV === "production" ? "" : "[PREVIEW TEST] "}${source}: ${name.replace(/[\r\n]/g, " ")}`,
+        htmlContent: `<div style="font-family:Arial,sans-serif;max-width:640px;margin:auto;padding:32px;color:#202b2a"><h1 style="font-family:Georgia,serif">${source === sourceNames.trade ? "New trade application" : source === sourceNames.capture ? "New sign-up from the in-shop QR page" : "A new framing conversation"}</h1><table style="width:100%;border-collapse:collapse">${rows
           .filter(([, v]) => v)
           .map(
             ([k, v]) =>
@@ -190,27 +256,7 @@ export async function POST(request: NextRequest) {
         502,
       );
     }
-    // Keep the established Brevo list; clients cannot select another list.
-    // The notification above is the lead; a list-add failure must never fail
-    // the request, so it is logged and swallowed.
-    try {
-      const contactRes = await fetch("https://api.brevo.com/v3/contacts", {
-        method: "POST",
-        headers,
-        signal: AbortSignal.timeout(12000),
-        body: JSON.stringify({
-          email,
-          attributes,
-          listIds: [Number(process.env.BREVO_LIST_ID) || 2],
-          updateEnabled: true,
-        }),
-      });
-      if (!contactRes.ok)
-        console.error("Brevo contact request failed:", contactRes.status);
-    } catch {
-      console.error("Brevo contact request errored");
-    }
-    return NextResponse.json({ success: true });
+    return NextResponse.json({ success: true, list });
   } catch {
     console.error("Inquiry processing failed");
     return fail(

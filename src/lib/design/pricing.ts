@@ -1,47 +1,16 @@
-import type {
-  DesignSelection,
-  MatStyle,
-  MatWidthKey,
-  PriceTier,
-} from "./types";
+import { pricing } from "@/lib/site";
+import type { DesignSelection, MatStyle, MatWidthKey } from "./types";
 
 /**
- * Estimate engine. Pure + deterministic so the browser (live preview) and the
- * quote API route (email to the shop) always agree.
- *
- * estimate = labor + moulding(perimeter x tier rate) + glazing(area)
- *          + mat(area + cut) + float surcharge + large-piece handling
- *
- * Calibration (mid tier, standard mat): 16x20 ~ $440, 36x48 ~ $1,130.
- * Rates are retail estimates, not shop costs — tune here, nowhere else.
+ * Geometry + an honest ballpark band. There is NO price engine: the shop has
+ * not given us a rate table, so nothing here computes a per-frame or per-size
+ * dollar figure. The band is built only from the two anchors in the brief
+ * (src/lib/site.ts pricing): most framing starts around $350; large pieces $1,000+.
  */
-export const TIER_RATE_PER_INCH: Record<PriceTier, number> = {
-  economy: 1.9,
-  mid: 2.6,
-  premium: 3.8,
-  signature: 5.4,
-};
-export const TIER_LABEL: Record<PriceTier, string> = {
-  economy: "Everyday",
-  mid: "Classic",
-  premium: "Premium",
-  signature: "Signature",
-};
-const LABOR = 80;
-const GLAZING_PER_SQ_IN = 0.095;
-const MAT_PER_SQ_IN = 0.09;
-const MAT_PREMIUM_PER_SQ_IN = 0.05;
-const MAT_CUT_FEE = 25;
-const FLOAT_FLAT = 60;
-const FLOAT_PER_ART_SQ_IN = 0.04;
-export const MAX_LONG_SIDE_IN = 72;
+export const MAX_LONG_SIDE_IN = 120;
+/** Above this the flow still works, with a note that Cherie will want to see the piece. */
+export const BIG_PIECE_IN = 72;
 export const MIN_SIDE_IN = 2;
-
-/** Long outer side above which extra handling applies. */
-const LARGE_HANDLING: [number, number][] = [
-  [60, 300],
-  [40, 150],
-];
 
 export const MAT_WIDTH_LABEL: Record<MatWidthKey, string> = {
   thin: "Thin",
@@ -64,50 +33,30 @@ export function matWidthIn(
   return quarter(standard * factor);
 }
 
-export type Estimate = {
-  total: number;
-  /** rounded down to $10 — what we show as "from $X" */
-  from: number;
-  outerW: number;
-  outerH: number;
-  matIn: number;
+export type Ballpark = {
+  /** Both brief anchors, shown together for every size. */
+  headline: string;
+  /** short form for the sticky bar */
+  short: string;
 };
 
-export function estimate(sel: DesignSelection): Estimate {
-  const { artW, artH, moulding, matStyle } = sel;
-  const matIn = matWidthIn(sel.matWidth, artW, artH, matStyle);
-  const outerW = artW + 2 * matIn;
-  const outerH = artH + 2 * matIn;
-  const perimeter = 2 * (outerW + outerH) + 8 * moulding.railWidthIn;
-  const glazed = outerW * outerH;
-  let total = LABOR;
-  total += perimeter * TIER_RATE_PER_INCH[moulding.priceTier];
-  total += glazed * GLAZING_PER_SQ_IN;
-  if (matStyle !== "none") {
-    const matArea = Math.max(0, glazed - artW * artH);
-    total += matArea * MAT_PER_SQ_IN + MAT_CUT_FEE;
-    if (sel.matColor.group === "Premium")
-      total += matArea * MAT_PREMIUM_PER_SQ_IN;
-  }
-  if (matStyle === "float") total += FLOAT_FLAT + artW * artH * FLOAT_PER_ART_SQ_IN;
-  const longSide = Math.max(outerW, outerH) + 2 * moulding.railWidthIn;
-  for (const [threshold, fee] of LARGE_HANDLING)
-    if (longSide > threshold) {
-      total += fee;
-      break;
-    }
-  total = Math.round(total / 5) * 5;
-  return { total, from: Math.floor(total / 10) * 10, outerW, outerH, matIn };
+/**
+ * Same two anchors for every size. The shop has not told us where "large"
+ * starts, so there is no size-based switch (gate 2, G2-02).
+ */
+export function ballpark(): Ballpark {
+  return {
+    headline: `Most framing starts around ${pricing.startsAround}. Large pieces often run ${pricing.largeFrom} and up.`,
+    short: `${pricing.startsAround}+ · large ${pricing.largeFrom}+`,
+  };
 }
 
-/** Surcharge shown beside the "Float" option (for the current size). */
-export function floatSurcharge(sel: DesignSelection): number {
-  const base = estimate({ ...sel, matStyle: "classic" }).total;
-  const flt = estimate({ ...sel, matStyle: "float" }).total;
-  return Math.max(0, flt - base);
+export type Layout = { outerW: number; outerH: number; matIn: number };
+
+export function layout(sel: DesignSelection): Layout {
+  const matIn = matWidthIn(sel.matWidth, sel.artW, sel.artH, sel.matStyle);
+  return { outerW: sel.artW + 2 * matIn, outerH: sel.artH + 2 * matIn, matIn };
 }
 
-export const money = (n: number) =>
-  "$" + Math.round(n).toLocaleString("en-US");
-
-export const ESTIMATE_NOTE = "Estimated — final quote confirmed in the shop.";
+export const ESTIMATE_NOTE =
+  "Ballpark only — Cherie gives you an exact quote after she sees the piece.";

@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
+import { meta } from "@/lib/seo";
 import InquiryForm from "@/components/InquiryForm";
-export const metadata: Metadata = {
-  title: "Tell us about your framing project",
+export const metadata: Metadata = meta({
+  title: "Contact Salado Village Framer | Call, Email or Visit",
   description:
-    "Start a conversation with Salado Village Framer. Share your artwork, size, and ideas before visiting our Salado shop.",
-  alternates: { canonical: "/contact" },
-};
+    "Contact Salado Village Framer in Salado, Texas. Call (254) 613-6123, send a message, or start with a photo of your piece and the size. Open Monday to Saturday.",
+  path: "/contact",
+});
 export default function Contact() {
   return (
     <>
@@ -19,7 +20,7 @@ export default function Contact() {
       </header>
       <section className="wrap section contact-layout">
         <div>
-          <h2>We’re listening.</h2>
+          <h2>Talk to us.</h2>
           <p className="lede">
             Call{" "}
             <a href="tel:+12546136123" className="text-link">
@@ -33,11 +34,11 @@ export default function Contact() {
           </p>
           <p className="lede">
             Monday–Saturday, 10am–5pm.
-            <br />2 Rock Creek Dr, Unit A<br />
-            Salado, Texas 76571
+            <br />2 Rock Creek Dr Unit A<br />
+            Salado, TX 76571
           </p>
-          <a href="/design" className="text-link" style={{ marginTop: 24 }}>
-            Want to send a visual idea? Design your frame ↗
+          <a href="/start-framing" className="text-link" style={{ marginTop: 24 }}>
+            Rather send a photo? Start framing →
           </a>
         </div>
         <InquiryForm />

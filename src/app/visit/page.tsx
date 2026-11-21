@@ -1,25 +1,26 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
-export const metadata: Metadata = {
-  title: "Visit our Salado frame shop | Monday–Saturday 10–5",
+import { meta } from "@/lib/seo";
+import { business } from "@/lib/site";
+export const metadata: Metadata = meta({
+  title: "Visit Salado Village Framer | Hours, Map and Directions",
   description:
-    "Visit Salado Village Framer at 2 Rock Creek Dr, Unit A, Salado, TX 76571. Open Monday–Saturday, 10am–5pm. Call (254) 613-6123.",
-  alternates: { canonical: "/visit" },
-};
+    "Visit Salado Village Framer at 2 Rock Creek Dr Unit A, Salado, TX 76571. Open Monday to Saturday, 10am to 5pm. Call (254) 613-6123 first for large pieces.",
+  path: "/visit",
+});
 export default function Visit() {
   return (
     <>
       <header className="page-intro">
-        <p className="eyebrow">A real shop. A personal welcome.</p>
+        <p className="eyebrow">Visit the shop</p>
         <h1>
           Come sit at
           <br />
           the design table.
         </h1>
         <p className="lede">
-          Bring your artwork, your questions, and a little time to explore.
-          We’ll help you see the possibilities.
+          Bring your piece and your questions. We’ll look at it together.
         </p>
       </header>
       <div
@@ -37,13 +38,13 @@ export default function Visit() {
       <section className="wrap section visit-details">
         <div>
           <p className="eyebrow">Find the shop</p>
-          <h3>
+          <h2 className="visit-h">
             Village Framer
             <br />
             in Salado.
-          </h3>
+          </h2>
           <p>
-            2 Rock Creek Dr, Unit A<br />
+            {business.streetAddress}<br />
             Salado, TX 76571
           </p>
           <a
@@ -56,12 +57,12 @@ export default function Visit() {
           </a>
         </div>
         <div>
-          <p className="eyebrow">Make a little time</p>
-          <h3>
+          <p className="eyebrow">Hours</p>
+          <h2 className="visit-h">
             Monday–Saturday
             <br />
             10am–5pm.
-          </h3>
+          </h2>
           <p>
             Sunday closed.
             <br />
@@ -74,16 +75,16 @@ export default function Visit() {
         </div>
         <div>
           <p className="eyebrow">Before you visit</p>
-          <h3>
+          <h2 className="visit-h">
             A photo is
             <br />a good beginning.
-          </h3>
+          </h2>
           <p>
             Bring approximate dimensions, a room photo if helpful, and a sense
             of your budget.
           </p>
-          <Link href="/design" className="text-link">
-            Send a framing idea ↗
+          <Link href="/start-framing" className="text-link">
+            Start framing →
           </Link>
         </div>
       </section>
@@ -97,12 +98,10 @@ export default function Visit() {
           />
         </div>
         <div className="feature-copy">
-          <p className="eyebrow">Meet the people behind the frame</p>
-          <h2>Experience you can talk to.</h2>
+          <p className="eyebrow">Meet your framer</p>
+          <h2>Talk it through with Cherie.</h2>
           <p>
-            With 30 years of experience, Cherie and Tim bring a practiced eye
-            and personal attention to your project. We’ll explore the details
-            with you, using real moulding and mat samples beside your artwork.
+            Cherie Flanagan has framed for thirty years and will look at your piece with you, with moulding and mat samples beside your artwork.
           </p>
           <p>
             Your framing work stays in our Salado shop, with the people you
@@ -110,28 +109,23 @@ export default function Visit() {
           </p>
           <div className="actions">
             <Link href="/contact" className="text-link">
-              Start a conversation ↗
+              Contact us →
             </Link>
           </div>
         </div>
       </section>
       <section className="wrap section centered">
-        <p className="eyebrow">Worth making a little time for</p>
+        <p className="eyebrow">Find us</p>
         <h2>
-          A Salado stop.
-          <br />A Central Texas welcome.
+          The shop is in Salado.
         </h2>
         <p className="lede">
-          We welcome framing projects from Temple, Killeen, Belton, Georgetown,
-          Round Rock, Cedar Park, Waco, and throughout the region.
+          If you are coming from out of town, here are the towns around Salado.
         </p>
         <div className="actions">
-          <Link className="text-link" href="/area">
-            Explore our Central Texas pages ↗
+          <Link className="text-link" href="/service-area">
+            Towns around Salado →
           </Link>
-          <a className="text-link" href="https://solasgallery.com/">
-            Meet our sister business, Solas Gallery ↗
-          </a>
         </div>
       </section>
     </>

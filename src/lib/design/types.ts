@@ -1,15 +1,12 @@
-export type PriceTier = "economy" | "mid" | "premium" | "signature";
 export type MatStyle = "classic" | "none" | "float";
 export type MatWidthKey = "thin" | "standard" | "wide";
 
 export type Moulding = {
   id: string;
+  /** plain descriptor of the sample swatch, e.g. "Black, slim gallery profile" */
   name: string;
-  descriptor: string;
-  maker: "Roma" | "Larson-Juhl";
   colorFamily: string;
   railWidthIn: number;
-  priceTier: PriceTier;
   profileImage: string;
 };
 

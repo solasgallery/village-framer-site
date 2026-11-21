@@ -1,5 +1,8 @@
 "use client";
 import { FormEvent, useState } from "react";
+import { ListNote, ListStatus, listStatus } from "@/components/ListNote";
+import { isOffline, offlineMessage, unconfirmedMessage } from "@/lib/formErrors";
+import { business } from "@/lib/site";
 export default function InquiryForm({
   source = "contact",
   compact = false,
@@ -8,13 +11,18 @@ export default function InquiryForm({
   compact?: boolean;
 }) {
   const [busy, setBusy] = useState(false),
-    [sent, setSent] = useState(false),
+    [sent, setSent] = useState<ListStatus | null>(null),
     [error, setError] = useState("");
   async function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (busy) return;
-    setBusy(true);
     setError("");
+    const what = compact ? "sign-up" : "message";
+    if (isOffline()) {
+      setError(offlineMessage(what));
+      return;
+    }
+    setBusy(true);
     const data = new FormData(e.currentTarget);
     const abort = new AbortController();
     const timer = setTimeout(() => abort.abort(), 30000);
@@ -29,46 +37,72 @@ export default function InquiryForm({
           phone: data.get("phone"),
           message: data.get("message"),
           website: data.get("website"),
+          // /capture exists only to join the list: submitting it is the opt-in.
+          // Everywhere else the box is unticked by default.
+          newsletter: compact || data.get("news") === "on",
           source,
         }),
       });
-      const result = await res.json();
-      if (!res.ok || !result.success)
-        throw new Error(result.error || "Please try again or call the shop.");
-      setSent(true);
+      const result = await res.json().catch(() => null);
+      if (!res.ok || !result?.success) {
+        // Our API always explains its own errors; anything else (a platform 5xx, an unreadable reply)
+        // may still have reached us, so don't say it wasn't sent.
+        setError(typeof result?.error === "string" && result.error ? result.error : unconfirmedMessage(what));
+        return;
+      }
+      setSent(listStatus(result.list));
       window.dispatchEvent(
         new CustomEvent("svf-inquiry-success", { detail: { source } }),
       );
-    } catch (e) {
-      setError(
-        e instanceof Error && e.name !== "AbortError"
-          ? e.message
-          : "We could not confirm delivery. Please call (254) 613-6123 before resending.",
-      );
+    } catch {
+      // Network error ("Failed to fetch"), dropped connection or our 30s timeout: never show the
+      // browser's text. The request may have reached us.
+      setError(unconfirmedMessage(what));
     } finally {
       clearTimeout(timer);
       setBusy(false);
     }
   }
+  if (sent && compact) {
+    // Say only what the server reports actually happened to the list add.
+    const [head, body] =
+      sent === "added"
+        ? ["You’re on the list.", "Thanks. We’ll email you now and then. Unsubscribe any time."]
+        : sent === "preview"
+          ? ["Preview: not added to the list", "This is a preview site. Nothing was added to the list."]
+          : ["We have your details, but not on the list yet.", null];
+    return (
+      <div className="form-success" role="status">
+        <p className="eyebrow">Thank you</p>
+        <h2>{head}</h2>
+        {body ? <p>{body}</p> : <ListNote status="failed" />}
+        <a className="text-link" href="/start-framing">
+          Explore a framing idea ↗
+        </a>
+      </div>
+    );
+  }
   if (sent)
     return (
       <div className="form-success" role="status">
         <p className="eyebrow">Thank you</p>
-        <h2>
-          {compact ? "You’re on the list." : "Let’s make something beautiful."}
-        </h2>
-        <p>
-          {compact
-            ? "We look forward to sharing shop news and inspiration with you."
-            : "Your message is with us. We’ll use the details you provided to help plan your visit."}
-        </p>
-        <a className="text-link" href="/design">
+        <h2>Thanks, we got your message.</h2>
+        <p>Your message is with us. We’ll use the details you provided to help plan your visit.</p>
+        <ListNote status={sent} />
+        <a className="text-link" href="/start-framing">
           Explore a framing idea ↗
         </a>
       </div>
     );
   return (
-    <form className="inquiry-form" onSubmit={submit}>
+    // method="post": a submit before hydration must never put details in the URL.
+    // action: that native submit goes to a route that discards it and says plainly it wasn't sent (G7-02).
+    <form className="inquiry-form" method="post" action="/api/form-fallback" onSubmit={submit}>
+      <noscript>
+        <p className="form-error">
+          This form needs JavaScript. Call {business.phone} or email {business.email} and we’ll take it from there.
+        </p>
+      </noscript>
       <fieldset disabled={busy}>
         <legend className="sr-only">Your contact details</legend>
         <div className="form-row">
@@ -102,6 +136,12 @@ export default function InquiryForm({
             />
           </label>
         )}
+        {!compact && (
+          <label className="check">
+            <input type="checkbox" name="news" />
+            Send me occasional shop news (optional)
+          </label>
+        )}
         <div className="honeypot" aria-hidden="true">
           <label>
             Leave this blank
@@ -112,13 +152,13 @@ export default function InquiryForm({
           {busy
             ? "Sending…"
             : compact
-              ? "Keep me inspired"
+              ? "Join the list"
               : "Send your message"}{" "}
           <span aria-hidden="true">↗</span>
         </button>
         <p className="form-note">
           {compact
-            ? "Sign up for occasional shop news and framing inspiration. You can unsubscribe from marketing emails anytime."
+            ? "We’ll email you now and then. Unsubscribe any time."
             : "We’ll use your details to respond to your inquiry."}{" "}
           <a href="/privacy">Privacy</a>
         </p>

@@ -142,3 +142,26 @@ export function jpegForEmail(src: HTMLCanvasElement, maxDim: number): string {
   }
   return out.split(",")[1];
 }
+
+/** JPEG Blob under maxBytes, longest side at most maxDim. */
+export async function jpegBlob(
+  src: HTMLCanvasElement,
+  maxDim: number,
+  maxBytes: number,
+): Promise<Blob> {
+  const s = Math.min(1, maxDim / Math.max(src.width, src.height));
+  const c = document.createElement("canvas");
+  c.width = Math.round(src.width * s);
+  c.height = Math.round(src.height * s);
+  const ctx = c.getContext("2d")!;
+  ctx.fillStyle = "#fff";
+  ctx.fillRect(0, 0, c.width, c.height);
+  ctx.drawImage(src, 0, 0, c.width, c.height);
+  let blob: Blob | null = null;
+  for (const q of [0.88, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3]) {
+    blob = await new Promise<Blob | null>((r) => c.toBlob(r, "image/jpeg", q));
+    if (blob && blob.size <= maxBytes) return blob;
+  }
+  if (!blob) throw new Error("Could not prepare the image.");
+  return blob;
+}

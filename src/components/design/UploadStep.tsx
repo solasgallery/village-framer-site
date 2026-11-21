@@ -144,10 +144,7 @@ export default function UploadStep({
             <button type="button" className="text-link" onClick={() => phone.current?.click()} disabled={busy}>
               Upload from your phone
             </button>
-            <small>
-              On a computer? Open saladovillageframer.com/design on your phone to
-              snap a photo of your piece.
-            </small>
+
           </div>
         </>
       )}
