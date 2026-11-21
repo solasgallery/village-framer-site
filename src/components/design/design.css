@@ -2,12 +2,18 @@
 body:has(.design-app) .announcement,
 body:has(.design-app) .site-header,
 body:has(.design-app) .site-footer,
-body:has(.design-app) .skip-link {
+body:has(.design-app) .skip-link,
+body:has(.design-loading) .announcement,
+body:has(.design-loading) .site-header,
+body:has(.design-loading) .site-footer,
+body:has(.design-loading) .sticky-cta,
+body:has(.design-app) .sticky-cta {
   display: none;
 }
 .design-loading {
-  min-height: 70vh;
+  min-height: 100dvh;
   display: grid;
+  align-content: center;
   place-items: center;
   font-family: var(--serif);
   font-size: 1.6rem;

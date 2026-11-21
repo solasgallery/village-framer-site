@@ -9,6 +9,7 @@ import { business, SITE_URL } from "@/lib/site";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
+  icons: { icon: "/brand/village-framer-mini.svg" },
   verification: {
     google: "AT_R1LQkNEO23NS0uQTrc2F8UYTRxVybtN1HlyykDy4",
   },

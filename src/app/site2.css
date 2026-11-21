@@ -51,3 +51,5 @@
   .rifle-grid{grid-template-columns:repeat(2,1fr)}
   .visit-grid{grid-template-columns:1fr;gap:32px}
 }
+.design-loading{text-align:center}
+.design-loading h1{font-size:clamp(2.4rem,6vw,4rem)}
