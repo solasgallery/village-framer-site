@@ -196,8 +196,10 @@ export async function POST(request: NextRequest) {
       else {
         list = "failed";
         try {
-          const listId = Number(process.env.BREVO_LIST_ID);
-          if (!listId) console.error("Brevo list add skipped: BREVO_LIST_ID is not set");
+          // Brevo list 5 = "VF Website Subscribers". BREVO_LIST_ID is NOT used: in Production it points at
+          // Solas's old "web inquiries" list (38). Optional override: BREVO_VF_LIST_ID.
+          const listId = Number(process.env.BREVO_VF_LIST_ID) || 5;
+          if (!listId) console.error("Brevo list add skipped: no list id");
           else {
             const contactRes = await fetch("https://api.brevo.com/v3/contacts", {
               method: "POST",

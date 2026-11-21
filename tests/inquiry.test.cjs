@@ -38,7 +38,7 @@ async function run(body, options = {}) {
     Uint8Array,
     AbortSignal,
     console: { error() {} },
-    process: { env: { BREVO_API_KEY: "mock-only", VERCEL_ENV: "production", BREVO_LIST_ID: "2", ...options.env } },
+    process: { env: { BREVO_API_KEY: "mock-only", VERCEL_ENV: "production", BREVO_LIST_ID: "38", ...options.env } },
     require(id) {
       if (id === "@/lib/rateLimit") {
         const rl = { exports: {} };
@@ -99,7 +99,7 @@ async function invalid(name, body, status = 400, options) {
     assert.equal(r.calls.length, 2);
     assert.equal(r.calls[0].url, "https://api.brevo.com/v3/contacts");
     assert.equal(r.calls[1].url, "https://api.brevo.com/v3/smtp/email");
-    assert.deepEqual(r.calls[0].body.listIds, [2]);
+    assert.deepEqual(r.calls[0].body.listIds, [5]); // list 5 VF, never the legacy BREVO_LIST_ID (38)
     assert.equal(r.calls[0].body.email, "test@example.invalid");
     assert.equal(r.calls[0].body.attributes.SMS, "+12545550101");
     assert.equal(r.calls[1].body.to[0].email, "info@solasgallery.com");
@@ -170,7 +170,7 @@ async function invalid(name, body, status = 400, options) {
   await test("server list override respected; client list ignored", async () => {
     const r = await run(
       { ...good, listId: 99 },
-      { env: { BREVO_LIST_ID: "7" } },
+      { env: { BREVO_VF_LIST_ID: "7" } },
     );
     assert.deepEqual(r.calls[0].body.listIds, [7]);
   });
@@ -287,9 +287,9 @@ async function invalid(name, body, status = 400, options) {
     assert.equal(bad.data.success, true);
     assert.equal(bad.data.list, "failed");
     assert.equal((await run(good, { throwAt: 1 })).data.list, "failed");
-    const noList = await run(good, { env: { BREVO_LIST_ID: "" } });
-    assert.equal(noList.calls.length, 1);
-    assert.equal(noList.data.list, "failed");
+    const noLegacy = await run(good, { env: { BREVO_LIST_ID: "" } });
+    assert.equal(noLegacy.data.list, "added");
+    assert.deepEqual(noLegacy.calls[0].body.listIds, [5]);
   });
   await test("list status: preview never adds and says preview; no opt-in says none", async () => {
     const r = await run(good, { env: { VERCEL_ENV: "preview" } });
@@ -328,7 +328,6 @@ async function invalid(name, body, status = 400, options) {
     assert.equal(row(smtp(await run(good, { statuses: [204, 201] })).body.htmlContent), "added to list");
     assert.match(row(smtp(await run(good, { statuses: [400, 201] })).body.htmlContent), /list add failed \(not added/);
     assert.match(row(smtp(await run(good, { throwAt: 1 })).body.htmlContent), /list add failed/);
-    assert.match(row(smtp(await run(good, { env: { BREVO_LIST_ID: "" } })).body.htmlContent), /list add failed/);
     const p = await run(good, { env: { VERCEL_ENV: "preview" } });
     assert.equal(row(smtp(p).body.htmlContent), "would be added in production (preview: not added)");
     assert.doesNotMatch(smtp(p).body.htmlContent, /added to list/);
