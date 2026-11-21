@@ -117,3 +117,29 @@ test("G7-03: Cherie's email writes the mat width with the same fractions as the 
   new Function("module", "exports", out)(mod, mod.exports);
   assert.equal(mod.exports.formatInches(2.5), "2 1/2");
 });
+
+test("customer-facing email shows only info@solasgallery.com; cherie@ is the lead recipient only", () => {
+  const r = read("src/app/api/start-framing/route.ts");
+  assert.match(r, /const PUBLIC_EMAIL = "info@solasgallery\.com";/);
+  // the customer confirmation block: sent from and replying to the public address
+  const conf = r.slice(r.indexOf("to: [{ email }]") - 200, r.indexOf("to: [{ email }]") + 200);
+  assert.match(conf, /sender: PUBLIC_SENDER/);
+  assert.match(conf, /replyTo: \{ email: PUBLIC_EMAIL/);
+  assert.doesNotMatch(conf, /LEADS_TO|cherie@/);
+  // no other address is printed anywhere a visitor can see it
+  const walk = (d) => fs.readdirSync(d, { withFileTypes: true }).flatMap((e) => (e.isDirectory() ? walk(path.join(d, e.name)) : [path.join(d, e.name)]));
+  const root = path.join(__dirname, "..", "src");
+  for (const f of walk(root).filter((f) => /\.(tsx?|css)$/.test(f) && !f.includes(`${path.sep}api${path.sep}`))) {
+    const emails = (fs.readFileSync(f, "utf8").match(/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g) || []).filter((e) => !e.endsWith("@example.com"));
+    for (const e of emails) assert.equal(e, "info@solasgallery.com", `${path.relative(root, f)} shows ${e}`);
+  }
+});
+
+test("NAP once per page: the footer block is skipped where the page body already has it", () => {
+  const foot = read("src/components/Footer.tsx");
+  assert.match(foot, /export const NAP_IN_PAGE = \["\/", "\/visit", "\/contact"\];/);
+  assert.match(foot, /\{!napInPage && \(\s*<div className="footer-contact">/);
+  const home = read("src/app/page.tsx");
+  assert.equal((home.match(/business\.streetAddress/g) || []).length, 1, "homepage prints the street address once");
+  assert.equal((home.match(/Cherie Flanagan/g) || []).length, 1, "homepage introduces Cherie once");
+});

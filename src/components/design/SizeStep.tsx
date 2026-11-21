@@ -5,6 +5,7 @@ import ArtCanvas from "./ArtCanvas";
 import type { Measured } from "./state";
 
 import { formatInches, parseInches } from "@/lib/design/parseSize";
+import { COMMON_SIZES, presetLabel, presetSize } from "@/lib/design/presets";
 
 /** Parsed inches to 1/8-inch precision; 0 when empty or unreadable. */
 const parse = (s: string) => {
@@ -12,7 +13,6 @@ const parse = (s: string) => {
   return r.ok ? r.value : 0;
 };
 const trim = (n: number) => formatInches(n);
-const COMMON: [number, number][] = [[8, 10], [11, 14], [16, 20], [24, 36], [36, 48], [48, 60]];
 
 const toEighth = (n: number) => Math.round(n * 8) / 8;
 const COMMON_NOTE = "common-size button";
@@ -145,15 +145,26 @@ export default function SizeStep({
       commit(cw, nh, rw, h, FILLED, nH.current);
     }
   };
-  const preset = ([a, b]: [number, number]) => {
-    // orient the preset like the art
-    const [pw, ph] = ratio >= 1 ? [Math.max(a, b), Math.min(a, b)] : [Math.min(a, b), Math.max(a, b)];
+  const preset = (c: readonly [number, number]) => {
+    // Width = first number, Height = second, exactly as the button reads.
+    const { w: pw, h: ph } = presetSize(c);
     typedW.current = typedH.current = true;
     filledW.current = filledH.current = false;
     nW.current = nH.current = COMMON_NOTE;
     setW(trim(pw));
     setH(trim(ph));
     commit(pw, ph, trim(pw), trim(ph), COMMON_NOTE, COMMON_NOTE);
+  };
+
+  // Landscape piece: tap a size, then swap. Keeps each field's own note with its value.
+  const swap = () => {
+    const [rw, rh] = [h, w];
+    [typedW.current, typedH.current] = [typedH.current, typedW.current];
+    [filledW.current, filledH.current] = [filledH.current, filledW.current];
+    [nW.current, nH.current] = [nH.current, nW.current];
+    setW(rw);
+    setH(rh);
+    commit(parse(rw), parse(rh), rw, rh, nW.current, nH.current);
   };
 
   return (
@@ -212,11 +223,20 @@ export default function SizeStep({
                 : `Fractions are fine, like 16 1/4, and so are feet, like 3' 6\".`)}
           </p>
           <div className="tool-row" role="group" aria-label="Common sizes">
-            {COMMON.map((c) => (
-              <button type="button" key={c.join("x")} className="chip" onClick={() => preset(c)}>
-                {c[0]}×{c[1]}
+            {COMMON_SIZES.map((c) => (
+              <button
+                type="button"
+                key={c.join("x")}
+                className="chip"
+                aria-label={`${c[0]} inches wide by ${c[1]} inches high`}
+                onClick={() => preset(c)}
+              >
+                {presetLabel(c)}
               </button>
             ))}
+            <button type="button" className="chip" disabled={!w.trim() && !h.trim()} onClick={swap}>
+              Swap width and height
+            </button>
           </div>
           <fieldset className="measured">
             <legend className="opt-label">What did you measure? <span>(optional)</span></legend>

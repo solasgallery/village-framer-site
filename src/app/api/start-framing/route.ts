@@ -23,6 +23,9 @@ export const maxDuration = 30;
 
 const LEADS_TO = "cherie@solasgallery.com";
 const SENDER = { name: "Salado Village Framer", email: "cherie@solasgallery.com" };
+/** The customer-facing address: the one public email on the site. cherie@ is the lead recipient only, never shown to a visitor. */
+const PUBLIC_EMAIL = "info@solasgallery.com";
+const PUBLIC_SENDER = { name: "Salado Village Framer", email: PUBLIC_EMAIL };
 const MAX_PHOTO = 2_000_000;
 const MAX_CONCEPT = 600_000;
 const fail = (error: string, status = 400) => NextResponse.json({ error }, { status });
@@ -211,9 +214,9 @@ export async function POST(request: NextRequest) {
             ? "Please wait for our reply before you ship anything."
             : "We will reply to set a time for your design consult.";
       const r = await send({
-        sender: SENDER,
+        sender: PUBLIC_SENDER,
         to: [{ email }],
-        replyTo: { email: LEADS_TO, name: "Cherie Flanagan" },
+        replyTo: { email: PUBLIC_EMAIL, name: "Salado Village Framer" },
         subject: `${prefix}We received your framing request (${ref})`,
         htmlContent: `<div style="font-family:Arial,sans-serif;max-width:560px;margin:auto;padding:32px;color:#202b2a"><h1 style="font-family:Georgia,serif">Thank you.</h1><p>We have your photo and details (reference ${ref}). Cherie will reply by email, usually within one business day.</p><p>${esc(nextLine)}</p><p>Your size: ${esc(formatInches(artW))} × ${esc(formatInches(artH))} inches. Ballpark we showed: ${esc(band.headline)} ${esc(ESTIMATE_NOTE)} Cherie will confirm the details with you before any work starts. The frame and mat you picked are samples; Cherie will show you the actual mouldings in the shop.</p><p style="color:#59625d;font-size:13px">${esc(business.nap)}<br>Reply to this email or call ${esc(business.phone)}.</p></div>`,
       });

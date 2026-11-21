@@ -3,9 +3,13 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { business, START } from "@/lib/site";
 
+export const NAP_IN_PAGE = ["/", "/visit", "/contact"];
+
 export default function Footer() {
   const path = usePathname();
-  const home = path === "/";
+  // Pages whose own body already carries the full address, phone and hours.
+  // The footer adds its "Find us in Salado." block everywhere else, so NAP shows once per page.
+  const napInPage = NAP_IN_PAGE.includes(path);
   return (
     <>
       <footer className="site-footer">
@@ -21,8 +25,7 @@ export default function Footer() {
               Start framing <span aria-hidden="true">→</span>
             </Link>
           </div>
-          {/* The homepage already carries the address once, in its Visit section. */}
-          {!home && (
+          {!napInPage && (
             <div className="footer-contact">
               <h3>Find us in Salado.</h3>
               <address>

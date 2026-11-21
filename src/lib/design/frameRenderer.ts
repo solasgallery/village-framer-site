@@ -355,6 +355,32 @@ function renderPlainWall(
   }
 }
 
+/** Thickness (px) of an L-shaped band along the top and left edges that covers `frac` of a W x H canvas. */
+export function cornerBand(W: number, H: number, frac: number) {
+  return (W + H - Math.sqrt((W + H) ** 2 - 4 * frac * W * H)) / 2;
+}
+
+/**
+ * Pixels per inch for the corner close-up. The band from the canvas edge to the
+ * art (margin + rail + mat) stays between 36% and 44% of the canvas area. Inside
+ * that range it zooms in until the piece runs off the right and bottom edges,
+ * so it reads as a close-up of one corner, not the whole frame.
+ */
+export function cornerPpi(
+  W: number,
+  H: number,
+  pad: number,
+  f: Pick<FrameInput, "railIn" | "matIn" | "artW" | "artH">,
+) {
+  const edge = Math.max(0.25, f.railIn + f.matIn);
+  const lo = (cornerBand(W, H, 0.36) - pad) / edge;
+  const hi = (cornerBand(W, H, 0.44) - pad) / edge;
+  const ow = f.artW + 2 * (f.matIn + f.railIn);
+  const oh = f.artH + 2 * (f.matIn + f.railIn);
+  const runOff = Math.max((W - pad) / ow, (H - pad) / oh) * 1.02;
+  return Math.min(420, Math.max(lo, Math.min(runOff, hi)));
+}
+
 /** Close-up of the top-left mitred corner: rail, mat edge and art. */
 export function renderCorner(canvas: HTMLCanvasElement, f: FrameInput) {
   const ctx = canvas.getContext("2d")!;
@@ -362,9 +388,11 @@ export function renderCorner(canvas: HTMLCanvasElement, f: FrameInput) {
   const H = canvas.height;
   ctx.fillStyle = "#cfc8ba";
   ctx.fillRect(0, 0, W, H);
-  // show the rail, the whole mat edge and a little of the art
-  const ppi = Math.min(420, Math.max(40, (H * 0.86) / (f.railIn + f.matIn + 1.2)));
-  const pad = H * 0.07;
+  // The top-left corner band (margin + rail + mat) covers roughly 36-44% of the
+  // picture; the art gets the rest. Before, the zoom was set so rail + mat filled
+  // most of the height, which left a dark moulding with a sliver of art.
+  const pad = H * 0.04;
+  const ppi = cornerPpi(W, H, pad, f);
   const box: Box = { x0: pad, y0: pad, ppi, minRailPx: 0 };
   drawPiece(ctx, f, box, { x0: 0, y0: 0, x1: W, y1: H }, {
     color: "rgba(30,20,10,.4)",

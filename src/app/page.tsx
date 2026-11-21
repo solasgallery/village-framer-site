@@ -186,7 +186,7 @@ export default function Home() {
               <Link href={START} className="inline-link">
                 Start framing preview
               </Link>{" "}
-              is a ballpark, not a quote: most framing starts around $350, large pieces often run $1,000 and up, and Cherie quotes exactly after she sees it. Our{" "}
+              is a ballpark, not a quote. The exact price comes after we see the piece. Our{" "}
               <Link href="/guides/how-much-does-custom-framing-cost" className="inline-link">
                 framing cost guide
               </Link>{" "}
