@@ -92,3 +92,13 @@ a[href^="mailto:"]{display:inline-block;padding:12px 2px;min-height:44px;box-siz
 .faq-item p{margin:0 0 16px}
 .inquiry-form label.check{display:flex;flex-direction:row;align-items:center;gap:10px;min-height:44px;margin:0 0 16px;font-weight:400;text-align:left}
 .inquiry-form label.check input{width:20px;height:20px;min-height:0;margin:0;padding:0;flex:0 0 auto;display:inline-block}
+/* Regional pages (/areas and /custom-framing-[town]-tx) */
+.area-copy p{max-width:65ch}
+.area-photo{margin:32px 0;max-width:680px}
+.area-photo-tall{max-width:440px}
+.area-photo img{display:block;width:100%;height:auto}
+.area-links{list-style:none;padding:0;margin:24px 0;display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:4px 24px;max-width:680px}
+.area-links li{margin:0}
+.area-links a{display:inline-block;padding:10px 0;min-height:44px}
+.area-cta{margin:32px 0 8px}
+.news-line{font-size:.95em;color:var(--muted,#5b625f)}
