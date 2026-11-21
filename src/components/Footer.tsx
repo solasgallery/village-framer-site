@@ -58,7 +58,8 @@ export default function Footer() {
           </div>
         </div>
       </footer>
-      {path !== START && (
+      {/* No Start framing bar on /capture: it is the in-shop QR sign-up page (G9-01). */}
+      {path !== START && path !== "/capture" && (
         <div className="sticky-cta">
           <Link href={START} className="button button-ink">
             Start framing <span aria-hidden="true">→</span>

@@ -86,13 +86,15 @@ export async function POST(request: NextRequest) {
       !Array.isArray(body.project)
         ? (body.project as Record<string, unknown>)
         : null;
+    // Filled in after the list add below, so the notification says what really happened (G8-02).
+    const newsletterRow: [string, string] = ["Newsletter", ""];
     const rows: [string, string][] = [
       ["Name", name],
       ["Email", email],
       ["Phone", phone],
       ["Source", source],
       ["Message", message],
-      ["Newsletter opt-in", body.newsletter === true ? "Yes" : "No"],
+      newsletterRow,
     ];
     if (project) {
       for (const [label, key] of [
@@ -178,46 +180,11 @@ export async function POST(request: NextRequest) {
     if (digits.length === 10) attributes.SMS = "+1" + digits;
     else if (digits.length === 11 && digits.startsWith("1"))
       attributes.SMS = "+" + digits;
-    const emailRes = await fetch("https://api.brevo.com/v3/smtp/email", {
-      method: "POST",
-      headers,
-      signal: AbortSignal.timeout(12000),
-      body: JSON.stringify({
-        sender: {
-          name: "Village Framer Website",
-          email: "cherie@solasgallery.com",
-        },
-        to: [
-          {
-            email: process.env.NOTIFICATION_EMAIL || "info@solasgallery.com",
-            name: "Tim Flanagan",
-          },
-        ],
-        replyTo: { email, name },
-        subject: `${process.env.VERCEL_ENV === "production" ? "" : "[PREVIEW TEST] "}${source}: ${name.replace(/[\r\n]/g, " ")}`,
-        htmlContent: `<div style="font-family:Arial,sans-serif;max-width:640px;margin:auto;padding:32px;color:#202b2a"><h1 style="font-family:Georgia,serif">${source === sourceNames.trade ? "New trade application" : "A new framing conversation"}</h1><table style="width:100%;border-collapse:collapse">${rows
-          .filter(([, v]) => v)
-          .map(
-            ([k, v]) =>
-              `<tr><th style="text-align:left;vertical-align:top;padding:10px;border-bottom:1px solid #ddd">${escape(k)}</th><td style="padding:10px;border-bottom:1px solid #ddd;white-space:pre-wrap">${escape(v)}</td></tr>`,
-          )
-          .join(
-            "",
-          )}</table>${attachment.length ? "<p>The attached concept uses illustrative finishes. Confirm the actual moulding, matting, dimensions, and budget in the shop.</p>" : ""}<p style="font-size:12px">Submitted through saladovillageframer.com. Reply to this email to contact the visitor.</p></div>`,
-        ...(attachment.length ? { attachment } : {}),
-      }),
-    });
-    if (!emailRes.ok) {
-      console.error("Brevo notification failed:", emailRes.status);
-      return fail(
-        "We could not confirm delivery. Please call (254) 613-6123 before resending.",
-        502,
-      );
-    }
     // Keep the established Brevo list; clients cannot select another list.
-    // The notification above is the lead; a list-add failure must never fail
-    // the request. The response says what happened to the list add so the
-    // page never claims a sign-up that did not happen:
+    // The list add runs BEFORE the notification so the notification can say
+    // what actually happened (G8-02). The notification is the lead; a list-add
+    // failure must never fail the request. The response says what happened to
+    // the list add so the page never claims a sign-up that did not happen:
     //   none    = no opt-in, nothing attempted
     //   preview = opt-in, but this is not production (list adds are skipped)
     //   added   = Brevo accepted the contact
@@ -246,6 +213,48 @@ export async function POST(request: NextRequest) {
           console.error("Brevo contact request errored");
         }
       }
+    }
+    newsletterRow[1] = {
+      none: "not requested (not added)",
+      preview: "would be added in production (preview: not added)",
+      added: "added to list",
+      failed: "opted in, but the list add failed (not added; please add by hand)",
+    }[list];
+    const emailRes = await fetch("https://api.brevo.com/v3/smtp/email", {
+      method: "POST",
+      headers,
+      signal: AbortSignal.timeout(12000),
+      body: JSON.stringify({
+        sender: {
+          name: "Village Framer Website",
+          email: "cherie@solasgallery.com",
+        },
+        to: [
+          {
+            email: process.env.NOTIFICATION_EMAIL || "info@solasgallery.com",
+            name: "Tim Flanagan",
+          },
+        ],
+        replyTo: { email, name },
+        subject: `${process.env.VERCEL_ENV === "production" ? "" : "[PREVIEW TEST] "}${source}: ${name.replace(/[\r\n]/g, " ")}`,
+        htmlContent: `<div style="font-family:Arial,sans-serif;max-width:640px;margin:auto;padding:32px;color:#202b2a"><h1 style="font-family:Georgia,serif">${source === sourceNames.trade ? "New trade application" : source === sourceNames.capture ? "New sign-up from the in-shop QR page" : "A new framing conversation"}</h1><table style="width:100%;border-collapse:collapse">${rows
+          .filter(([, v]) => v)
+          .map(
+            ([k, v]) =>
+              `<tr><th style="text-align:left;vertical-align:top;padding:10px;border-bottom:1px solid #ddd">${escape(k)}</th><td style="padding:10px;border-bottom:1px solid #ddd;white-space:pre-wrap">${escape(v)}</td></tr>`,
+          )
+          .join(
+            "",
+          )}</table>${attachment.length ? "<p>The attached concept uses illustrative finishes. Confirm the actual moulding, matting, dimensions, and budget in the shop.</p>" : ""}<p style="font-size:12px">Submitted through saladovillageframer.com. Reply to this email to contact the visitor.</p></div>`,
+        ...(attachment.length ? { attachment } : {}),
+      }),
+    });
+    if (!emailRes.ok) {
+      console.error("Brevo notification failed:", emailRes.status);
+      return fail(
+        "We could not confirm delivery. Please call (254) 613-6123 before resending.",
+        502,
+      );
     }
     return NextResponse.json({ success: true, list });
   } catch {

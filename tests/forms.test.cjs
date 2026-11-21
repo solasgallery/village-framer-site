@@ -43,13 +43,13 @@ test("top bar does not say the Rifle Paper Co. gifts are made in Salado", () => 
 test("G7-01: trade tiers are 10/15/20% at $2,500/$7,500/$15,000, rolling 12 months, framing only", () => {
   const trade = read("src/app/trade/page.tsx");
   const faq = read("src/app/trade/faq/page.tsx");
-  assert.match(trade, /\["Associate", "10%", "\$2,500"\]/);
-  assert.match(trade, /\["Preferred", "15%", "\$7,500"\]/);
-  assert.match(trade, /\["Atelier", "20%", "\$15,000"\]/);
+  assert.match(trade, /\["Trade", "10%", "\$2,500"\]/);
+  assert.match(trade, /\["Trade Plus", "15%", "\$7,500"\]/);
+  assert.match(trade, /\["Trade Premier", "20%", "\$15,000"\]/);
   assert.match(trade, /rolling 12 months/);
   assert.match(trade, /custom framing only, not retail gifts/);
   assert.match(faq, /10%, 15% and 20% off custom framing/);
-  assert.match(faq, /\$2,500 for Associate \(10%\), \$7,500 for Preferred \(15%\) and \$15,000 for Atelier \(20%\)/);
+  assert.match(faq, /\$2,500 for Trade \(10%\), \$7,500 for Trade Plus \(15%\) and \$15,000 for Trade Premier \(20%\)/);
   assert.match(faq, /rolling 12 months/);
   assert.match(faq, /Custom framing only\. Retail gifts are not included/);
   // Nothing anywhere in the app still offers the old 25% top tier or a no-spend tier.
@@ -61,6 +61,8 @@ test("G7-01: trade tiers are 10/15/20% at $2,500/$7,500/$15,000, rolling 12 mont
     const s = read(f);
     assert.doesNotMatch(s, /25%|25 percent/, f);
     assert.doesNotMatch(s, /no (minimum )?spend|without (a )?minimum/i, f);
+    // Tier names are Trade / Trade Plus / Trade Premier (Tim, 2026-11-21); the old names are retired.
+    assert.doesNotMatch(s, /\b(Associate|Preferred|Atelier)\b/, f);
   }
 });
 
@@ -116,6 +118,13 @@ test("G7-03: Cherie's email writes the mat width with the same fractions as the 
   const mod = { exports: {} };
   new Function("module", "exports", out)(mod, mod.exports);
   assert.equal(mod.exports.formatInches(2.5), "2 1/2");
+});
+
+test("G8-01: every inch value in Cherie's email is a fraction (frame width included), never a raw decimal", () => {
+  const route = read("src/app/api/start-framing/route.ts");
+  assert.match(route, /\(about \$\{formatInches\(moulding\.railWidthIn\)\}″ wide\)/);
+  assert.doesNotMatch(route, /\$\{moulding\.railWidthIn\}/);
+  assert.doesNotMatch(route, /\(\$\{artW\} × \$\{artH\}\)/);
 });
 
 test("customer-facing email shows only info@solasgallery.com; cherie@ is the lead recipient only", () => {

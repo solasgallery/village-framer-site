@@ -70,6 +70,7 @@ async function run(body, options = {}) {
   const response = await context.exports.POST(request);
   return { status: response.status, data: await response.json(), calls };
 }
+const smtp = (r) => r.calls.find((c) => c.url === "https://api.brevo.com/v3/smtp/email");
 let pass = 0,
   fail = 0;
 async function test(name, fn) {
@@ -91,19 +92,19 @@ async function invalid(name, body, status = 400, options) {
   });
 }
 (async () => {
-  await test("capture sends styled notification FIRST, then server-list contact", async () => {
+  await test("capture adds to the server list FIRST, then sends the notification that reports it (G8-02)", async () => {
     const r = await run({ ...good, listId: 999 });
     assert.equal(r.status, 200);
     assert.equal(r.data.success, true);
     assert.equal(r.calls.length, 2);
-    assert.equal(r.calls[0].url, "https://api.brevo.com/v3/smtp/email");
-    assert.equal(r.calls[1].url, "https://api.brevo.com/v3/contacts");
-    assert.deepEqual(r.calls[1].body.listIds, [2]);
-    assert.equal(r.calls[1].body.email, "test@example.invalid");
-    assert.equal(r.calls[1].body.attributes.SMS, "+12545550101");
-    assert.equal(r.calls[0].body.to[0].email, "info@solasgallery.com");
-    assert.equal(r.calls[0].body.replyTo.email, "test@example.invalid");
-    assert.match(r.calls[0].body.subject, /In-person QR/);
+    assert.equal(r.calls[0].url, "https://api.brevo.com/v3/contacts");
+    assert.equal(r.calls[1].url, "https://api.brevo.com/v3/smtp/email");
+    assert.deepEqual(r.calls[0].body.listIds, [2]);
+    assert.equal(r.calls[0].body.email, "test@example.invalid");
+    assert.equal(r.calls[0].body.attributes.SMS, "+12545550101");
+    assert.equal(r.calls[1].body.to[0].email, "info@solasgallery.com");
+    assert.equal(r.calls[1].body.replyTo.email, "test@example.invalid");
+    assert.match(r.calls[1].body.subject, /In-person QR/);
   });
   await test("studio attachments and project directions passed to notification", async () => {
     const r = await run({
@@ -123,11 +124,11 @@ async function invalid(name, body, status = 400, options) {
       ],
     });
     assert.equal(r.status, 200);
-    assert.equal(r.calls[0].body.attachment.length, 2);
-    assert.equal(r.calls[0].body.attachment[0].content, jpeg);
-    assert.equal(r.calls[0].body.attachment[0].name, "framing-concept.jpg");
-    assert.match(r.calls[0].body.htmlContent, /24 × 36 inches/);
-    assert.match(r.calls[0].body.htmlContent, /Gold fillet requested/);
+    assert.equal(smtp(r).body.attachment.length, 2);
+    assert.equal(smtp(r).body.attachment[0].content, jpeg);
+    assert.equal(smtp(r).body.attachment[0].name, "framing-concept.jpg");
+    assert.match(smtp(r).body.htmlContent, /24 × 36 inches/);
+    assert.match(smtp(r).body.htmlContent, /Gold fillet requested/);
   });
   await test("visitor strings HTML escaped and subject newlines removed", async () => {
     const r = await run({
@@ -137,7 +138,7 @@ async function invalid(name, body, status = 400, options) {
       project: { frame: "<b>gold</b>", city: "<img src=x>" },
     });
     assert.equal(r.status, 200);
-    const e = r.calls[0].body;
+    const e = smtp(r).body;
     assert(!e.htmlContent.includes("<script>"));
     assert(!e.htmlContent.includes("<img src=x>"));
     assert(e.htmlContent.includes("&lt;script&gt;"));
@@ -171,14 +172,14 @@ async function invalid(name, body, status = 400, options) {
       { ...good, listId: 99 },
       { env: { BREVO_LIST_ID: "7" } },
     );
-    assert.deepEqual(r.calls[1].body.listIds, [7]);
+    assert.deepEqual(r.calls[0].body.listIds, [7]);
   });
-  await test("list-add failure (400, bad list id) is NON-FATAL: notification already sent, request succeeds", async () => {
-    const r = await run(good, { statuses: [201, 400] });
+  await test("list-add failure (400, bad list id) is NON-FATAL: notification still sent, request succeeds", async () => {
+    const r = await run(good, { statuses: [400, 201] });
     assert.equal(r.status, 200);
     assert.equal(r.data.success, true);
     assert.equal(r.calls.length, 2);
-    assert.equal(r.calls[0].url, "https://api.brevo.com/v3/smtp/email");
+    assert.equal(r.calls[1].url, "https://api.brevo.com/v3/smtp/email");
   });
   await test("no opt-in: submitter is NOT added to the marketing list", async () => {
     const r = await run({ ...good, newsletter: false });
@@ -190,23 +191,26 @@ async function invalid(name, body, status = 400, options) {
     assert.equal(r3.calls.length, 1);
   });
   await test("list-add network error is NON-FATAL", async () => {
-    const r = await run(good, { throwAt: 2 });
+    const r = await run(good, { throwAt: 1 });
     assert.equal(r.status, 200);
     assert.equal(r.data.success, true);
   });
-  await test("notification failure never reports success and skips the list add", async () => {
-    const r = await run(good, { statuses: [503] });
+  await test("notification failure never reports success", async () => {
+    const r = await run(good, { statuses: [201, 503] });
     assert.equal(r.status, 502);
     assert.notEqual(r.data.success, true);
-    assert.equal(r.calls.length, 1);
+    assert.equal(r.calls.length, 2);
+    const n = await run({ ...good, newsletter: false }, { statuses: [503] });
+    assert.equal(n.status, 502);
+    assert.equal(n.calls.length, 1);
   });
   await test("upstream network error returns failure", async () => {
-    const r = await run(good, { throwAt: 1 });
+    const r = await run(good, { throwAt: 2 });
     assert.equal(r.status, 502);
     assert.notEqual(r.data.success, true);
   });
   await test("contact update 204 accepted", async () => {
-    const r = await run(good, { statuses: [201, 204] });
+    const r = await run(good, { statuses: [204, 201] });
     assert.equal(r.data.success, true);
   });
   await invalid("missing API key", good, 503, { env: { BREVO_API_KEY: "" } });
@@ -278,11 +282,11 @@ async function invalid(name, body, status = 400, options) {
   // claims "You're on the list" for an add that did not happen.
   await test("list status: production opt-in reports added only when Brevo accepts", async () => {
     assert.equal((await run(good)).data.list, "added");
-    assert.equal((await run(good, { statuses: [201, 204] })).data.list, "added");
-    const bad = await run(good, { statuses: [201, 400] });
+    assert.equal((await run(good, { statuses: [204, 201] })).data.list, "added");
+    const bad = await run(good, { statuses: [400, 201] });
     assert.equal(bad.data.success, true);
     assert.equal(bad.data.list, "failed");
-    assert.equal((await run(good, { throwAt: 2 })).data.list, "failed");
+    assert.equal((await run(good, { throwAt: 1 })).data.list, "failed");
     const noList = await run(good, { env: { BREVO_LIST_ID: "" } });
     assert.equal(noList.calls.length, 1);
     assert.equal(noList.data.list, "failed");
@@ -306,9 +310,29 @@ async function invalid(name, body, status = 400, options) {
       project: { frame: "W".repeat(1000), city: "T".repeat(1000) },
     });
     assert.equal(r.status, 200);
-    assert(!r.calls[0].body.htmlContent.includes("W".repeat(121)));
-    assert(!r.calls[0].body.htmlContent.includes("T".repeat(121)));
-    assert.match(r.calls[0].body.subject, /Website inquiry/);
+    assert(!smtp(r).body.htmlContent.includes("W".repeat(121)));
+    assert(!smtp(r).body.htmlContent.includes("T".repeat(121)));
+    assert.match(smtp(r).body.subject, /Website inquiry/);
+  });
+  // G8-02: the /capture notification has its own heading, and the newsletter line
+  // says what really happened to the list add (never "added" on the preview or after a failed add).
+  const row = (html) => (html.match(/<th[^>]*>Newsletter<\/th><td[^>]*>([^<]*)<\/td>/) || [])[1];
+  await test("G8-02: QR sign-up heading; contact and trade keep theirs", async () => {
+    assert.match(smtp(await run(good)).body.htmlContent, /<h1[^>]*>New sign-up from the in-shop QR page<\/h1>/);
+    assert.match(smtp(await run({ ...good, source: "in-person-qr" })).body.htmlContent, /New sign-up from the in-shop QR page/);
+    assert.match(smtp(await run({ ...good, source: "contact" })).body.htmlContent, /<h1[^>]*>A new framing conversation<\/h1>/);
+    assert.match(smtp(await run({ ...good, source: "trade" })).body.htmlContent, /<h1[^>]*>New trade application<\/h1>/);
+  });
+  await test("G8-02: newsletter line is honest in every state", async () => {
+    assert.equal(row(smtp(await run(good)).body.htmlContent), "added to list");
+    assert.equal(row(smtp(await run(good, { statuses: [204, 201] })).body.htmlContent), "added to list");
+    assert.match(row(smtp(await run(good, { statuses: [400, 201] })).body.htmlContent), /list add failed \(not added/);
+    assert.match(row(smtp(await run(good, { throwAt: 1 })).body.htmlContent), /list add failed/);
+    assert.match(row(smtp(await run(good, { env: { BREVO_LIST_ID: "" } })).body.htmlContent), /list add failed/);
+    const p = await run(good, { env: { VERCEL_ENV: "preview" } });
+    assert.equal(row(smtp(p).body.htmlContent), "would be added in production (preview: not added)");
+    assert.doesNotMatch(smtp(p).body.htmlContent, /added to list/);
+    assert.equal(row(smtp(await run({ ...good, newsletter: false })).body.htmlContent), "not requested (not added)");
   });
   console.log(
     `\n${pass} passed; ${fail} failed. All upstream traffic mocked; zero external requests.`,

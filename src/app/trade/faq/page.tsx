@@ -9,11 +9,11 @@ export const metadata: Metadata = meta({
   path: "/trade/faq",
 });
 
-// Tier percentages and thresholds are the established facts (YARDSTICK_P3, G7-01). Tier NAMES are still OPEN for Tim.
+// Tier percentages and thresholds are the established facts (YARDSTICK_P3, G7-01). Tier names: Tim, 2026-11-21.
 const faq: [string, string][] = [
   ["Who qualifies for the trade program?", "The trade program is for design professionals, such as interior designers and architects. Tell us about your practice when you apply."],
-  ["What are the tiers?", "Associate, Preferred and Atelier, at 10%, 15% and 20% off custom framing."],
-  ["How do I reach a tier?", "Tiers are earned by your custom framing spend over a rolling 12 months: $2,500 for Associate (10%), $7,500 for Preferred (15%) and $15,000 for Atelier (20%)."],
+  ["What are the tiers?", "Trade, Trade Plus and Trade Premier, at 10%, 15% and 20% off custom framing."],
+  ["How do I reach a tier?", "Tiers are earned by your custom framing spend over a rolling 12 months: $2,500 for Trade (10%), $7,500 for Trade Plus (15%) and $15,000 for Trade Premier (20%)."],
   ["Is there a cost to join?", "No membership fee. The trade program is a partnership, not a subscription."],
   ["What does the trade percentage cover?", "Custom framing only. Retail gifts are not included, and gift purchases do not count toward a tier."],
   ["How does the application work?", "Submit your application online. We will get back to you by email or phone."],

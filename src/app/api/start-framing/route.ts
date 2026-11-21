@@ -160,12 +160,12 @@ export async function POST(request: NextRequest) {
       ["Phone", phone],
       ["How they want to start", DELIVERY[delivery]],
       ["Size the customer typed", `width: ${rawW || "(not recorded)"} · height: ${rawH || "(not recorded)"}`],
-      ["Size we read (nearest 1/8 inch)", `${formatInches(artW)} × ${formatInches(artH)} inches (${artW} × ${artH})`],
+      ["Size we read (nearest 1/8 inch)", `${formatInches(artW)} × ${formatInches(artH)} inches`],
       ["What they measured", measuredLabel],
       ...(Math.max(artW, artH) > BIG_PIECE_IN
         ? ([["Big piece", `Over ${BIG_PIECE_IN} inches on the long side. Cherie will want to see it; a consult may be the right start.`]] as [string, string][])
         : []),
-      ["Frame idea", `Sample swatch: ${moulding.name} (about ${moulding.railWidthIn}" wide). Not a specific product; Cherie shows the actual mouldings in the shop.`],
+      ["Frame idea", `Sample swatch: ${moulding.name} (about ${formatInches(moulding.railWidthIn)}″ wide). Not a specific product; Cherie shows the actual mouldings in the shop.`],
       [
         "Mat idea",
         matStyle === "none" ? "No mat" : `${matStyle === "float" ? "Float" : "Classic"}, ${matColor.name}, ${MAT_WIDTH_LABEL[matWidth]} (${formatInches(est.matIn)}″)`,

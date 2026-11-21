@@ -766,5 +766,13 @@ body:has(.design-app) .sticky-cta {
   .crumbs { font-size: 13px; letter-spacing: 0.08em; }
   .crumbs li + li::before { margin: 0 14px; }
 }
+/* G9-02: below 360px every step label stays whole (was clipped to "DET" at 320).
+   Tighter spacing fits one line; wrapping is the fallback, never clipping. */
+@media (max-width: 359px) {
+  .crumbs { letter-spacing: 0; flex-wrap: wrap; justify-content: center; overflow-x: visible; }
+  .crumbs li:first-child, .crumbs li:last-child { margin-inline: 0; }
+  .crumbs li + li::before { margin: 0 1px; font-size: 13px; }
+  .crumbs span, .crumbs button { padding-inline: 1px; }
+}
 .review-bar-price b { font-size: 1.1rem; white-space: nowrap; }
 .review-bar .wide { min-width: 150px; }

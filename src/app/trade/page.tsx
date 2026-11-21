@@ -18,11 +18,11 @@ const services = [
   ["Multi-piece projects", "Framing several pieces for one project? Tell us the count and sizes and we will plan it together."],
   ["Design consultation", "Material selection and project planning in the shop, with you and your client."],
 ];
-// Percentages and thresholds are the established facts (YARDSTICK_P3, G7-01). Tier NAMES are still OPEN for Tim.
+// Percentages and thresholds are the established facts (YARDSTICK_P3, G7-01). Tier names: Tim, 2026-11-21.
 const tiers = [
-  ["Associate", "10%", "$2,500"],
-  ["Preferred", "15%", "$7,500"],
-  ["Atelier", "20%", "$15,000"],
+  ["Trade", "10%", "$2,500"],
+  ["Trade Plus", "15%", "$7,500"],
+  ["Trade Premier", "20%", "$15,000"],
 ];
 
 export default function Trade() {
