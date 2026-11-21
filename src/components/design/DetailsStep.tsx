@@ -8,6 +8,7 @@ import { business } from "@/lib/site";
 import ArtCanvas from "./ArtCanvas";
 import FrameCanvas from "./FrameCanvas";
 import { derived, fmtIn, findMat, selectionOf, type Design } from "./state";
+import { ListNote, ListStatus, listStatus } from "@/components/ListNote";
 
 const EMAIL = /^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]+$/;
 const phoneOk = (s: string) => {
@@ -33,7 +34,7 @@ const NEXT: Record<string, string[]> = {
 };
 const LABEL = { dropoff: "Drop off at the shop", ship: "Ship to us", consult: "Book a design consult" } as const;
 
-export type SentInfo = { ref: string; testMode: boolean; confirmationSent: boolean; firstName: string; email: string; delivery: keyof typeof NEXT };
+export type SentInfo = { ref: string; testMode: boolean; confirmationSent: boolean; list: ListStatus; firstName: string; email: string; delivery: keyof typeof NEXT };
 
 export function Confirmation({ info }: { info: SentInfo }) {
   return (
@@ -46,6 +47,7 @@ export function Confirmation({ info }: { info: SentInfo }) {
           ? `We sent a copy to ${info.email}. If it doesn't arrive, Cherie still has your request.`
           : "We couldn't send your copy. Cherie still has your request."}
       </p>
+      <ListNote status={info.list} />
       <h2 className="next-title">What happens next</h2>
       <ol className="next-steps">
         {NEXT[info.delivery].map((t) => (
@@ -131,6 +133,7 @@ export default function DetailsStep({ design, onDone }: { design: Design; onDone
       });
       onDone({
         ref: data.ref, testMode: !!data.testMode, confirmationSent: data.confirmationSent === true,
+        list: f.news ? listStatus(data.list) : "none",
         firstName: f.name.trim().split(" ")[0], email: f.email.trim(), delivery,
       });
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -180,7 +183,7 @@ export default function DetailsStep({ design, onDone }: { design: Design; onDone
             <div className="summary-total"><dt>Ballpark</dt><dd><b>{d.band.headline}</b> {ESTIMATE_NOTE}</dd></div>
           </dl>
         </aside>
-        <form className="inquiry-form quote-form" onSubmit={submit} noValidate>
+        <form className="inquiry-form quote-form" method="post" onSubmit={submit} noValidate>
           {field("name", "Your name", { type: "text", autoComplete: "name" })}
           {field("email", "Email", { type: "email", autoComplete: "email", inputMode: "email" })}
           {field("phone", "Phone", { type: "tel", autoComplete: "tel", inputMode: "tel" })}

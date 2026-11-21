@@ -18,7 +18,7 @@ export default function Nav() {
         Skip to content
       </a>
       <div className="announcement">
-        Custom framing and Rifle Paper Co. gifts, made and sold in Salado.{" "}
+        Framed in our Salado shop · Rifle Paper Co. gifts.{" "}
         <Link href="/visit">Open Monday–Saturday, 10–5</Link>
       </div>
       <header className="site-header">

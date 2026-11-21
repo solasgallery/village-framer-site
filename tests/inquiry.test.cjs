@@ -274,6 +274,31 @@ async function invalid(name, body, status = 400, options) {
     { ...good, message: "X".repeat(2000001) },
     413,
   );
+  // G6-01: the response must say what happened to the list add, so /capture never
+  // claims "You're on the list" for an add that did not happen.
+  await test("list status: production opt-in reports added only when Brevo accepts", async () => {
+    assert.equal((await run(good)).data.list, "added");
+    assert.equal((await run(good, { statuses: [201, 204] })).data.list, "added");
+    const bad = await run(good, { statuses: [201, 400] });
+    assert.equal(bad.data.success, true);
+    assert.equal(bad.data.list, "failed");
+    assert.equal((await run(good, { throwAt: 2 })).data.list, "failed");
+    const noList = await run(good, { env: { BREVO_LIST_ID: "" } });
+    assert.equal(noList.calls.length, 1);
+    assert.equal(noList.data.list, "failed");
+  });
+  await test("list status: preview never adds and says preview; no opt-in says none", async () => {
+    const r = await run(good, { env: { VERCEL_ENV: "preview" } });
+    assert.equal(r.status, 200);
+    assert.equal(r.calls.length, 1);
+    assert.equal(r.calls[0].url, "https://api.brevo.com/v3/smtp/email");
+    assert.match(r.calls[0].body.subject, /^\[PREVIEW TEST\] /);
+    assert.equal(r.data.list, "preview");
+    const none = await run({ ...good, newsletter: false });
+    assert.equal(none.data.list, "none");
+    const noneP = await run({ ...good, newsletter: false }, { env: { VERCEL_ENV: "preview" } });
+    assert.equal(noneP.data.list, "none");
+  });
   await test("project text bounded and source cannot inject", async () => {
     const r = await run({
       ...good,

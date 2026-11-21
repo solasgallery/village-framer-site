@@ -223,8 +223,12 @@ export async function POST(request: NextRequest) {
       console.error("start-framing confirmation errored");
     }
 
-    // ---- 4) marketing list: opt-in only, production only
+    // ---- 4) marketing list: opt-in only, production only. Reported back so the
+    // confirmation never claims a sign-up that did not happen.
+    let list: "none" | "preview" | "added" | "failed" = "none";
+    if (body.newsletter === true && testMode) list = "preview";
     if (!testMode && body.newsletter === true) {
+      list = "failed";
       try {
         const listId = Number(process.env.BREVO_LIST_ID);
         if (!listId) {
@@ -241,13 +245,14 @@ export async function POST(request: NextRequest) {
               updateEnabled: true,
             }),
           });
-          if (!lr.ok) console.error("start-framing list add failed:", lr.status, await lr.text().catch(() => ""));
+          if (lr.ok) list = "added";
+          else console.error("start-framing list add failed:", lr.status, await lr.text().catch(() => ""));
         }
       } catch {
         console.error("start-framing list add errored");
       }
     }
-    return NextResponse.json({ success: true, ref, testMode, confirmationSent });
+    return NextResponse.json({ success: true, ref, testMode, confirmationSent, list });
   } catch (e) {
     console.error("start-framing failed", e instanceof Error ? e.message : "");
     return fail(`We could not confirm delivery. Please call ${business.phone} or try again later.`, 502);

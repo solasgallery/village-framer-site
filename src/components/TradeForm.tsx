@@ -1,5 +1,6 @@
 "use client";
 import { FormEvent, useState } from "react";
+import { ListNote, ListStatus, listStatus } from "@/components/ListNote";
 
 const SPECIALIZATIONS = ["Residential", "Commercial", "Hospitality", "Mixed practice", "Staging", "Other"];
 const SERVICES = ["Custom framing", "Conservation / archival", "Shadow boxes", "Multi-piece projects", "Mirrors", "Design consultation"];
@@ -7,7 +8,7 @@ const SERVICES = ["Custom framing", "Conservation / archival", "Shadow boxes", "
 /** Trade application. Posts to /api/inquiry (same honeypot, caps and rate limit as the contact form). */
 export default function TradeForm({ full = false }: { full?: boolean }) {
   const [busy, setBusy] = useState(false);
-  const [sent, setSent] = useState(false);
+  const [sent, setSent] = useState<ListStatus | null>(null);
   const [error, setError] = useState("");
 
   async function submit(e: FormEvent<HTMLFormElement>) {
@@ -48,7 +49,7 @@ export default function TradeForm({ full = false }: { full?: boolean }) {
       });
       const result = await res.json().catch(() => ({}));
       if (!res.ok || !result.success) throw new Error(result.error || "Please try again or call the shop.");
-      setSent(true);
+      setSent(listStatus(result.list));
     } catch (err) {
       setError(
         err instanceof Error && err.name !== "AbortError"
@@ -67,11 +68,13 @@ export default function TradeForm({ full = false }: { full?: boolean }) {
         <p className="eyebrow">Thank you</p>
         <h2>We received your application.</h2>
         <p>We will be in touch by email or phone.</p>
+        <ListNote status={sent} />
       </div>
     );
 
   return (
-    <form className="inquiry-form" onSubmit={submit}>
+    // method="post": a submit before hydration must never put details in the URL.
+    <form className="inquiry-form" method="post" onSubmit={submit}>
       <fieldset disabled={busy}>
         <legend className="sr-only">Trade application</legend>
         <div className="form-row">

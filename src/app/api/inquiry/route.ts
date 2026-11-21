@@ -158,7 +158,7 @@ export async function POST(request: NextRequest) {
     }
     // Test hook for local/preview curl tests: validate, send nothing. Never active in production.
     if (process.env.VERCEL_ENV !== "production" && process.env.SVF_DRY_RUN === "1")
-      return NextResponse.json({ success: true, dryRun: true });
+      return NextResponse.json({ success: true, dryRun: true, list: body.newsletter === true ? "preview" : "none" });
     const apiKey = process.env.BREVO_API_KEY;
     if (!apiKey)
       return fail(
@@ -216,27 +216,38 @@ export async function POST(request: NextRequest) {
     }
     // Keep the established Brevo list; clients cannot select another list.
     // The notification above is the lead; a list-add failure must never fail
-    // the request, so it is logged and swallowed.
-    try {
-      // Marketing list: only with an explicit, unticked-by-default opt-in.
-      if (process.env.VERCEL_ENV !== "production" || body.newsletter !== true) return NextResponse.json({ success: true });
-      const listId = Number(process.env.BREVO_LIST_ID);
-      if (!listId) {
-        console.error("Brevo list add skipped: BREVO_LIST_ID is not set");
-        return NextResponse.json({ success: true });
+    // the request. The response says what happened to the list add so the
+    // page never claims a sign-up that did not happen:
+    //   none    = no opt-in, nothing attempted
+    //   preview = opt-in, but this is not production (list adds are skipped)
+    //   added   = Brevo accepted the contact
+    //   failed  = opt-in in production, but the add did not go through
+    let list: "none" | "preview" | "added" | "failed" = "none";
+    // Marketing list: only with an explicit opt-in (unticked box, or the /capture submit itself).
+    if (body.newsletter === true) {
+      if (process.env.VERCEL_ENV !== "production") list = "preview";
+      else {
+        list = "failed";
+        try {
+          const listId = Number(process.env.BREVO_LIST_ID);
+          if (!listId) console.error("Brevo list add skipped: BREVO_LIST_ID is not set");
+          else {
+            const contactRes = await fetch("https://api.brevo.com/v3/contacts", {
+              method: "POST",
+              headers,
+              signal: AbortSignal.timeout(12000),
+              body: JSON.stringify({ email, attributes, listIds: [listId], updateEnabled: true }),
+            });
+            if (contactRes.ok) list = "added";
+            else
+              console.error("Brevo contact request failed:", contactRes.status, await contactRes.text().catch(() => ""));
+          }
+        } catch {
+          console.error("Brevo contact request errored");
+        }
       }
-      const contactRes = await fetch("https://api.brevo.com/v3/contacts", {
-        method: "POST",
-        headers,
-        signal: AbortSignal.timeout(12000),
-        body: JSON.stringify({ email, attributes, listIds: [listId], updateEnabled: true }),
-      });
-      if (!contactRes.ok)
-        console.error("Brevo contact request failed:", contactRes.status, await contactRes.text().catch(() => ""));
-    } catch {
-      console.error("Brevo contact request errored");
     }
-    return NextResponse.json({ success: true });
+    return NextResponse.json({ success: true, list });
   } catch {
     console.error("Inquiry processing failed");
     return fail(
