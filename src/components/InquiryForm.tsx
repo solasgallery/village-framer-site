@@ -1,6 +1,8 @@
 "use client";
 import { FormEvent, useState } from "react";
 import { ListNote, ListStatus, listStatus } from "@/components/ListNote";
+import { isOffline, offlineMessage, unconfirmedMessage } from "@/lib/formErrors";
+import { business } from "@/lib/site";
 export default function InquiryForm({
   source = "contact",
   compact = false,
@@ -14,8 +16,13 @@ export default function InquiryForm({
   async function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (busy) return;
-    setBusy(true);
     setError("");
+    const what = compact ? "sign-up" : "message";
+    if (isOffline()) {
+      setError(offlineMessage(what));
+      return;
+    }
+    setBusy(true);
     const data = new FormData(e.currentTarget);
     const abort = new AbortController();
     const timer = setTimeout(() => abort.abort(), 30000);
@@ -36,19 +43,21 @@ export default function InquiryForm({
           source,
         }),
       });
-      const result = await res.json();
-      if (!res.ok || !result.success)
-        throw new Error(result.error || "Please try again or call the shop.");
+      const result = await res.json().catch(() => null);
+      if (!res.ok || !result?.success) {
+        // Our API always explains its own errors; anything else (a platform 5xx, an unreadable reply)
+        // may still have reached us, so don't say it wasn't sent.
+        setError(typeof result?.error === "string" && result.error ? result.error : unconfirmedMessage(what));
+        return;
+      }
       setSent(listStatus(result.list));
       window.dispatchEvent(
         new CustomEvent("svf-inquiry-success", { detail: { source } }),
       );
-    } catch (e) {
-      setError(
-        e instanceof Error && e.name !== "AbortError"
-          ? e.message
-          : "We could not confirm delivery. Please call (254) 613-6123 before resending.",
-      );
+    } catch {
+      // Network error ("Failed to fetch"), dropped connection or our 30s timeout: never show the
+      // browser's text. The request may have reached us.
+      setError(unconfirmedMessage(what));
     } finally {
       clearTimeout(timer);
       setBusy(false);
@@ -87,7 +96,13 @@ export default function InquiryForm({
     );
   return (
     // method="post": a submit before hydration must never put details in the URL.
-    <form className="inquiry-form" method="post" onSubmit={submit}>
+    // action: that native submit goes to a route that discards it and says plainly it wasn't sent (G7-02).
+    <form className="inquiry-form" method="post" action="/api/form-fallback" onSubmit={submit}>
+      <noscript>
+        <p className="form-error">
+          This form needs JavaScript. Call {business.phone} or email {business.email} and we’ll take it from there.
+        </p>
+      </noscript>
       <fieldset disabled={busy}>
         <legend className="sr-only">Your contact details</legend>
         <div className="form-row">

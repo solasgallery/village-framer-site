@@ -39,3 +39,81 @@ test("top bar does not say the Rifle Paper Co. gifts are made in Salado", () => 
   assert.doesNotMatch(nav, /made and sold in Salado/);
   assert.match(nav, /Framed in our Salado shop · Rifle Paper Co\. gifts/);
 });
+
+test("G7-01: trade tiers are 10/15/20% at $2,500/$7,500/$15,000, rolling 12 months, framing only", () => {
+  const trade = read("src/app/trade/page.tsx");
+  const faq = read("src/app/trade/faq/page.tsx");
+  assert.match(trade, /\["Associate", "10%", "\$2,500"\]/);
+  assert.match(trade, /\["Preferred", "15%", "\$7,500"\]/);
+  assert.match(trade, /\["Atelier", "20%", "\$15,000"\]/);
+  assert.match(trade, /rolling 12 months/);
+  assert.match(trade, /custom framing only, not retail gifts/);
+  assert.match(faq, /10%, 15% and 20% off custom framing/);
+  assert.match(faq, /\$2,500 for Associate \(10%\), \$7,500 for Preferred \(15%\) and \$15,000 for Atelier \(20%\)/);
+  assert.match(faq, /rolling 12 months/);
+  assert.match(faq, /Custom framing only\. Retail gifts are not included/);
+  // Nothing anywhere in the app still offers the old 25% top tier or a no-spend tier.
+  const walk = (dir) =>
+    fs.readdirSync(path.join(__dirname, "..", dir), { withFileTypes: true }).flatMap((e) =>
+      e.isDirectory() ? walk(path.join(dir, e.name)) : /\.(tsx?|json)$/.test(e.name) ? [path.join(dir, e.name)] : [],
+    );
+  for (const f of walk("src")) {
+    const s = read(f);
+    assert.doesNotMatch(s, /25%|25 percent/, f);
+    assert.doesNotMatch(s, /no (minimum )?spend|without (a )?minimum/i, f);
+  }
+});
+
+test("FS6-02: a network failure never shows the browser's text and always gives phone + email", () => {
+  const msgs = read("src/lib/formErrors.ts");
+  assert.match(msgs, /business\.phone/);
+  assert.match(msgs, /business\.email/);
+  assert.match(msgs, /couldn’t confirm your \$\{what\} reached us/);
+  assert.match(msgs, /wasn’t sent: this device looks offline/);
+  for (const f of ["src/components/InquiryForm.tsx", "src/components/TradeForm.tsx", "src/components/design/DetailsStep.tsx"]) {
+    const s = read(f);
+    assert.doesNotMatch(s, /\b(e|err|error)\.message\b/, `${f} must not show a raw error message`);
+    assert.match(s, /unconfirmedMessage\(/, f);
+    assert.match(s, /if \(isOffline\(\)\)/, f);
+    assert.match(s, /\} catch \{/, f);
+  }
+});
+
+test("G7-02: a native (pre-hydration / no-JS) submit goes to the fallback route, never back to the page", () => {
+  for (const f of ["src/components/InquiryForm.tsx", "src/components/TradeForm.tsx", "src/components/design/DetailsStep.tsx"]) {
+    for (const tag of read(f).match(/<form\b[^>]*>/g) || []) assert.match(tag, /action="\/api\/form-fallback"/, `${f}: ${tag}`);
+  }
+  for (const f of ["src/components/InquiryForm.tsx", "src/components/TradeForm.tsx"]) assert.match(read(f), /<noscript>/, f);
+  const page = read("src/app/form-not-sent/page.tsx");
+  assert.match(page, /noindex: true/);
+  assert.match(page, /business\.phone/);
+  assert.match(page, /business\.email/);
+  assert.doesNotMatch(read("src/app/sitemap.ts"), /form-not-sent/);
+});
+
+test("G7-02: /api/form-fallback discards the body and 303s to /form-not-sent with nothing in the URL", async () => {
+  const ts = require("typescript");
+  const code = ts.transpileModule(read("src/app/api/form-fallback/route.ts"), {
+    compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020 },
+  }).outputText;
+  const mod = { exports: {} };
+  new Function("module", "exports", "Response", code)(mod, mod.exports, Response);
+  for (const fn of ["POST", "GET"]) {
+    const res = await mod.exports[fn](new Request("http://x/api/form-fallback?name=a", { method: fn, body: fn === "POST" ? "name=Jane&email=j%40x.com" : undefined }));
+    assert.equal(res.status, 303);
+    assert.equal(res.headers.get("location"), "/form-not-sent");
+  }
+});
+
+test("G7-03: Cherie's email writes the mat width with the same fractions as the page", () => {
+  const route = read("src/app/api/start-framing/route.ts");
+  assert.match(route, /MAT_WIDTH_LABEL\[matWidth\]\} \(\$\{formatInches\(est\.matIn\)\}″\)/);
+  assert.doesNotMatch(route, /\$\{est\.matIn\}"/);
+  const ts = require("typescript");
+  const out = ts.transpileModule(read("src/lib/design/parseSize.ts"), {
+    compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020 },
+  }).outputText;
+  const mod = { exports: {} };
+  new Function("module", "exports", out)(mod, mod.exports);
+  assert.equal(mod.exports.formatInches(2.5), "2 1/2");
+});

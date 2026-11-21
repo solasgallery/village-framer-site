@@ -18,11 +18,11 @@ const services = [
   ["Multi-piece projects", "Framing several pieces for one project? Tell us the count and sizes and we will plan it together."],
   ["Design consultation", "Material selection and project planning in the shop, with you and your client."],
 ];
-// OPEN for Tim (unverified tiers): percentages kept from the legacy page; see logs/framer-decisions.md.
+// Percentages and thresholds are the established facts (YARDSTICK_P3, G7-01). Tier NAMES are still OPEN for Tim.
 const tiers = [
-  ["Associate", "15%"],
-  ["Preferred", "20%"],
-  ["Atelier", "25%"],
+  ["Associate", "10%", "$2,500"],
+  ["Preferred", "15%", "$7,500"],
+  ["Atelier", "20%", "$15,000"],
 ];
 
 export default function Trade() {
@@ -50,12 +50,16 @@ export default function Trade() {
           ))}
         </ul>
         <h2>Trade tiers</h2>
-        <p>There is no membership fee. Each tier takes a percentage off custom framing.</p>
+        <p>
+          There is no membership fee. Your tier is earned by your custom framing spend with us over a rolling 12 months.
+          The percentage comes off custom framing only, not retail gifts.
+        </p>
         <ul className="trade-tiers">
-          {tiers.map(([n, pct]) => (
+          {tiers.map(([n, pct, spend]) => (
             <li key={n}>
               <span className="tier-pct">{pct}</span>
               <span className="tier-name">{n}</span>
+              <span className="tier-spend">{spend} in framing over a rolling 12 months</span>
             </li>
           ))}
         </ul>

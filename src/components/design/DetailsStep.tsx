@@ -5,6 +5,7 @@ import { jpegBlob } from "@/lib/design/artImage";
 import { ESTIMATE_NOTE, MAT_WIDTH_LABEL } from "@/lib/design/pricing";
 import { track } from "@/lib/design/track";
 import { business } from "@/lib/site";
+import { isOffline, offlineMessage, unconfirmedMessage } from "@/lib/formErrors";
 import ArtCanvas from "./ArtCanvas";
 import FrameCanvas from "./FrameCanvas";
 import { derived, fmtIn, findMat, selectionOf, type Design } from "./state";
@@ -92,7 +93,13 @@ export default function DetailsStep({ design, onDone }: { design: Design; onDone
       document.getElementById(`q-${Object.keys(e)[0]}`)?.focus();
       return;
     }
+    if (isOffline()) {
+      setServerError(offlineMessage("request"));
+      return;
+    }
     setBusy(true);
+    // Until fetch starts nothing has left the browser; after that it may have reached us (FS6-02).
+    let sending = false;
     try {
       const concept = document.createElement("canvas");
       concept.width = 1200;
@@ -121,10 +128,12 @@ export default function DetailsStep({ design, onDone }: { design: Design; onDone
           },
         }),
       );
+      sending = true;
       const res = await fetch("/api/start-framing", { method: "POST", body: fd });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok || !data.success) {
-        setServerError(data.error || `We couldn't send your request. Please call ${business.phone}.`);
+      const data = await res.json().catch(() => null);
+      if (!res.ok || !data?.success) {
+        // Our API always explains its own errors; anything else may still have reached us.
+        setServerError(typeof data?.error === "string" && data.error ? data.error : unconfirmedMessage("request"));
         return;
       }
       track("quote_requested", {
@@ -138,7 +147,11 @@ export default function DetailsStep({ design, onDone }: { design: Design; onDone
       });
       window.scrollTo({ top: 0, behavior: "smooth" });
     } catch {
-      setServerError(`We couldn't send your request. Please check your connection or call ${business.phone}.`);
+      setServerError(
+        sending
+          ? unconfirmedMessage("request")
+          : `We couldn’t get your photo ready to send, so nothing was sent. Please try again, or call ${business.phone} or email ${business.email}.`,
+      );
     } finally {
       setBusy(false);
     }
@@ -183,7 +196,7 @@ export default function DetailsStep({ design, onDone }: { design: Design; onDone
             <div className="summary-total"><dt>Ballpark</dt><dd><b>{d.band.headline}</b> {ESTIMATE_NOTE}</dd></div>
           </dl>
         </aside>
-        <form className="inquiry-form quote-form" method="post" onSubmit={submit} noValidate>
+        <form className="inquiry-form quote-form" method="post" action="/api/form-fallback" onSubmit={submit} noValidate>
           {field("name", "Your name", { type: "text", autoComplete: "name" })}
           {field("email", "Email", { type: "email", autoComplete: "email", inputMode: "email" })}
           {field("phone", "Phone", { type: "tel", autoComplete: "tel", inputMode: "tel" })}

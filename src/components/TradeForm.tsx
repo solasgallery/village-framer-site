@@ -1,6 +1,8 @@
 "use client";
 import { FormEvent, useState } from "react";
 import { ListNote, ListStatus, listStatus } from "@/components/ListNote";
+import { isOffline, offlineMessage, unconfirmedMessage } from "@/lib/formErrors";
+import { business } from "@/lib/site";
 
 const SPECIALIZATIONS = ["Residential", "Commercial", "Hospitality", "Mixed practice", "Staging", "Other"];
 const SERVICES = ["Custom framing", "Conservation / archival", "Shadow boxes", "Multi-piece projects", "Mirrors", "Design consultation"];
@@ -14,8 +16,12 @@ export default function TradeForm({ full = false }: { full?: boolean }) {
   async function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (busy) return;
-    setBusy(true);
     setError("");
+    if (isOffline()) {
+      setError(offlineMessage("application"));
+      return;
+    }
+    setBusy(true);
     const fd = new FormData(e.currentTarget);
     const v = (k: string) => String(fd.get(k) ?? "").trim();
     const lines: string[] = [];
@@ -47,15 +53,17 @@ export default function TradeForm({ full = false }: { full?: boolean }) {
           source: "trade",
         }),
       });
-      const result = await res.json().catch(() => ({}));
-      if (!res.ok || !result.success) throw new Error(result.error || "Please try again or call the shop.");
+      const result = await res.json().catch(() => null);
+      if (!res.ok || !result?.success) {
+        // Our API always explains its own errors; anything else may still have reached us.
+        setError(typeof result?.error === "string" && result.error ? result.error : unconfirmedMessage("application"));
+        return;
+      }
       setSent(listStatus(result.list));
-    } catch (err) {
-      setError(
-        err instanceof Error && err.name !== "AbortError"
-          ? err.message
-          : "We could not confirm delivery. Please call (254) 613-6123 before resending.",
-      );
+    } catch {
+      // Network error ("Failed to fetch"), dropped connection or our 30s timeout: never show the
+      // browser's text. The request may have reached us.
+      setError(unconfirmedMessage("application"));
     } finally {
       clearTimeout(timer);
       setBusy(false);
@@ -74,7 +82,13 @@ export default function TradeForm({ full = false }: { full?: boolean }) {
 
   return (
     // method="post": a submit before hydration must never put details in the URL.
-    <form className="inquiry-form" method="post" onSubmit={submit}>
+    // action: that native submit goes to a route that discards it and says plainly it wasn't sent (G7-02).
+    <form className="inquiry-form" method="post" action="/api/form-fallback" onSubmit={submit}>
+      <noscript>
+        <p className="form-error">
+          This form needs JavaScript. Call {business.phone} or email {business.email} and we’ll take it from there.
+        </p>
+      </noscript>
       <fieldset disabled={busy}>
         <legend className="sr-only">Trade application</legend>
         <div className="form-row">

@@ -165,7 +165,7 @@ export async function POST(request: NextRequest) {
       ["Frame idea", `Sample swatch: ${moulding.name} (about ${moulding.railWidthIn}" wide). Not a specific product; Cherie shows the actual mouldings in the shop.`],
       [
         "Mat idea",
-        matStyle === "none" ? "No mat" : `${matStyle === "float" ? "Float" : "Classic"}, ${matColor.name}, ${MAT_WIDTH_LABEL[matWidth]} — ${est.matIn}"`,
+        matStyle === "none" ? "No mat" : `${matStyle === "float" ? "Float" : "Classic"}, ${matColor.name}, ${MAT_WIDTH_LABEL[matWidth]} (${formatInches(est.matIn)}″)`,
       ],
       ["Ballpark shown to customer", `${band.headline} ${ESTIMATE_NOTE}`],
       ["Notes", notes],
