@@ -1,5 +1,5 @@
 import { defaultMat, matColors, mouldings } from "@/lib/design/catalog";
-import { estimate, matWidthIn } from "@/lib/design/pricing";
+import { ballpark, layout } from "@/lib/design/pricing";
 import type {
   DesignSelection,
   MatColor,
@@ -56,10 +56,7 @@ export function selectionOf(d: Design): DesignSelection | null {
 }
 
 export function derived(sel: DesignSelection) {
-  return {
-    ...estimate(sel),
-    matIn: matWidthIn(sel.matWidth, sel.artW, sel.artH, sel.matStyle),
-  };
+  return { ...layout(sel), band: ballpark(sel.artW, sel.artH) };
 }
 
 export const fmtIn = (n: number) =>

@@ -55,7 +55,7 @@ export default function InquiryForm({
       <div className="form-success" role="status">
         <p className="eyebrow">Thank you</p>
         <h2>
-          {compact ? "You’re on the list." : "Let’s make something beautiful."}
+          {compact ? "You’re on the list." : "Thanks, we got your message."}
         </h2>
         <p>
           {compact

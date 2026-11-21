@@ -2,7 +2,7 @@
 import { FormEvent, useMemo, useState } from "react";
 import { makeProxy } from "@/lib/design/frameRenderer";
 import { jpegBlob } from "@/lib/design/artImage";
-import { MAT_WIDTH_LABEL, money } from "@/lib/design/pricing";
+import { ESTIMATE_NOTE, MAT_WIDTH_LABEL } from "@/lib/design/pricing";
 import { track } from "@/lib/design/track";
 import { business } from "@/lib/site";
 import ArtCanvas from "./ArtCanvas";
@@ -43,7 +43,7 @@ export default function DetailsStep({ design, onDone }: { design: Design; onDone
   const [errs, setErrs] = useState<Record<string, string>>({});
   const [busy, setBusy] = useState(false);
   const [serverError, setServerError] = useState("");
-  const [sent, setSent] = useState<{ ref: string; testMode: boolean } | null>(null);
+  const [sent, setSent] = useState<{ ref: string; testMode: boolean; confirmationSent: boolean } | null>(null);
   const delivery = design.delivery!;
 
   const validate = () => {
@@ -99,10 +99,10 @@ export default function DetailsStep({ design, onDone }: { design: Design; onDone
         return;
       }
       track("quote_requested", {
-        value: d.total, currency: "USD", frame_id: sel.moulding.id, delivery,
+        frame_id: sel.moulding.id, delivery,
         art_long_side_in: Math.max(sel.artW, sel.artH),
       });
-      setSent({ ref: data.ref, testMode: !!data.testMode });
+      setSent({ ref: data.ref, testMode: !!data.testMode, confirmationSent: data.confirmationSent === true });
       onDone();
       window.scrollTo({ top: 0, behavior: "smooth" });
     } catch {
@@ -118,8 +118,10 @@ export default function DetailsStep({ design, onDone }: { design: Design; onDone
         <p className="eyebrow">Request received</p>
         <h1 className="step-title">Thank you, {f.name.trim().split(" ")[0]}.</h1>
         <p className="step-sub">
-          Your photo and details are with us, and a confirmation is on its way to {f.email.trim()}.
-          Reference <b>{sent.ref}</b>.
+          Your photo and details are with us. Reference <b>{sent.ref}</b>.{" "}
+          {sent.confirmationSent
+            ? `We emailed a copy to ${f.email.trim()}.`
+            : "We couldn't send your copy, but Cherie still has your request."}
         </p>
         <h2 className="next-title">What happens next</h2>
         <ol className="next-steps">
@@ -154,22 +156,22 @@ export default function DetailsStep({ design, onDone }: { design: Design; onDone
   return (
     <div className="step-body quote">
       <h1 className="step-title">Where should we reach you?</h1>
-      <p className="step-sub">Cherie reads every request herself. Nothing is charged.</p>
+      <p className="step-sub">Nothing is charged.</p>
       <div className="quote-layout">
         <aside className="summary" aria-label="Your request">
           <div className="summary-preview">
             <FrameCanvas
               art={proxy} moulding={sel.moulding} artW={sel.artW} artH={sel.artH} matStyle={sel.matStyle}
               matHex={mat.hex} matIn={d.matIn} mode="studio" width={600} height={450}
-              label={`Your art framed in ${sel.moulding.name}`} className="preview-canvas"
+              label={`Your art with a sample moulding: ${sel.moulding.name}`} className="preview-canvas"
             />
           </div>
           <dl>
             <div><dt>Artwork</dt><dd><ArtCanvas source={art} alt="Your artwork thumbnail" maxDim={120} className="mini-art" /> {fmtIn(sel.artW)} × {fmtIn(sel.artH)}</dd></div>
-            <div><dt>Frame</dt><dd>{sel.moulding.name} · {sel.moulding.maker}</dd></div>
+            <div><dt>Frame</dt><dd>{sel.moulding.name} (sample)</dd></div>
             <div><dt>Mat</dt><dd>{sel.matStyle === "none" ? "No mat" : `${sel.matStyle === "float" ? "Float" : "Classic"} · ${mat.name} · ${MAT_WIDTH_LABEL[sel.matWidth]} (${fmtIn(d.matIn)})`}</dd></div>
             <div><dt>Plan</dt><dd>{LABEL[delivery]}</dd></div>
-            <div className="summary-total"><dt>Ballpark</dt><dd><b>{money(d.low)} – {money(d.high)}</b>. A ballpark, not a quote.</dd></div>
+            <div className="summary-total"><dt>Ballpark</dt><dd><b>{d.band.headline}</b>. {ESTIMATE_NOTE}</dd></div>
           </dl>
         </aside>
         <form className="inquiry-form quote-form" onSubmit={submit} noValidate>

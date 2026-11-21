@@ -20,7 +20,7 @@ export default function Contact() {
       </header>
       <section className="wrap section contact-layout">
         <div>
-          <h2>We’re listening.</h2>
+          <h2>Talk to us.</h2>
           <p className="lede">
             Call{" "}
             <a href="tel:+12546136123" className="text-link">

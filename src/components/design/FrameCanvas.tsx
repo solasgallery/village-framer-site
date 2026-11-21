@@ -88,7 +88,7 @@ export default function FrameCanvas(p: FrameCanvasProps) {
     canvas.height = height;
     if (mode === "wall" && room && roomImg) {
       const r = renderWall(canvas, f, room, roomImg);
-      onScaled?.(r.scaledToFit);
+      onScaled?.(r.plain);
     } else if (mode === "corner") renderCorner(canvas, f);
     else
       renderStudio(canvas, f, {

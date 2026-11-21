@@ -2,7 +2,7 @@
 import { useMemo, useState } from "react";
 import { matColors, rooms } from "@/lib/design/catalog";
 import { makeProxy } from "@/lib/design/frameRenderer";
-import { ESTIMATE_NOTE, MAT_WIDTH_LABEL, floatSurcharge, matWidthIn, money } from "@/lib/design/pricing";
+import { ESTIMATE_NOTE, MAT_WIDTH_LABEL, matWidthIn } from "@/lib/design/pricing";
 import type { MatStyle, MatWidthKey } from "@/lib/design/types";
 import ArtCanvas from "./ArtCanvas";
 import FrameCanvas from "./FrameCanvas";
@@ -44,8 +44,7 @@ export default function ReviewStep({
   const room = rooms.find((r) => r.id === roomId)!;
   const mat = findMat(design.matColorId);
   const noMat = design.matStyle === "none";
-  const matFloat = floatSurcharge(sel);
-
+  
   const common = {
     moulding: sel.moulding,
     artW: sel.artW,
@@ -55,9 +54,9 @@ export default function ReviewStep({
     matIn: d.matIn,
   };
   const label = {
-    studio: `Studio preview of your art in ${sel.moulding.name}`,
+    studio: `Studio preview of your art with a sample moulding: ${sel.moulding.name}`,
     wall: `Your framed art hung on a ${room.name.toLowerCase()} wall`,
-    corner: `Close-up of the ${sel.moulding.name} corner`,
+    corner: `Close-up of the sample moulding corner: ${sel.moulding.name}`,
   };
   const outW = quarter(d.outerW + 2 * sel.moulding.railWidthIn);
   const outH = quarter(d.outerH + 2 * sel.moulding.railWidthIn);
@@ -90,7 +89,10 @@ export default function ReviewStep({
                 ))}
               </div>
               <p className="hint">
-                Room scenes are illustrations, drawn for an 8-foot ceiling. Your piece is shown to scale{scaled ? " (shrunk to fit this wall)" : ""}.
+                Illustration — generated image, scale approximate.
+                {scaled
+                  ? " Your piece is bigger than these room scenes, so it is shown on a plain wall with a height ruler."
+                  : ""}
               </p>
             </div>
           )}
@@ -119,7 +121,7 @@ export default function ReviewStep({
             <div>
               <span className="opt-label">Frame</span>
               <b>{sel.moulding.name}</b>
-              <small>{sel.moulding.maker} · {sel.moulding.descriptor}</small>
+              <small>Sample swatch. Cherie will show you the actual mouldings in the shop.</small>
             </div>
             <button type="button" className="text-link" onClick={() => goto(3)}>Change</button>
           </div>
@@ -131,7 +133,6 @@ export default function ReviewStep({
                 <label key={s.id} className={design.matStyle === s.id ? "on" : ""}>
                   <input type="radio" name="matStyle" value={s.id} checked={design.matStyle === s.id} onChange={() => update({ matStyle: s.id })} />
                   {s.label}
-                  {s.id === "float" && matFloat > 0 && <small> +{money(matFloat)}</small>}
                 </label>
               ))}
             </div>
@@ -145,7 +146,6 @@ export default function ReviewStep({
               <div key={g} className="swatch-group">
                 <span className="swatch-title">
                   {g}
-                  {g === "Premium" && <small> · adds to the estimate</small>}
                 </span>
                 <div className="swatches">
                   {matColors.filter((c) => c.group === g).map((c) => (
@@ -176,16 +176,16 @@ export default function ReviewStep({
           <div className="estimate" aria-live="polite">
             <span className="opt-label">Ballpark for this design</span>
             <p className="estimate-line">
-              <b>{money(d.low)} – {money(d.high)}</b>
+              <b>{d.band.headline}</b>
             </p>
-            <small>{ESTIMATE_NOTE} Finished size about {fmtIn(outW)} × {fmtIn(outH)}.</small>
+            <small>{ESTIMATE_NOTE} Finished size about {fmtIn(outW)} × {fmtIn(outH)}. Mat colors and widths shown are samples too.</small>
           </div>
         </div>
       </div>
       <div className="review-bar">
         <div className="review-bar-price" aria-hidden="true">
           <small>Ballpark</small>
-          <b>{money(d.low)}–{money(d.high)}</b>
+          <b>{d.band.short}</b>
         </div>
         <button type="button" className="button button-ink wide" onClick={onNext}>
           Next: how to get it to us

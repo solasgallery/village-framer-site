@@ -21,7 +21,7 @@ const frame = [
 
 const how = [
   { image: "portrait-process-01", n: "01", title: "Send a photo", text: "Upload it from your phone, add the size, and see it in sample mouldings and mats." },
-  { image: "portrait-process-02", n: "02", title: "Get a ballpark", text: "You see an honest range before anyone calls you. The exact price comes after we see the piece." },
+  { image: "portrait-process-02", n: "02", title: "Get a ballpark", text: "You see a ballpark before anyone calls you. The exact price comes after we see the piece." },
   { image: "portrait-process-03", n: "03", title: "We frame it here", text: "Drop it off, ship it to us or talk it through first. The work never leaves the shop." },
 ];
 
@@ -48,8 +48,8 @@ export default function Home() {
             </em>
           </h1>
           <p className="lede">
-            Upload a photo of the piece. See it in sample frames on a wall, close to true size. Know the ballpark before you
-            ever pick up the phone.
+            Upload a photo of the piece, see it in sample frames, and get a ballpark before you
+            pick up the phone.
           </p>
           <StartCta className="hero-cta" secondary={{ href: "/visit", label: "Visit the shop" }} />
         </div>
@@ -152,8 +152,8 @@ export default function Home() {
             in the frame.
           </h2>
           <p className="lede">
-            Upload a photo, enter the size, and watch it appear in sample mouldings and mats, hung
-            on a wall at close to true scale. Then choose to drop it off, ship it to us or book a consult.
+            Upload a photo, enter the size, and watch it appear in sample mouldings and mats, shown on an
+            illustrated wall. Then choose to drop it off, ship it to us or book a consult.
           </p>
           <StartCta onDark />
         </div>
@@ -186,7 +186,7 @@ export default function Home() {
               <Link href={START} className="inline-link">
                 Start framing preview
               </Link>{" "}
-              gives you a ballpark range for your exact piece, and our{" "}
+              gives you a ballpark for your piece, and our{" "}
               <Link href="/guides/how-much-does-custom-framing-cost" className="inline-link">
                 framing cost guide
               </Link>{" "}

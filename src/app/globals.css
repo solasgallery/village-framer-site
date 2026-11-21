@@ -1071,3 +1071,11 @@ a:hover {
     flex: 1 1 100%;
   }
 }
+
+/* Gate 1 fix: tap targets of at least 44px */
+.menu-toggle { min-height: 44px; padding: 0 4px; }
+.footer-contact > a,
+.footer-bottom a,
+.site-footer a:not(.button) { display: inline-flex; align-items: center; min-height: 44px; }
+.footer-contact > a { display: flex; margin-top: 0; }
+.text-link { min-height: 44px; box-sizing: border-box; padding-block: 11px; }

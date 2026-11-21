@@ -128,8 +128,6 @@ export default function DesignApp() {
               track("frame_selected", {
                 frame_id: m.id,
                 frame_name: m.name,
-                maker: m.maker,
-                price_tier: m.priceTier,
               });
               go(4);
             }}

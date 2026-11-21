@@ -2,14 +2,14 @@ import { NextRequest, NextResponse } from "next/server";
 import { put } from "@vercel/blob";
 import { randomBytes } from "node:crypto";
 import { matColors, mouldings } from "@/lib/design/catalog";
-import { MAT_WIDTH_LABEL, MAX_LONG_SIDE_IN, MIN_SIDE_IN, estimate, money } from "@/lib/design/pricing";
+import { ESTIMATE_NOTE, MAT_WIDTH_LABEL, MAX_LONG_SIDE_IN, MIN_SIDE_IN, ballpark, layout } from "@/lib/design/pricing";
 import type { MatStyle, MatWidthKey } from "@/lib/design/types";
-import { signPath } from "@/lib/leadLink";
+import { LINK_TTL_MS, signPath } from "@/lib/leadLink";
 import { business } from "@/lib/site";
 
 /**
  * POST /api/start-framing — the "Start framing" flow.
- *  1. Validates + re-prices the design server-side.
+ *  1. Validates the design server-side and works out the same ballpark band the page showed (no per-frame prices).
  *  2. Stores the customer photo and the concept image in a PRIVATE Vercel Blob store.
  *  3. Emails Cherie (LEADS_TO) with signed photo links + the attached images.
  *  4. Emails the customer a confirmation.
@@ -74,7 +74,8 @@ export async function POST(request: NextRequest) {
     const matStyle = MAT_STYLES.find((s) => s === d.matStyle);
     const matWidth = MAT_WIDTHS.find((s) => s === d.matWidth);
     if (!moulding || !matColor || !matStyle || !matWidth) return fail("Please choose a frame and mat for your design.");
-    const est = estimate({ artW, artH, moulding, matStyle, matWidth, matColor });
+    const est = layout({ artW, artH, moulding, matStyle, matWidth, matColor });
+    const band = ballpark(artW, artH);
 
     const photoFile = form.get("photo");
     const conceptFile = form.get("concept");
@@ -105,8 +106,9 @@ export async function POST(request: NextRequest) {
       ? await put(`${base}-concept.jpg`, concept, { access: "private", contentType: "image/jpeg", addRandomSuffix: false })
       : null;
     const origin = request.nextUrl.origin;
+    const exp = Date.now() + LINK_TTL_MS;
     const link = (pathname: string) =>
-      `${origin}/api/lead-photo?p=${encodeURIComponent(pathname)}&s=${signPath(pathname)}`;
+      `${origin}/api/lead-photo?p=${encodeURIComponent(pathname)}&e=${exp}&s=${signPath(pathname, exp)}`;
     const photoLink = link(photoBlob.pathname);
     const conceptLink = conceptBlob ? link(conceptBlob.pathname) : "";
 
@@ -118,12 +120,12 @@ export async function POST(request: NextRequest) {
       ["Phone", phone],
       ["How they want to start", DELIVERY[delivery]],
       ["Art size", `${artW} × ${artH} inches (measured: ${MEASURED[measured]})`],
-      ["Frame idea", `${moulding.name} — ${moulding.maker} (${moulding.colorFamily}, ${moulding.railWidthIn}" rail)`],
+      ["Frame idea", `Sample swatch: ${moulding.name} (about ${moulding.railWidthIn}" wide). Not a specific product; Cherie shows the actual mouldings in the shop.`],
       [
         "Mat idea",
         matStyle === "none" ? "No mat" : `${matStyle === "float" ? "Float" : "Classic"}, ${matColor.name}, ${MAT_WIDTH_LABEL[matWidth]} — ${est.matIn}"`,
       ],
-      ["Ballpark shown to customer", `${money(est.low)} – ${money(est.high)} (a ballpark, not a quote)`],
+      ["Ballpark shown to customer", `${band.headline}. ${ESTIMATE_NOTE}`],
       ["Notes", notes],
       ["Newsletter opt-in", body.newsletter === true ? "Yes" : "No"],
     ];
@@ -149,7 +151,7 @@ export async function POST(request: NextRequest) {
       to: [{ email: LEADS_TO, name: "Cherie Flanagan" }],
       replyTo: { email, name },
       subject: `${prefix}New framing request: ${name.replace(/[\r\n]/g, " ")} (${DELIVERY[delivery]})`,
-      htmlContent: `<div style="font-family:Arial,sans-serif;max-width:640px;margin:auto;padding:32px;color:#202b2a"><h1 style="font-family:Georgia,serif">${testMode ? "[PREVIEW TEST] " : ""}A new framing request</h1><p><a href="${photoLink}">Open the customer’s photo</a>${conceptLink ? ` · <a href="${conceptLink}">Open the design concept</a>` : ""}<br><small>Both images are also attached. The links stay private to this email.</small></p><table style="width:100%;border-collapse:collapse">${table}</table><p style="font-size:12px">Sent from saladovillageframer.com/start-framing. Reply to this email to reach the customer.</p></div>`,
+      htmlContent: `<div style="font-family:Arial,sans-serif;max-width:640px;margin:auto;padding:32px;color:#202b2a"><h1 style="font-family:Georgia,serif">${testMode ? "[PREVIEW TEST] " : ""}A new framing request</h1><p><a href="${photoLink}">Open the customer’s photo</a>${conceptLink ? ` · <a href="${conceptLink}">Open the design concept</a>` : ""}<br><small>Both images are also attached. The links stay private to this email and stop working after 30 days.</small></p><table style="width:100%;border-collapse:collapse">${table}</table><p style="font-size:12px">Sent from saladovillageframer.com/start-framing. Reply to this email to reach the customer.</p></div>`,
       attachment,
     });
     if (!notifyRes.ok) {
@@ -157,6 +159,7 @@ export async function POST(request: NextRequest) {
       return fail(`We could not confirm delivery. Please call ${business.phone} before resending.`, 502);
     }
 
+    let confirmationSent = false;
     // ---- 3) customer confirmation (failure never fails the request: the lead is already safe)
     try {
       const nextLine =
@@ -170,9 +173,10 @@ export async function POST(request: NextRequest) {
         to: [{ email, name }],
         replyTo: { email: LEADS_TO, name: "Cherie Flanagan" },
         subject: `${prefix}We received your framing request (${ref})`,
-        htmlContent: `<div style="font-family:Arial,sans-serif;max-width:560px;margin:auto;padding:32px;color:#202b2a"><h1 style="font-family:Georgia,serif">Thank you, ${esc(name.split(" ")[0])}.</h1><p>We have your photo and details (reference ${ref}). Cherie will reply by email, usually within one business day.</p><p>${esc(nextLine)}</p><p>Your size: ${artW} × ${artH} inches. Ballpark we showed: ${money(est.low)} – ${money(est.high)}. That is a ballpark, not a quote; we confirm your exact price with you before any work begins.</p><p style="color:#59625d;font-size:13px">${esc(business.nap)}<br>Reply to this email or call ${esc(business.phone)}.</p></div>`,
+        htmlContent: `<div style="font-family:Arial,sans-serif;max-width:560px;margin:auto;padding:32px;color:#202b2a"><h1 style="font-family:Georgia,serif">Thank you, ${esc(name.split(" ")[0])}.</h1><p>We have your photo and details (reference ${ref}). Cherie will reply by email, usually within one business day.</p><p>${esc(nextLine)}</p><p>Your size: ${artW} × ${artH} inches. Ballpark we showed: ${esc(band.headline.toLowerCase())}. ${esc(ESTIMATE_NOTE)} We confirm your exact price with you before any work begins. The frame and mat you picked are samples; Cherie will show you the actual mouldings in the shop.</p><p style="color:#59625d;font-size:13px">${esc(business.nap)}<br>Reply to this email or call ${esc(business.phone)}.</p></div>`,
       });
-      if (!r.ok) console.error("start-framing confirmation failed:", r.status);
+      if (r.ok) confirmationSent = true;
+      else console.error("start-framing confirmation failed:", r.status);
     } catch {
       console.error("start-framing confirmation errored");
     }
@@ -195,7 +199,7 @@ export async function POST(request: NextRequest) {
         console.error("start-framing list add errored");
       }
     }
-    return NextResponse.json({ success: true, ref, testMode });
+    return NextResponse.json({ success: true, ref, testMode, confirmationSent });
   } catch (e) {
     console.error("start-framing failed", e instanceof Error ? e.message : "");
     return fail(`We could not confirm delivery. Please call ${business.phone} or try again later.`, 502);

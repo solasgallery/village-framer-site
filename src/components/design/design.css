@@ -752,3 +752,17 @@ body:has(.design-app) .sticky-cta {
   .quote-layout { grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
   .step-body { padding-bottom: 140px; }
 }
+
+/* Gate 1 fixes: crumbs fit at 375, 44px tap targets */
+.crumbs { overflow-x: auto; justify-content: flex-start; scrollbar-width: none; font-size: 11px; letter-spacing: 0.04em; }
+.crumbs::-webkit-scrollbar { display: none; }
+.crumbs li { flex: none; }
+.crumbs li:first-child { margin-left: auto; }
+.crumbs li:last-child { margin-right: auto; }
+.crumbs li + li::before { margin: 0 5px; }
+.crumbs span, .crumbs button { min-height: 44px; display: inline-flex; align-items: center; padding-block: 0; }
+.chip { min-height: 44px; }
+@media (min-width: 640px) {
+  .crumbs { font-size: 13px; letter-spacing: 0.08em; }
+  .crumbs li + li::before { margin: 0 14px; }
+}

@@ -5,7 +5,7 @@ const OPTIONS: { id: Delivery; title: string; text: string; next: string }[] = [
   {
     id: "dropoff",
     title: "Drop it off",
-    text: "Bring the piece to the shop in Salado. We look at it with you, show you real mouldings and mats beside it, and confirm the price before we start.",
+    text: "Bring the piece to the shop in Salado. We look at it with you, show you actual mouldings and mats beside it, and confirm the price before we start.",
     next: "Best for most projects, and for anything you would rather not mail.",
   },
   {

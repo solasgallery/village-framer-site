@@ -11,11 +11,11 @@ export default function Footer() {
       <footer className="site-footer">
         <div className="footer-top wrap">
           <div>
-            <p className="eyebrow">Your piece. Our personal attention.</p>
+            <p className="eyebrow">Custom framing in Salado</p>
             <h2>
-              Some things deserve
+              Ready to frame
               <br />
-              <em>a beautiful frame.</em>
+              <em>something?</em>
             </h2>
             <Link href={START} className="button button-gold">
               Start framing <span aria-hidden="true">→</span>

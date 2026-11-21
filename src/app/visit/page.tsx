@@ -13,7 +13,7 @@ export default function Visit() {
   return (
     <>
       <header className="page-intro">
-        <p className="eyebrow">A real shop. A personal welcome.</p>
+        <p className="eyebrow">Visit the shop</p>
         <h1>
           Come sit at
           <br />
@@ -102,9 +102,7 @@ export default function Visit() {
           <p className="eyebrow">Meet your framer</p>
           <h2>Experience you can talk to.</h2>
           <p>
-            Cherie Flanagan has framed for thirty years and brings a practiced eye
-            and personal attention to your project. We’ll explore the details
-            with you, using real moulding and mat samples beside your artwork.
+            Cherie Flanagan has framed for thirty years and will look at your piece with you, with moulding and mat samples beside your artwork.
           </p>
           <p>
             Your framing work stays in our Salado shop, with the people you
