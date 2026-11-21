@@ -20,8 +20,7 @@ export default function Visit() {
           the design table.
         </h1>
         <p className="lede">
-          Bring your artwork, your questions, and a little time to explore.
-          We’ll help you see the possibilities.
+          Bring your piece and your questions. We’ll look at it together.
         </p>
       </header>
       <div
@@ -58,7 +57,7 @@ export default function Visit() {
           </a>
         </div>
         <div>
-          <p className="eyebrow">Make a little time</p>
+          <p className="eyebrow">Hours</p>
           <h3>
             Monday–Saturday
             <br />
@@ -100,7 +99,7 @@ export default function Visit() {
         </div>
         <div className="feature-copy">
           <p className="eyebrow">Meet your framer</p>
-          <h2>Experience you can talk to.</h2>
+          <h2>Talk it through with Cherie.</h2>
           <p>
             Cherie Flanagan has framed for thirty years and will look at your piece with you, with moulding and mat samples beside your artwork.
           </p>
@@ -116,17 +115,16 @@ export default function Visit() {
         </div>
       </section>
       <section className="wrap section centered">
-        <p className="eyebrow">Worth making a little time for</p>
+        <p className="eyebrow">Find us</p>
         <h2>
-          A Salado stop.
-          <br />A Central Texas welcome.
+          The shop is in Salado.
         </h2>
         <p className="lede">
-          Customers come to us from across Central Texas.
+          If you are coming from out of town, here are the towns around Salado.
         </p>
         <div className="actions">
           <Link className="text-link" href="/service-area">
-            Our service area →
+            Towns around Salado →
           </Link>
         </div>
       </section>

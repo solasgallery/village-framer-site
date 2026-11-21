@@ -1,5 +1,6 @@
 import { defaultMat, matColors, mouldings } from "@/lib/design/catalog";
 import { ballpark, layout } from "@/lib/design/pricing";
+import { formatInches } from "@/lib/design/parseSize";
 import type {
   DesignSelection,
   MatColor,
@@ -56,8 +57,7 @@ export function selectionOf(d: Design): DesignSelection | null {
 }
 
 export function derived(sel: DesignSelection) {
-  return { ...layout(sel), band: ballpark(sel.artW, sel.artH) };
+  return { ...layout(sel), band: ballpark() };
 }
 
-export const fmtIn = (n: number) =>
-  `${Number.isInteger(n) ? n : Number(n.toFixed(2))}″`;
+export const fmtIn = (n: number) => `${formatInches(n)}″`;

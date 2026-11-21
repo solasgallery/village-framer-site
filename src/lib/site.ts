@@ -16,7 +16,7 @@ export const business = {
   email: "info@solasgallery.com",
   hours: "Monday–Saturday, 10am–5pm",
   hoursNote: "Sunday closed",
-  nap: "Salado Village Framer · 2 Rock Creek Dr Unit A · Salado, TX 76571 · (254) 613-6123",
+  nap: "Salado Village Framer · 2 Rock Creek Dr Unit A, Salado, TX 76571 · (254) 613-6123",
   mapsDirections:
     "https://www.google.com/maps/dir/?api=1&destination=Salado+Village+Framer+2+Rock+Creek+Dr+Unit+A+Salado+TX+76571",
   mapsReviews:

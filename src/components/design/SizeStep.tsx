@@ -4,11 +4,14 @@ import { MAX_LONG_SIDE_IN, MIN_SIDE_IN } from "@/lib/design/pricing";
 import ArtCanvas from "./ArtCanvas";
 import type { Measured } from "./state";
 
+import { formatInches, parseInches } from "@/lib/design/parseSize";
+
+/** Parsed inches to quarter-inch precision; 0 when empty or unreadable. */
 const parse = (s: string) => {
-  const n = parseFloat(s);
-  return Number.isFinite(n) ? n : 0;
+  const r = parseInches(s);
+  return r.ok ? r.value : 0;
 };
-const trim = (n: number) => String(Math.round(n * 100) / 100);
+const trim = (n: number) => formatInches(n);
 const COMMON: [number, number][] = [[8, 10], [11, 14], [16, 20], [24, 36], [36, 48], [48, 60]];
 
 export default function SizeStep({
@@ -35,7 +38,13 @@ export default function SizeStep({
   const nw = parse(w);
   const nh = parse(h);
 
+  const unreadable = (label: string, raw: string) =>
+    raw.trim() && !parseInches(raw).ok
+      ? `We couldn’t read the ${label} “${raw.trim()}”. Use inches like 16, 16.25 or 16 1/4.`
+      : "";
   const problem = (() => {
+    const bad = unreadable("width", w) || unreadable("height", h);
+    if (bad) return bad;
     if (!nw || !nh) return "";
     if (nw < MIN_SIDE_IN || nh < MIN_SIDE_IN)
       return `Each side needs to be at least ${MIN_SIDE_IN}″.`;
@@ -101,7 +110,7 @@ export default function SizeStep({
               Width (inches)
               <input
                 type="text"
-                inputMode="decimal"
+                inputMode="text"
                 autoComplete="off"
                 value={w}
                 onChange={(e) => setWidth(e.target.value)}
@@ -113,7 +122,7 @@ export default function SizeStep({
               Height (inches)
               <input
                 type="text"
-                inputMode="decimal"
+                inputMode="text"
                 autoComplete="off"
                 value={h}
                 onChange={(e) => setHeight(e.target.value)}
@@ -127,7 +136,10 @@ export default function SizeStep({
             Keep my photo’s proportions
           </label>
           <p id="size-help" className={problem ? "step-error" : "hint"} role={problem ? "alert" : undefined}>
-            {problem || `Up to ${MAX_LONG_SIDE_IN}″ on the long side. Big pieces are our specialty.`}
+            {problem ||
+              (nw && nh
+                ? `We’ll use ${trim(nw)}″ wide by ${trim(nh)}″ high (rounded to the nearest quarter inch).`
+                : `Up to ${MAX_LONG_SIDE_IN}″ on the long side. Fractions are fine, like 16 1/4.`)}
           </p>
           <div className="tool-row" role="group" aria-label="Common sizes">
             {COMMON.map((c) => (

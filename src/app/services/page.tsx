@@ -24,7 +24,7 @@ export default function Services() {
         </h1>
         <p className="lede">
           Custom framing is what we do, and every piece is framed in our Salado shop. Most projects start around{" "}
-          {pricing.startsAround}; large pieces run {pricing.largeFrom} and up.
+          {pricing.startsAround}; large pieces often run {pricing.largeFrom} and up.
         </p>
         <StartCta />
       </header>

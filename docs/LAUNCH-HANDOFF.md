@@ -23,7 +23,7 @@ POST /api/inquiry retains Brevo contact create/update, server-owned list2, then 
 Page canonicals, sitemap, robots and Store JSON-LD use the actual Salado storefront and corrected hours. Existing Google verification, GTM-TCJR9HV, and Brevo tracking are preserved. Events: svf_inquiry_success (only confirmed success), svf_phone_click, svf_directions_click, svf_studio_open. No names, emails or photos are included in those events. GTM/Ads conversion setup is a separate task; merely emitting an event does not configure an Ads conversion.
 
 ## Follow-on work
-Import actual Roma/Larson-Juhl data and licensed images. Add documented project stories and customer hometowns only when supplied. Prepare Search Ads separately; no campaign or spend was started. SocialBee drafts need review before scheduling. GBP remains a brick-and-mortar profile; no service areas added. SolasGallery.com and HUBSalado.com are separate projects.
+Real supplier moulding data and licensed images are a possible later pass (historical item; none is used now, samples are unbranded). Add documented project stories and customer hometowns only when supplied. Prepare Search Ads separately; no campaign or spend was started. SocialBee drafts need review before scheduling. GBP remains a brick-and-mortar profile; no service areas added. SolasGallery.com and HUBSalado.com are separate projects.
 
 ## Validation
 Production build, TypeScript, mocked Brevo route tests, local HTTP route checks, and browser visual checks. See validation results recorded with launch completion. Roll back with Vercel Instant Rollback to the previous production deployment if needed; source baseline edc4d8a2105c0e5f184b4b72713ddfd6fe4c2cae.

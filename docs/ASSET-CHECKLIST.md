@@ -21,24 +21,14 @@ tiles it along the four rails and mitres the corners.
 - **Orientation:** the image runs *along* the rail horizontally (it repeats left→right) and *across* the rail vertically. The **top edge of the image is the OUTER edge** of the frame; the bottom edge is the inner (sight) edge.
 - **Content:** a straight-on, evenly lit close-up of a piece of moulding laid horizontally, cropped so the face of the moulding fills the image top to bottom. Shoot a piece ~6–12 in long so the grain repeats naturally.
 - **Size:** about 512 × 192 px (ratio 8:3; the placeholders are 256 × 96). PNG, JPG, WebP or SVG all work. Keep each under ~60 KB.
-- **Name it** after the moulding `id` (e.g. `roma-walnut-classic.jpg`) and put it in `public/mouldings/`, then update that entry's `profileImage` path.
+- **Name it** after the moulding `id` (e.g. `dark-walnut-medium.jpg`) and put it in `public/mouldings/`, then update that entry's `profileImage` path.
 
-## Adding a 17th moulding (data-only change)
+## Adding another sample moulding
 
-Append an object to `src/data/mouldings.json` and drop its image in `public/mouldings/`:
-
-```json
-{ "id": "roma-new-one", "name": "New One", "descriptor": "One-line descriptor",
-  "maker": "Roma", "colorFamily": "Walnut", "railWidthIn": 1.5,
-  "priceTier": "mid", "profileImage": "/mouldings/roma-new-one.jpg" }
-```
-
-- `maker`: `Roma` or `Larson-Juhl`
-- `priceTier`: `economy` | `mid` | `premium` | `signature` (rates live in `src/lib/design/pricing.ts`)
-- `colorFamily`: any text; a new value automatically becomes a filter chip.
+Historical note: an earlier version tagged each moulding with a supplier `maker` and a `priceTier`. Both were removed in gate-1 fixes. The samples are now generic, unbranded swatches ("Sample · about 0.75″ wide") and there is no price engine. See `src/lib/design/catalog.ts` for the current fields. Do not name a supplier or product on a sample until Cherie supplies real moulding data.
 
 ## Still needed from the shop (not images)
 
 - Google reviews link currently opens a Google Maps search for the shop. Swap in the direct Google Business review URL (`g.page/...` / `search.google.com/local/reviews?placeid=...`) in the trust block, `src/app/page.tsx`, when available.
-- Pricing: the estimate rates in `src/lib/design/pricing.ts` are calibrated to the brief (16×20 mid-tier ≈ $445, 36×48 ≈ $1,135), not to the shop's real price list. Cherie should sanity-check them.
+- Pricing: `src/lib/design/pricing.ts` has no rate table. It shows only the two brief anchors ("Most framing starts around $350. Large pieces often run $1,000 and up.") for every size. Cherie can supply real ranges later.
 - Wording on the new Services list (`src/app/services/page.tsx`) is a neutral placeholder for Cherie to approve.

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { put } from "@vercel/blob";
 import { randomBytes } from "node:crypto";
 import { matColors, mouldings } from "@/lib/design/catalog";
+import { formatInches } from "@/lib/design/parseSize";
 import { ESTIMATE_NOTE, MAT_WIDTH_LABEL, MAX_LONG_SIDE_IN, MIN_SIDE_IN, ballpark, layout } from "@/lib/design/pricing";
 import type { MatStyle, MatWidthKey } from "@/lib/design/types";
 import { LINK_TTL_MS, signPath } from "@/lib/leadLink";
@@ -75,7 +76,7 @@ export async function POST(request: NextRequest) {
     const matWidth = MAT_WIDTHS.find((s) => s === d.matWidth);
     if (!moulding || !matColor || !matStyle || !matWidth) return fail("Please choose a frame and mat for your design.");
     const est = layout({ artW, artH, moulding, matStyle, matWidth, matColor });
-    const band = ballpark(artW, artH);
+    const band = ballpark();
 
     const photoFile = form.get("photo");
     const conceptFile = form.get("concept");
@@ -119,13 +120,13 @@ export async function POST(request: NextRequest) {
       ["Email", email],
       ["Phone", phone],
       ["How they want to start", DELIVERY[delivery]],
-      ["Art size", `${artW} × ${artH} inches (measured: ${MEASURED[measured]})`],
+      ["Art size", `${formatInches(artW)} × ${formatInches(artH)} inches (${artW} × ${artH}; measured: ${MEASURED[measured]})`],
       ["Frame idea", `Sample swatch: ${moulding.name} (about ${moulding.railWidthIn}" wide). Not a specific product; Cherie shows the actual mouldings in the shop.`],
       [
         "Mat idea",
         matStyle === "none" ? "No mat" : `${matStyle === "float" ? "Float" : "Classic"}, ${matColor.name}, ${MAT_WIDTH_LABEL[matWidth]} — ${est.matIn}"`,
       ],
-      ["Ballpark shown to customer", `${band.headline}. ${ESTIMATE_NOTE}`],
+      ["Ballpark shown to customer", `${band.headline} ${ESTIMATE_NOTE}`],
       ["Notes", notes],
       ["Newsletter opt-in", body.newsletter === true ? "Yes" : "No"],
     ];
@@ -173,7 +174,7 @@ export async function POST(request: NextRequest) {
         to: [{ email, name }],
         replyTo: { email: LEADS_TO, name: "Cherie Flanagan" },
         subject: `${prefix}We received your framing request (${ref})`,
-        htmlContent: `<div style="font-family:Arial,sans-serif;max-width:560px;margin:auto;padding:32px;color:#202b2a"><h1 style="font-family:Georgia,serif">Thank you, ${esc(name.split(" ")[0])}.</h1><p>We have your photo and details (reference ${ref}). Cherie will reply by email, usually within one business day.</p><p>${esc(nextLine)}</p><p>Your size: ${artW} × ${artH} inches. Ballpark we showed: ${esc(band.headline.toLowerCase())}. ${esc(ESTIMATE_NOTE)} We confirm your exact price with you before any work begins. The frame and mat you picked are samples; Cherie will show you the actual mouldings in the shop.</p><p style="color:#59625d;font-size:13px">${esc(business.nap)}<br>Reply to this email or call ${esc(business.phone)}.</p></div>`,
+        htmlContent: `<div style="font-family:Arial,sans-serif;max-width:560px;margin:auto;padding:32px;color:#202b2a"><h1 style="font-family:Georgia,serif">Thank you, ${esc(name.split(" ")[0])}.</h1><p>We have your photo and details (reference ${ref}). Cherie will reply by email, usually within one business day.</p><p>${esc(nextLine)}</p><p>Your size: ${esc(formatInches(artW))} × ${esc(formatInches(artH))} inches. Ballpark we showed: ${esc(band.headline)} ${esc(ESTIMATE_NOTE)} We confirm your exact price with you before any work begins. The frame and mat you picked are samples; Cherie will show you the actual mouldings in the shop.</p><p style="color:#59625d;font-size:13px">${esc(business.nap)}<br>Reply to this email or call ${esc(business.phone)}.</p></div>`,
       });
       if (r.ok) confirmationSent = true;
       else console.error("start-framing confirmation failed:", r.status);

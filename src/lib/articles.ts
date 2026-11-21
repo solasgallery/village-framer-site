@@ -306,8 +306,8 @@ export const guides: Article[] = [
         list: [
           "Lay the piece flat. Do not measure a rolled print until it has been flattened.",
           "Measure the width, edge to edge, then the height. Write them as width by height.",
-          "Round up to the nearest quarter inch.",
-          "Measure the art itself, not an old mat or border. We cut the mat opening slightly smaller than the art, usually about a quarter inch of overlap on each side, so the art is held in place.",
+          "Round to the nearest quarter inch.",
+          "Measure the art itself, not an old mat or border.",
           "For canvas, objects or anything with thickness, measure the depth, front to back, at its thickest point.",
         ],
       },
@@ -326,7 +326,7 @@ export const guides: Article[] = [
       {
         h: "Not sure? Send a photo",
         p: [
-          "Lay a tape measure along the edge of the piece, take a straight-on photo, and upload it in Start framing. We can usually read the size from it, and we confirm it before any cutting.",
+          "Lay a tape measure along the edge of the piece, take a straight-on photo, and upload it in Start framing. Close is fine. We confirm every size before any cutting.",
         ],
       },
     ],

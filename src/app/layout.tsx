@@ -18,6 +18,9 @@ export const metadata: Metadata = {
   }),
 };
 
+/** Trackers load on production only, so preview/local/audit traffic never reaches production analytics. */
+const TRACK = process.env.VERCEL_ENV === "production";
+
 export const viewport = { width: "device-width", initialScale: 1, themeColor: "#faf7f0" };
 
 export default function RootLayout({
@@ -28,6 +31,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        {TRACK && (
+          <>
         {/*
           Google Tag Manager
           Container: GTM-TCJR9HV
@@ -58,8 +63,11 @@ export default function RootLayout({
           {`window.Brevo = window.Brevo || [];
           Brevo.push(["init", { client_key: "9u1hsxe9gvu5e6i2ar4j28q2" }]);`}
         </Script>
+          </>
+        )}
       </head>
       <body>
+        {TRACK && (
         <noscript>
           <iframe
             src="https://www.googletagmanager.com/ns.html?id=GTM-TCJR9HV"
@@ -68,6 +76,7 @@ export default function RootLayout({
             style={{ display: "none", visibility: "hidden" }}
           />
         </noscript>
+        )}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{

@@ -10,9 +10,6 @@ import type { DesignSelection, MatStyle, MatWidthKey } from "./types";
 export const MAX_LONG_SIDE_IN = 72;
 export const MIN_SIDE_IN = 2;
 
-/** Art up to this size (either orientation) gets the "starts around" band. */
-const SMALL_SIDES: [number, number] = [24, 36];
-
 export const MAT_WIDTH_LABEL: Record<MatWidthKey, string> = {
   thin: "Thin",
   standard: "Standard",
@@ -35,20 +32,21 @@ export function matWidthIn(
 }
 
 export type Ballpark = {
-  large: boolean;
-  /** e.g. "Around $350 and up" */
+  /** Both brief anchors, shown together for every size. */
   headline: string;
   /** short form for the sticky bar */
   short: string;
 };
 
-export function ballpark(artW: number, artH: number): Ballpark {
-  const long = Math.max(artW, artH);
-  const short = Math.min(artW, artH);
-  const large = long > SMALL_SIDES[1] || short > SMALL_SIDES[0];
-  return large
-    ? { large, headline: `Often ${pricing.largeFrom} and up`, short: `Often ${pricing.largeFrom}+` }
-    : { large, headline: `Around ${pricing.startsAround} and up`, short: `Around ${pricing.startsAround}+` };
+/**
+ * Same two anchors for every size. The shop has not told us where "large"
+ * starts, so there is no size-based switch (gate 2, G2-02).
+ */
+export function ballpark(): Ballpark {
+  return {
+    headline: `Most framing starts around ${pricing.startsAround}. Large pieces often run ${pricing.largeFrom} and up.`,
+    short: `${pricing.startsAround}+ · large ${pricing.largeFrom}+`,
+  };
 }
 
 export type Layout = { outerW: number; outerH: number; matIn: number };

@@ -20,9 +20,9 @@ const frame = [
 ];
 
 const how = [
-  { image: "portrait-process-01", n: "01", title: "Send a photo", text: "Upload it from your phone, add the size, and see it in sample mouldings and mats." },
-  { image: "portrait-process-02", n: "02", title: "Get a ballpark", text: "You see a ballpark before anyone calls you. The exact price comes after we see the piece." },
-  { image: "portrait-process-03", n: "03", title: "We frame it here", text: "Drop it off, ship it to us or talk it through first. The work never leaves the shop." },
+  { image: "design-table-collaboration", alt: "Three women working on a frame package at the shop's design table", n: "01", title: "Send a photo", text: "Upload it from your phone, add the size, and see it in sample mouldings and mats." },
+  { image: "moulding-wall", alt: "A woman standing with framed pieces in front of the wall of moulding corner samples", n: "02", title: "Get a ballpark", text: "You see a ballpark before anyone calls you. The exact price comes after we see the piece." },
+  { image: "careful-detail-work", alt: "A framer in gloves cleaning glass at the workbench", n: "03", title: "We frame it here", text: "Drop it off, ship it to us or talk it through first. The work never leaves the shop." },
 ];
 
 const rifle = [
@@ -131,7 +131,7 @@ export default function Home() {
           {how.map((x) => (
             <figure key={x.image}>
               <div className="process-photo reveal-photo">
-                <Image src={`/images/selected/${x.image}.webp`} alt={`${x.title}. ${x.text}`} fill sizes="(max-width:540px) 90vw, 30vw" />
+                <Image src={`/images/selected/${x.image}.webp`} alt={x.alt} fill sizes="(max-width:540px) 90vw, 30vw" />
               </div>
               <figcaption>
                 {x.n}
@@ -172,14 +172,14 @@ export default function Home() {
           <div>
             <p className="eyebrow">What it costs</p>
             <h2>
-              Honest numbers,
+              Two numbers to
               <br />
-              up front.
+              start with.
             </h2>
           </div>
           <div>
             <p className="price-anchor">
-              Most projects start around <b>{pricing.startsAround}</b>. Large pieces run <b>{pricing.largeFrom}</b> and up.
+              Most framing starts around <b>{pricing.startsAround}</b>. Large pieces often run <b>{pricing.largeFrom}</b> and up.
             </p>
             <p>
               Size, moulding, mat and glass all move the number. The{" "}

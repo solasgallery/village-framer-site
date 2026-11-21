@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { business } from "@/lib/content";
+import { business } from "@/lib/site";
 
 /** The two standing calls to action: design it online, or call the shop. */
 export default function CtaPair({

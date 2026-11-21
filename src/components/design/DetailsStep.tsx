@@ -171,7 +171,7 @@ export default function DetailsStep({ design, onDone }: { design: Design; onDone
             <div><dt>Frame</dt><dd>{sel.moulding.name} (sample)</dd></div>
             <div><dt>Mat</dt><dd>{sel.matStyle === "none" ? "No mat" : `${sel.matStyle === "float" ? "Float" : "Classic"} · ${mat.name} · ${MAT_WIDTH_LABEL[sel.matWidth]} (${fmtIn(d.matIn)})`}</dd></div>
             <div><dt>Plan</dt><dd>{LABEL[delivery]}</dd></div>
-            <div className="summary-total"><dt>Ballpark</dt><dd><b>{d.band.headline}</b>. {ESTIMATE_NOTE}</dd></div>
+            <div className="summary-total"><dt>Ballpark</dt><dd><b>{d.band.headline}</b> {ESTIMATE_NOTE}</dd></div>
           </dl>
         </aside>
         <form className="inquiry-form quote-form" onSubmit={submit} noValidate>

@@ -829,8 +829,7 @@ a:hover {
   background: var(--sage);
 }
 .gallery-photo img {
-  object-fit: contain;
-  padding: 8px;
+  object-fit: cover;
 }
 .gallery-grid figcaption {
   font-size: 14px;

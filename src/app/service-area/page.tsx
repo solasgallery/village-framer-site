@@ -5,9 +5,9 @@ import { business } from "@/lib/site";
 import StartCta from "@/components/StartCta";
 
 export const metadata: Metadata = meta({
-  title: "Custom Framing for Central Texas | Salado Village Framer",
+  title: "Custom Framing Near Salado, TX | Salado Village Framer",
   description:
-    "One shop in Salado, Texas, just off Interstate 35, serving customers from Temple, Belton, Killeen, Georgetown, Round Rock and Waco. Start framing from home.",
+    "One framing shop in Salado, Texas, just off Interstate 35. See the towns around Salado and start your framing project from home with a photo and a size.",
   path: "/service-area",
 });
 const towns = ["Belton", "Temple", "Killeen", "Harker Heights", "Copperas Cove", "Georgetown", "Round Rock", "Cedar Park", "Leander", "Pflugerville", "Hutto", "Taylor", "Waco", "Austin"];
@@ -16,17 +16,17 @@ export default function ServiceArea() {
     <>
       <header className="page-intro">
         <p className="eyebrow">Service area</p>
-        <h1>One shop in Salado. Customers from across Central Texas.</h1>
+        <h1>One shop in Salado, and the towns around it.</h1>
         <p className="lede">
-          We have a single storefront, in Salado just off Interstate 35. Customers come from the towns around us, and
-          you can start your project from home before you make the trip.
+          We have a single storefront, in Salado just off Interstate 35. You can start your project from home before you
+          make the trip.
         </p>
         <StartCta />
       </header>
       <section className="wrap section prose" style={{ paddingTop: 0 }}>
         <h2>Towns around Salado</h2>
         <p>
-          These are towns around the shop. They are not separate locations; the
+          These are towns near the shop. They are not separate locations; the
           shop is in {business.locality}.
         </p>
         <ul className="town-list">
@@ -42,8 +42,8 @@ export default function ServiceArea() {
         </ul>
         <h2>Before you come</h2>
         <p>
-          Bring the piece, a photo of the wall, and a budget you are comfortable with. Most projects start around $350
-          and large pieces run $1,000 and up. Read the <Link href="/guides/how-to-measure-for-framing">measuring guide</Link>{" "}
+          Bring the piece, a photo of the wall, and a budget you are comfortable with. Most framing starts around $350.
+          Large pieces often run $1,000 and up. Read the <Link href="/guides/how-to-measure-for-framing">measuring guide</Link>{" "}
           if you would like to send us a size first.
         </p>
         <p>
