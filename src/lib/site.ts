@@ -2,7 +2,7 @@
  * Single source of truth for NAP, hours, price anchors and every dated value.
  * Dates are ISO strings; anything shown to visitors is derived from here.
  */
-export const SITE_URL = "https://saladovillageframer.com";
+export const SITE_URL = "https://www.saladovillageframer.com";
 
 export const business = {
   name: "Salado Village Framer",
@@ -12,7 +12,7 @@ export const business = {
   postalCode: "76571",
   phone: "(254) 613-6123",
   phoneHref: "tel:+12546136123",
-  phoneE164: "+1-254-613-6123",
+  phoneE164: "(254) 613-6123",
   email: "info@solasgallery.com",
   hours: "Monday–Saturday, 10am–5pm",
   hoursNote: "Sunday closed",

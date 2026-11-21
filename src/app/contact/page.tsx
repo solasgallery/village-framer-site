@@ -35,7 +35,7 @@ export default function Contact() {
           <p className="lede">
             Monday–Saturday, 10am–5pm.
             <br />2 Rock Creek Dr Unit A<br />
-            Salado, Texas 76571
+            Salado, TX 76571
           </p>
           <a href="/start-framing" className="text-link" style={{ marginTop: 24 }}>
             Rather send a photo? Start framing →

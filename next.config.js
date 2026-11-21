@@ -17,6 +17,14 @@ const nextConfig = {
       r("/journal/:slug", "/guides"),
     ];
   },
+  async headers() {
+    // Legacy static Trade Collective pages (public/trade/*.html): orphaned from the redesigned site,
+    // carry stale "Summer 2026" dates and no canonical. Keep them out of the index (SEO, 2026-11-21).
+    return [
+      { source: '/trade', headers: [{ key: 'X-Robots-Tag', value: 'noindex, follow' }] },
+      { source: '/trade/:path*', headers: [{ key: 'X-Robots-Tag', value: 'noindex, follow' }] },
+    ]
+  },
   async rewrites() {
     return [
       { source: '/trade', destination: '/trade/index.html' },
