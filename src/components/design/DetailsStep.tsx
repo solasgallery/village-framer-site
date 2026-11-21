@@ -120,8 +120,8 @@ export default function DetailsStep({ design, onDone }: { design: Design; onDone
         <p className="step-sub">
           Your photo and details are with us. Reference <b>{sent.ref}</b>.{" "}
           {sent.confirmationSent
-            ? `We emailed a copy to ${f.email.trim()}.`
-            : "We couldn't send your copy, but Cherie still has your request."}
+            ? `We sent a copy to ${f.email.trim()}. If it doesn't arrive, Cherie still has your request.`
+            : "We couldn't send your copy. Cherie still has your request."}
         </p>
         <h2 className="next-title">What happens next</h2>
         <ol className="next-steps">
