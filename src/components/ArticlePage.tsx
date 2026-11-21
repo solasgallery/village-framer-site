@@ -61,7 +61,7 @@ export default function ArticlePage({ a }: { a: Article }) {
         ))}
         <aside className="article-cta">
           <h2>See it framed.</h2>
-          <p>Upload a photo of your piece, see it in real frames, and get a ballpark range.</p>
+          <p>Upload a photo of your piece, see it in sample frames, and get a ballpark range.</p>
           <StartCta />
         </aside>
         <nav className="editorial-bottom" aria-label="Keep reading">

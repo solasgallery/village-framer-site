@@ -9,7 +9,7 @@ import Reviews from "@/components/Reviews";
 export const metadata: Metadata = meta({
   title: "Custom Picture Framing in Salado, TX | Village Framer",
   description:
-    "Custom framing in Salado, Texas for art, photographs, shadow boxes and oversized pieces. Upload a photo, preview real frames and get a ballpark price.",
+    "Custom framing in Salado, Texas for art, photographs, shadow boxes and oversized pieces. Upload a photo, preview frame styles and get a ballpark price.",
   path: "/",
 });
 
@@ -20,7 +20,7 @@ const frame = [
 ];
 
 const how = [
-  { image: "portrait-process-01", n: "01", title: "Send a photo", text: "Upload it from your phone, add the size, and see it in real mouldings and mats." },
+  { image: "portrait-process-01", n: "01", title: "Send a photo", text: "Upload it from your phone, add the size, and see it in sample mouldings and mats." },
   { image: "portrait-process-02", n: "02", title: "Get a ballpark", text: "You see an honest range before anyone calls you. The exact price comes after we see the piece." },
   { image: "portrait-process-03", n: "03", title: "We frame it here", text: "Drop it off, ship it to us or talk it through first. The work never leaves the shop." },
 ];
@@ -48,7 +48,7 @@ export default function Home() {
             </em>
           </h1>
           <p className="lede">
-            Upload a photo of the piece. See it in real frames on a wall at true size. Know the ballpark before you
+            Upload a photo of the piece. See it in sample frames on a wall, close to true size. Know the ballpark before you
             ever pick up the phone.
           </p>
           <StartCta className="hero-cta" secondary={{ href: "/visit", label: "Visit the shop" }} />
@@ -152,8 +152,8 @@ export default function Home() {
             in the frame.
           </h2>
           <p className="lede">
-            Upload a photo, enter the size, and watch it appear in real Roma and Larson-Juhl mouldings and mats, hung
-            on a wall at true scale. Then choose to drop it off, ship it to us or book a consult.
+            Upload a photo, enter the size, and watch it appear in sample mouldings and mats, hung
+            on a wall at close to true scale. Then choose to drop it off, ship it to us or book a consult.
           </p>
           <StartCta onDark />
         </div>
@@ -248,7 +248,7 @@ export default function Home() {
                 Get directions
               </a>
               <Link className="text-link" href="/service-area">
-                Where our customers come from
+                Towns around Salado
               </Link>
             </div>
           </div>

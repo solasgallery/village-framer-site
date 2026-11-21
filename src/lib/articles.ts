@@ -276,7 +276,7 @@ export const guides: Article[] = [
       {
         h: "Get a ballpark in two minutes",
         p: [
-          "Our Start framing preview shows your own photo in real frames and gives a range for your size, frame and mat. It is a ballpark, not a quote. The exact price comes after we have seen the piece.",
+          "Our Start framing preview shows your own photo in sample frames and gives a range for your size, frame and mat. It is a ballpark, not a quote. The exact price comes after we have seen the piece.",
         ],
       },
     ],

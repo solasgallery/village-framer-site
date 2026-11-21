@@ -24,9 +24,9 @@ export default function ServiceArea() {
         <StartCta />
       </header>
       <section className="wrap section prose" style={{ paddingTop: 0 }}>
-        <h2>Towns we hear from most</h2>
+        <h2>Towns around Salado</h2>
         <p>
-          These are communities customers have told us they are coming from. They are not separate locations; the
+          These are towns around the shop. They are not separate locations; the
           shop is in {business.locality}.
         </p>
         <ul className="town-list">
@@ -36,7 +36,7 @@ export default function ServiceArea() {
         </ul>
         <h2>Three ways to work with us from a distance</h2>
         <ul>
-          <li>Upload a photo and the size in <Link href="/start-framing">Start framing</Link>, preview it in real frames and get a ballpark.</li>
+          <li>Upload a photo and the size in <Link href="/start-framing">Start framing</Link>, preview frame styles and get a ballpark.</li>
           <li>Drop the piece off when you are in Salado. Call first for anything large.</li>
           <li>Choose to ship it to us. We reply with how to pack it before you send anything.</li>
         </ul>
