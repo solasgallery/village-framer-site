@@ -1,12 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
-export const metadata: Metadata = {
-  title: "Framing gallery & a look inside our workshop",
+import { meta } from "@/lib/seo";
+export const metadata: Metadata = meta({
+  title: "Our Framing Work: Art, Textiles, Keepsakes | Village Framer",
   description:
-    "Real artwork, textiles, photographs, and process images from Salado Village Framer. Find a little inspiration for your own piece.",
-  alternates: { canonical: "/gallery" },
-};
+    "Photographs of real framing projects from our Salado shop: paintings, textiles, documents, keepsakes and oversized pieces. See what we can do with yours.",
+  path: "/gallery",
+});
 const work = [
   ["painting-framed", "A painting, beautifully presented."],
   ["woven-artwork", "Texture deserves a thoughtful frame."],
@@ -53,8 +54,8 @@ export default function Gallery() {
           ))}
         </div>
         <div className="actions">
-          <Link href="/design" className="button button-ink">
-            Now try your own piece ↗
+          <Link href="/start-framing" className="button button-ink">
+            Start framing your piece →
           </Link>
         </div>
       </section>

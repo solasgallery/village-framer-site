@@ -1,5 +1,5 @@
 [
-  { "id": "living-room", "name": "Living room", "image": "/rooms/living-room.svg", "width": 1600, "height": 1000, "pxPerInch": 10, "anchor": { "x": 800, "y": 340 }, "alt": "Placeholder living room wall with a sofa and plant" },
-  { "id": "hallway", "name": "Hallway", "image": "/rooms/hallway.svg", "width": 1600, "height": 1000, "pxPerInch": 10, "anchor": { "x": 800, "y": 340 }, "alt": "Placeholder hallway wall with a console table" },
-  { "id": "office", "name": "Office", "image": "/rooms/office.svg", "width": 1600, "height": 1000, "pxPerInch": 10, "anchor": { "x": 800, "y": 330 }, "alt": "Placeholder office wall with a desk and monitor" }
+  { "id": "living-room", "name": "Living room", "image": "/rooms/living-room.jpg", "width": 1024, "height": 576, "pxPerInch": 7.1, "anchor": { "x": 516, "y": 190 }, "alt": "Stand-in photo of a living room wall above a sofa (generated illustration, scale estimated from sofa width)" },
+  { "id": "hallway", "name": "Hallway", "image": "/rooms/hallway.jpg", "width": 1024, "height": 576, "pxPerInch": 4.6, "anchor": { "x": 512, "y": 200 }, "alt": "Stand-in photo of a hallway wall above a console table (generated illustration, scale estimated)" },
+  { "id": "office", "name": "Office", "image": "/rooms/office.jpg", "width": 1024, "height": 576, "pxPerInch": 7, "anchor": { "x": 512, "y": 190 }, "alt": "Stand-in photo of an office wall above a desk (generated illustration, scale estimated from desk width)" }
 ]

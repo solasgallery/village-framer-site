@@ -101,7 +101,7 @@ export default function FrameStep({
                 <span className="frame-desc">{m.descriptor}</span>
                 <span className="frame-meta">
                   <span>{m.maker}</span>
-                  <b>from {money(from)}</b>
+                  <b>from about {money(from)}</b>
                 </span>
               </button>
             </li>
@@ -116,7 +116,7 @@ export default function FrameStep({
           </button>
         </p>
       )}
-      <p className="hint">Estimated — final quote confirmed in the shop.</p>
+      <p className="hint">Ballpark only. Finishes shown are illustrative; Cherie matches them to real samples in the shop.</p>
     </div>
   );
 }

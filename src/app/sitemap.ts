@@ -1,23 +1,13 @@
 import type { MetadataRoute } from "next";
-import { cityPages, articles } from "@/lib/content";
-import { moreCityPages } from "@/lib/more-cities";
+import { all } from "@/lib/articles";
+import { contentReviewedOn, SITE_URL } from "@/lib/site";
+
 export default function sitemap(): MetadataRoute.Sitemap {
-  return [
-    "",
-    "/design",
-    "/services",
-    "/gallery",
-    "/visit",
-    "/contact",
-    "/area",
-    "/journal",
-    "/privacy",
-    ...cityPages.concat(moreCityPages).map((x) => `/area/${x.slug}`),
-    ...articles.map((x) => `/journal/${x.slug}`),
-  ].map((path) => ({
-    url: `https://saladovillageframer.com${path}`,
-    lastModified: new Date("2026-09-10"),
+  const paths = ["", "/start-framing", "/services", "/guides", "/gallery", "/visit", "/contact", "/service-area", "/privacy", ...all.map((a) => a.path)];
+  return paths.map((path) => ({
+    url: `${SITE_URL}${path}`,
+    lastModified: new Date(contentReviewedOn),
     changeFrequency: "monthly",
-    priority: path === "" ? 1 : path.startsWith("/area/") ? 0.6 : 0.8,
+    priority: path === "" ? 1 : path === "/start-framing" ? 0.9 : 0.7,
   }));
 }

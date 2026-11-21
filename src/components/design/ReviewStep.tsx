@@ -2,7 +2,7 @@
 import { useMemo, useState } from "react";
 import { matColors, rooms } from "@/lib/design/catalog";
 import { makeProxy } from "@/lib/design/frameRenderer";
-import { MAT_WIDTH_LABEL, floatSurcharge, matWidthIn, money } from "@/lib/design/pricing";
+import { ESTIMATE_NOTE, MAT_WIDTH_LABEL, floatSurcharge, matWidthIn, money } from "@/lib/design/pricing";
 import type { MatStyle, MatWidthKey } from "@/lib/design/types";
 import ArtCanvas from "./ArtCanvas";
 import FrameCanvas from "./FrameCanvas";
@@ -27,12 +27,12 @@ export default function ReviewStep({
   design,
   update,
   goto,
-  onQuote,
+  onNext,
 }: {
   design: Design;
   update: (patch: Partial<Design>) => void;
   goto: (s: 2 | 3) => void;
-  onQuote: () => void;
+  onNext: () => void;
 }) {
   const sel = selectionOf(design)!;
   const art = design.art!;
@@ -90,7 +90,7 @@ export default function ReviewStep({
                 ))}
               </div>
               <p className="hint">
-                Room scenes are placeholders. Shown to scale{scaled ? " (shrunk to fit this wall)" : ""}.
+                Room scenes are illustrations, drawn for an 8-foot ceiling. Your piece is shown to scale{scaled ? " (shrunk to fit this wall)" : ""}.
               </p>
             </div>
           )}
@@ -174,21 +174,21 @@ export default function ReviewStep({
           </fieldset>
 
           <div className="estimate" aria-live="polite">
-            <span className="opt-label">Estimated total</span>
+            <span className="opt-label">Ballpark for this design</span>
             <p className="estimate-line">
-              <b>Estimated from {money(d.from)}</b> — final quote confirmed in the shop.
+              <b>{money(d.low)} – {money(d.high)}</b>
             </p>
-            <small>Finished size about {fmtIn(outW)} × {fmtIn(outH)}.</small>
+            <small>{ESTIMATE_NOTE} Finished size about {fmtIn(outW)} × {fmtIn(outH)}.</small>
           </div>
         </div>
       </div>
       <div className="review-bar">
         <div className="review-bar-price" aria-hidden="true">
-          <small>Estimated from</small>
-          <b>{money(d.from)}</b>
+          <small>Ballpark</small>
+          <b>{money(d.low)}–{money(d.high)}</b>
         </div>
-        <button type="button" className="button button-ink wide" onClick={onQuote}>
-          Get my quote
+        <button type="button" className="button button-ink wide" onClick={onNext}>
+          Next: how to get it to us
         </button>
       </div>
     </div>

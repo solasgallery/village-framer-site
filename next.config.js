@@ -4,8 +4,18 @@ const nextConfig = {
     formats: ['image/avif', 'image/webp'],
   },
   async redirects() {
-    // The old /studio visualizer is retired; /design replaces it.
-    return [{ source: '/studio', destination: '/design', permanent: true }]
+    const r = (source, destination) => ({ source, destination, statusCode: 301 });
+    return [
+      r("/design", "/start-framing"),
+      r("/studio", "/start-framing"),
+      // 16 thin town pages consolidated into one service-area page
+      r("/area", "/service-area"),
+      r("/area/:city", "/service-area"),
+      r("/journal", "/guides"),
+      r("/journal/framing-oversized-art", "/services/oversized-framing"),
+      r("/journal/choosing-a-frame-and-mat", "/guides/float-mount-vs-mat"),
+      r("/journal/:slug", "/guides"),
+    ];
   },
   async rewrites() {
     return [

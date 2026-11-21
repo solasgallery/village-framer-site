@@ -8,8 +8,10 @@ import type {
   Moulding,
 } from "@/lib/design/types";
 
-export type Step = 1 | 2 | 3 | 4 | 5;
-export const STEPS = ["Upload", "Size", "Frame", "Review", "Quote"] as const;
+export type Step = 1 | 2 | 3 | 4 | 5 | 6;
+export const STEPS = ["Photo", "Size", "Frame", "Preview", "Delivery", "Details"] as const;
+export type Delivery = "dropoff" | "ship" | "consult";
+export type Measured = "art" | "frame" | "unsure";
 
 export type Design = {
   art: HTMLCanvasElement | null;
@@ -19,6 +21,8 @@ export type Design = {
   matStyle: MatStyle;
   matWidth: MatWidthKey;
   matColorId: string;
+  measured: Measured;
+  delivery: Delivery | null;
 };
 
 export const initialDesign: Design = {
@@ -29,6 +33,8 @@ export const initialDesign: Design = {
   matStyle: "classic",
   matWidth: "standard",
   matColorId: defaultMat.id,
+  measured: "art",
+  delivery: null,
 };
 
 export const findMoulding = (id: string | null): Moulding | undefined =>

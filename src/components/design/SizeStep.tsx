@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { MAX_LONG_SIDE_IN, MIN_SIDE_IN } from "@/lib/design/pricing";
 import ArtCanvas from "./ArtCanvas";
+import type { Measured } from "./state";
 
 const parse = (s: string) => {
   const n = parseFloat(s);
@@ -16,7 +17,11 @@ export default function SizeStep({
   artH,
   onSize,
   onNext,
+  measured,
+  onMeasured,
 }: {
+  measured: Measured;
+  onMeasured: (m: Measured) => void;
   art: HTMLCanvasElement;
   artW: number;
   artH: number;
@@ -77,7 +82,7 @@ export default function SizeStep({
   return (
     <div className="step-body">
       <h1 className="step-title">How big is it?</h1>
-      <p className="step-sub">Approximate is fine — we measure precisely in the shop.</p>
+      <p className="step-sub">Inches, width by height. Approximate is fine; we measure precisely in the shop.</p>
       <div className="size-layout">
         <div className="dim-wrap" aria-hidden={false}>
           <div className="dim-art">
@@ -131,6 +136,34 @@ export default function SizeStep({
               </button>
             ))}
           </div>
+          <fieldset className="measured">
+            <legend className="opt-label">What did you measure?</legend>
+            <div className="seg">
+              {([
+                ["art", "The art itself"],
+                ["frame", "Outside of its frame"],
+                ["unsure", "Not sure"],
+              ] as const).map(([id, label]) => (
+                <label key={id} className={measured === id ? "on" : ""}>
+                  <input type="radio" name="measured" checked={measured === id} onChange={() => onMeasured(id)} />
+                  {label}
+                </label>
+              ))}
+            </div>
+          </fieldset>
+          <details className="measure-help">
+            <summary>How to measure your piece</summary>
+            <ol>
+              <li>Lay the piece flat on a table. Use a hard tape measure or ruler, not a sewing tape.</li>
+              <li>Measure the width first, then the height, edge to edge, in inches. Round to the nearest quarter inch.</li>
+              <li>Measure the art only, not the border of a mat or an old frame. If it is already framed and you would rather not open it, measure the outside of the frame and tell us that above. We will sort out the rest.</li>
+              <li>Canvas, objects and shadow boxes: also note how thick it is, front to back. You can add that on the last step.</li>
+              <li>Not sure? Take a photo with a tape measure laid beside the piece and put it in the notes. Close is fine; we confirm every size in the shop.</li>
+            </ol>
+            <p>
+              <a href="/guides/how-to-measure-for-framing">Read the full measuring guide</a>
+            </p>
+          </details>
           {ok && Math.max(nw, nh) >= 36 && (
             <p className="big-note">A big one — that’s exactly what we do best.</p>
           )}

@@ -1,3 +1,4 @@
+import { pricing } from "@/lib/site";
 import type {
   DesignSelection,
   MatStyle,
@@ -68,6 +69,9 @@ export type Estimate = {
   total: number;
   /** rounded down to $10 — what we show as "from $X" */
   from: number;
+  /** ballpark range shown to the customer (final quote is set in the shop) */
+  low: number;
+  high: number;
   outerW: number;
   outerH: number;
   matIn: number;
@@ -96,8 +100,16 @@ export function estimate(sel: DesignSelection): Estimate {
       total += fee;
       break;
     }
-  total = Math.round(total / 5) * 5;
-  return { total, from: Math.floor(total / 10) * 10, outerW, outerH, matIn };
+  total = Math.max(pricing.floor, Math.round(total / 5) * 5);
+  return {
+    total,
+    from: Math.floor(total / 10) * 10,
+    low: Math.max(pricing.floor, Math.round((total * 0.9) / 10) * 10),
+    high: Math.round((total * 1.2) / 10) * 10,
+    outerW,
+    outerH,
+    matIn,
+  };
 }
 
 /** Surcharge shown beside the "Float" option (for the current size). */
@@ -110,4 +122,4 @@ export function floatSurcharge(sel: DesignSelection): number {
 export const money = (n: number) =>
   "$" + Math.round(n).toLocaleString("en-US");
 
-export const ESTIMATE_NOTE = "Estimated — final quote confirmed in the shop.";
+export const ESTIMATE_NOTE = "A ballpark, not a quote. Cherie confirms your exact price after she sees the piece.";

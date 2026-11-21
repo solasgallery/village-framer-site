@@ -17,7 +17,7 @@ export default function Analytics() {
       if (href.startsWith("tel:")) push("svf_phone_click");
       else if (href.includes("google.com/maps/dir"))
         push("svf_directions_click");
-      else if (href === "/design") push("svf_design_cta_click");
+      else if (href === "/start-framing") push("svf_design_cta_click");
     };
     window.addEventListener("svf-inquiry-success", success);
     document.addEventListener("click", click);

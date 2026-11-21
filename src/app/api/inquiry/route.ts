@@ -170,7 +170,7 @@ export async function POST(request: NextRequest) {
           },
         ],
         replyTo: { email, name },
-        subject: `${source}: ${name.replace(/[\r\n]/g, " ")}`,
+        subject: `${process.env.VERCEL_ENV === "production" ? "" : "[PREVIEW TEST] "}${source}: ${name.replace(/[\r\n]/g, " ")}`,
         htmlContent: `<div style="font-family:Arial,sans-serif;max-width:640px;margin:auto;padding:32px;color:#202b2a"><h1 style="font-family:Georgia,serif">A new framing conversation</h1><table style="width:100%;border-collapse:collapse">${rows
           .filter(([, v]) => v)
           .map(
@@ -194,6 +194,7 @@ export async function POST(request: NextRequest) {
     // The notification above is the lead; a list-add failure must never fail
     // the request, so it is logged and swallowed.
     try {
+      if (process.env.VERCEL_ENV !== "production") return NextResponse.json({ success: true });
       const contactRes = await fetch("https://api.brevo.com/v3/contacts", {
         method: "POST",
         headers,

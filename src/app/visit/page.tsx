@@ -1,12 +1,14 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
-export const metadata: Metadata = {
-  title: "Visit our Salado frame shop | Monday–Saturday 10–5",
+import { meta } from "@/lib/seo";
+import { business } from "@/lib/site";
+export const metadata: Metadata = meta({
+  title: "Visit Salado Village Framer | Hours, Map and Directions",
   description:
-    "Visit Salado Village Framer at 2 Rock Creek Dr, Unit A, Salado, TX 76571. Open Monday–Saturday, 10am–5pm. Call (254) 613-6123.",
-  alternates: { canonical: "/visit" },
-};
+    "Visit Salado Village Framer at 2 Rock Creek Dr Unit A, Salado, TX 76571. Open Monday to Saturday, 10am to 5pm. Call (254) 613-6123 first for large pieces.",
+  path: "/visit",
+});
 export default function Visit() {
   return (
     <>
@@ -43,7 +45,7 @@ export default function Visit() {
             in Salado.
           </h3>
           <p>
-            2 Rock Creek Dr, Unit A<br />
+            {business.streetAddress}<br />
             Salado, TX 76571
           </p>
           <a
@@ -82,8 +84,8 @@ export default function Visit() {
             Bring approximate dimensions, a room photo if helpful, and a sense
             of your budget.
           </p>
-          <Link href="/design" className="text-link">
-            Send a framing idea ↗
+          <Link href="/start-framing" className="text-link">
+            Start framing →
           </Link>
         </div>
       </section>
@@ -97,10 +99,10 @@ export default function Visit() {
           />
         </div>
         <div className="feature-copy">
-          <p className="eyebrow">Meet the people behind the frame</p>
+          <p className="eyebrow">Meet your framer</p>
           <h2>Experience you can talk to.</h2>
           <p>
-            With 30 years of experience, Cherie and Tim bring a practiced eye
+            Cherie Flanagan has framed for thirty years and brings a practiced eye
             and personal attention to your project. We’ll explore the details
             with you, using real moulding and mat samples beside your artwork.
           </p>
@@ -110,7 +112,7 @@ export default function Visit() {
           </p>
           <div className="actions">
             <Link href="/contact" className="text-link">
-              Start a conversation ↗
+              Contact us →
             </Link>
           </div>
         </div>
@@ -122,16 +124,12 @@ export default function Visit() {
           <br />A Central Texas welcome.
         </h2>
         <p className="lede">
-          We welcome framing projects from Temple, Killeen, Belton, Georgetown,
-          Round Rock, Cedar Park, Waco, and throughout the region.
+          Customers come to us from across Central Texas.
         </p>
         <div className="actions">
-          <Link className="text-link" href="/area">
-            Explore our Central Texas pages ↗
+          <Link className="text-link" href="/service-area">
+            Our service area →
           </Link>
-          <a className="text-link" href="https://solasgallery.com/">
-            Meet our sister business, Solas Gallery ↗
-          </a>
         </div>
       </section>
     </>

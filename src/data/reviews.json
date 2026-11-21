@@ -1,0 +1,11 @@
+{
+  "source": "Google",
+  "business": "Salado Village Framer",
+  "checkedOn": "2026-11-21",
+  "overall": { "rating": "4.7", "count": 3 },
+  "reviews": [
+    { "name": "Francine", "rating": 5, "text": "Highly recommend this shop, they meet all our needs for the set of the Texas gold bullion!", "shown": "2 weeks before 2026-11-21" },
+    { "name": "Barackovich", "rating": 5, "text": "Excellent work done here, will definitely be back before long.", "shown": "2 weeks before 2026-11-21" },
+    { "name": "Jay", "rating": 4, "text": "Salado Village Framer was great to work with. Their communication, followup, attention to detail, and most importantly their creativity made the experience very positive. We are 100% satisfied. Jay and Jackie Smyre", "shown": "13 hours before 2026-11-21" }
+  ]
+}

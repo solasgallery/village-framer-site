@@ -1,7 +1,37 @@
 import Image from "next/image";
 import Link from "next/link";
-import { business, regionCities } from "@/lib/content";
-import CtaPair from "@/components/CtaPair";
+import type { Metadata } from "next";
+import { business, pricing, START } from "@/lib/site";
+import { meta } from "@/lib/seo";
+import StartCta from "@/components/StartCta";
+import Reviews from "@/components/Reviews";
+
+export const metadata: Metadata = meta({
+  title: "Custom Picture Framing in Salado, TX | Village Framer",
+  description:
+    "Custom framing in Salado, Texas for art, photographs, shadow boxes and oversized pieces. Upload a photo, preview real frames and get a ballpark price.",
+  path: "/",
+});
+
+const frame = [
+  { title: "Art and photographs", image: "painting-framed", href: "/services/conservation-framing", text: "Paintings, prints, family photos and the pictures you keep coming back to." },
+  { title: "Keepsakes and shadow boxes", image: "memorabilia-display", href: "/services/shadow-box-framing", text: "Jerseys, medals, textiles and the objects that carry a story." },
+  { title: "Mirrors and big pieces", image: "large-framed-textile", href: "/services/mirror-framing", text: "Oversized art, statement mirrors and pieces too big for a store frame." },
+];
+
+const how = [
+  { image: "portrait-process-01", n: "01", title: "Send a photo", text: "Upload it from your phone, add the size, and see it in real mouldings and mats." },
+  { image: "portrait-process-02", n: "02", title: "Get a ballpark", text: "You see an honest range before anyone calls you. The exact price comes after we see the piece." },
+  { image: "portrait-process-03", n: "03", title: "We frame it here", text: "Drop it off, ship it to us or talk it through first. The work never leaves the shop." },
+];
+
+const rifle = [
+  { f: "umbrellas", alt: "Rifle Paper Co. floral umbrellas on display in the shop", w: 1400, h: 788 },
+  { f: "wrapping-paper", alt: "Rolls of Rifle Paper Co. wrapping paper in a basket", w: 1400, h: 788 },
+  { f: "shelf-notebooks", alt: "Rifle Paper Co. notebooks and planners on a shop shelf", w: 1400, h: 788 },
+  { f: "gift-boxes", alt: "Stacked Rifle Paper Co. boxed stationery in the shop", w: 1400, h: 788 },
+];
+
 export default function Home() {
   return (
     <>
@@ -17,401 +47,214 @@ export default function Home() {
               framed.
             </em>
           </h1>
-          <CtaPair className="hero-cta" />
           <p className="lede">
-            The art you found. The moment you kept. The piece that deserves a
-            little more. Bring it to people who see what you see.
+            Upload a photo of the piece. See it in real frames on a wall at true size. Know the ballpark before you
+            ever pick up the phone.
           </p>
-          <div className="actions">
-            <Link href="/visit" className="text-link">
-              Visit our shop ↗
-            </Link>
-          </div>
+          <StartCta className="hero-cta" secondary={{ href: "/visit", label: "Visit the shop" }} />
         </div>
         <div className="hero-image">
           <Image
             src="/images/selected/hero-hands-at-work.webp"
-            alt="Two framers working together over artwork and matting at the Village Framer workbench"
+            alt="Two framers working together over artwork and matting at the workbench"
             fill
             priority
             sizes="(max-width:800px) 100vw, 54vw"
           />
-          <div className="hero-caption">
-            <span>Real hands. A personal eye. Right here.</span>
-            <span>SALADO, TX</span>
-          </div>
         </div>
       </section>
-      <p className="services-strip">
-        Custom framing · Conservation framing · Restoration · Archival printing
-        · Delivery &amp; installation · Rifle Paper Co. retail gifts &amp; goods
-      </p>
-      <div className="trust-strip">
-        <span>30 years of experience</span>
-        <span>Your artwork stays here</span>
-        <span>Big pieces welcome</span>
-        <span>Personal design guidance</span>
-      </div>
-      <section className="wrap section">
+
+      <section className="wrap section" id="what-we-frame">
         <div className="section-heading">
           <div>
-            <p className="eyebrow">Start with something you love</p>
-            <h2>What are we framing?</h2>
+            <p className="eyebrow">What we frame</p>
+            <h2>Start with something you love.</h2>
           </div>
-          <p>
-            You don’t have to know the right frame.
-            <br />
-            That’s the part we do together.
-          </p>
+          <p>You don’t have to know the right frame. That’s the part we do together.</p>
         </div>
         <div className="cards-3">
-          {[
-            {
-              title: "Art & photographs",
-              image: "painting-framed",
-              text: "Original paintings, prints, family photos, and the pictures you keep coming back to.",
-            },
-            {
-              title: "Objects & memories",
-              image: "woven-artwork",
-              text: "Textiles, jerseys, keepsakes, and wonderfully hard-to-frame things.",
-            },
-            {
-              title: "Something bigger",
-              image: "large-framed-textile",
-              text: "Oversized artwork, mirrors, and pieces that make a room feel like yours.",
-            },
-          ].map((x) => (
-            <Link href="/services" className="picture-card" key={x.title}>
+          {frame.map((x) => (
+            <Link href={x.href} className="picture-card" key={x.title}>
               <div className="photo">
-                <Image
-                  src={`/images/selected/${x.image}.webp`}
-                  alt={x.title}
-                  fill
-                  sizes="(max-width:540px) 90vw, 30vw"
-                />
+                <Image src={`/images/selected/${x.image}.webp`} alt={x.title} fill sizes="(max-width:540px) 90vw, 30vw" />
               </div>
               <h3>
                 {x.title}
-                <span aria-hidden="true">↗</span>
+                <span aria-hidden="true">→</span>
               </h3>
               <p>{x.text}</p>
             </Link>
           ))}
         </div>
-        <CtaPair />
       </section>
+
       <section className="large-piece ink" id="large-pieces">
         <div className="wrap section large-grid">
           <div className="large-copy">
             <p className="eyebrow">Our specialty</p>
-            <h2>Big pieces are our specialty.</h2>
+            <h2>Big pieces are what we do best.</h2>
             <p className="lede">
-              Oversized art is where the big-box framers tap out — and where we
-              do our best work. Large canvas, estate pieces, mirrors, the thing
-              that&apos;s been leaning against your wall for a year because
-              nobody would touch it. Bring it in. If it fits through our door,
-              we can frame it.
+              Oversized canvas, estate art, statement mirrors, the piece that has leaned against your wall for a year
+              because nobody would touch it. Big work needs stronger joinery, safer glazing and a proper way to hang
+              it, and we plan all three before a single cut is made.
             </p>
-            <div className="actions">
-              <Link href="/design" className="button button-gold">
-                Start with your piece <span aria-hidden="true">↗</span>
-              </Link>
-              <a href={business.phoneHref} className="button button-light">
-                Call {business.phone}
-              </a>
-            </div>
+            <p className="lede">
+              Cherie Flanagan, certified picture framer, has framed for thirty years. Your work never
+              leaves the shop.
+            </p>
+            <StartCta onDark label="Start with your big piece" secondary={{ href: "/services/oversized-framing", label: "How we frame big pieces" }} />
           </div>
-          {/* PLACEHOLDER before/after — asset #5-6 in docs/ASSET-CHECKLIST.md */}
-          <div className="before-after">
-            <figure>
-              <div className="ba-before" role="img" aria-label="Placeholder: a large artwork leaning unframed against a wall">
-                <span>Unframed</span>
-              </div>
-              <figcaption>Before</figcaption>
-            </figure>
-            <figure>
-              <div className="ba-photo">
-                <Image
-                  src="/images/selected/cherie-large-frame.webp"
-                  alt="Cherie holding a large framed piece with a wide mat in the shop"
-                  fill
-                  sizes="(max-width:800px) 45vw, 22vw"
-                />
-              </div>
-              <figcaption>After — framed &amp; ready to hang</figcaption>
-            </figure>
+          <div className="large-photo">
+            <Image
+              src="/images/selected/cherie-large-frame.webp"
+              alt="A large framed piece with a wide mat in the Salado shop"
+              fill
+              sizes="(max-width:800px) 100vw, 44vw"
+            />
           </div>
         </div>
       </section>
-      <section className="split-feature sage">
-        <div className="feature-photo">
-          <Image
-            src="/images/selected/design-table-collaboration.webp"
-            alt="Comparing artwork and framing materials together at the design table"
-            fill
-            sizes="(max-width:800px) 100vw, 50vw"
-          />
-        </div>
-        <div className="feature-copy">
-          <p className="eyebrow">A frame is only the beginning</p>
-          <h2>
-            Your eye.
-            <br />
-            Our experience.
-            <br />
-            <em>A better fit.</em>
-          </h2>
-          <p>
-            There’s a difference between choosing a frame and finding the right
-            one. We’ll look at the piece, the room, and the details that matter
-            to you—with real samples and a personal artistic eye.
-          </p>
-          <p>
-            Thirty years of experience. Moulding from Roma and Larson-Juhl. And
-            the reassurance of knowing your work stays right here in our Salado
-            shop.
-          </p>
-          <div className="actions">
-            <Link className="text-link" href="/visit">
-              Meet us at the design table ↗
-            </Link>
-          </div>
-        </div>
-      </section>
-      <section className="wrap section cherie-block" id="meet-cherie">
-        <div className="cherie-photo">
-          {/* PLACEHOLDER portrait — asset #1 in docs/ASSET-CHECKLIST.md */}
-          <Image
-            src="/images/selected/cherie-portrait.webp"
-            alt="Portrait of Cherie Flanagan, certified picture framer"
-            fill
-            sizes="(max-width:800px) 90vw, 44vw"
-          />
-        </div>
-        <div className="cherie-copy">
-          <p className="eyebrow">Meet your framer</p>
-          <h2>Framed by Cherie.</h2>
-          <p className="lede">
-            Cherie Flanagan has been framing for 30 years. She&apos;s a
-            certified picture framer, which means your piece is designed by
-            someone trained in conservation — not handed to a Saturday crew.
-            Every frame is built right here in our Salado shop, by people
-            you&apos;ll meet when you walk in.
-          </p>
-          <div className="actions">
-            <a href="#visit" className="text-link">
-              Meet us in the shop ↗
-            </a>
-          </div>
-          <CtaPair />
-        </div>
-      </section>
-      <section className="wrap section">
+
+      <section className="wrap section" id="how-it-works">
         <div className="section-heading">
           <div>
-            <p className="eyebrow">Made here, with care</p>
+            <p className="eyebrow">How it works</p>
             <h2>
-              From possibility
+              From a photo
               <br />
               to a place on your wall.
             </h2>
           </div>
-          <p>A closer look at one piece coming together in our workshop.</p>
+          <p>Three steps. Nothing is charged until you and Cherie agree on the design and the price.</p>
         </div>
         <div className="process-grid">
-          {[
-            {
-              image: "portrait-process-01",
-              title: "Start with your piece.",
-              text: "Bring the artwork and the story behind it.",
-            },
-            {
-              image: "portrait-process-02",
-              title: "Find its frame.",
-              text: "Explore color, texture, matting, and those finishing details.",
-            },
-            {
-              image: "portrait-process-03",
-              title: "See it come together.",
-              text: "Framed in our shop, by the people you meet.",
-            },
-          ].map((x, i) => (
+          {how.map((x) => (
             <figure key={x.image}>
               <div className="process-photo reveal-photo">
-                <Image
-                  src={`/images/selected/${x.image}.webp`}
-                  alt={x.title + " " + x.text}
-                  fill
-                  sizes="(max-width:540px) 90vw, 30vw"
-                />
+                <Image src={`/images/selected/${x.image}.webp`} alt={`${x.title}. ${x.text}`} fill sizes="(max-width:540px) 90vw, 30vw" />
               </div>
               <figcaption>
-                0{i + 1}
+                {x.n}
                 <b>{x.title}</b>
                 {x.text}
               </figcaption>
             </figure>
           ))}
         </div>
-        <CtaPair />
       </section>
-      <section className="split-feature ink">
+
+      <section className="split-feature ink" id="start">
         <div className="feature-copy">
-          <p className="eyebrow">A little imagination goes a long way</p>
+          <p className="eyebrow">Try it on your phone</p>
           <h2>
-            Try your art.
+            See your art
             <br />
-            Find a direction.
+            in the frame.
           </h2>
           <p className="lede">
-            Upload a photo. See it live in real mouldings and mats, hung on a
-            wall to scale, with an estimate along the way.
+            Upload a photo, enter the size, and watch it appear in real Roma and Larson-Juhl mouldings and mats, hung
+            on a wall at true scale. Then choose to drop it off, ship it to us or book a consult.
           </p>
-          <p>
-            Save what speaks to you, or send it to us. We’ll take it from an
-            idea to the real thing together.
-          </p>
-          <CtaPair onDark />
+          <StartCta onDark />
         </div>
         <div className="feature-photo">
           <Image
             src="/images/selected/gallery-wall.webp"
-            alt="A grouping of framed pieces displayed together in the gallery"
+            alt="A grouping of framed pieces displayed together on a gallery wall"
             fill
             sizes="(max-width:800px) 100vw, 50vw"
           />
         </div>
       </section>
-      <section className="wrap section trust-block">
-        <p className="promise">
-          Our promise: every piece is inspected before it leaves the shop. If
-          it&apos;s not right, we make it right.
-        </p>
-        <a
-          href="https://www.google.com/maps/search/?api=1&query=Salado+Village+Framer+Salado+Texas"
-          className="text-link"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Read Google reviews ↗
-        </a>
-        <CtaPair />
-      </section>
-      <section className="wrap section" style={{ paddingTop: 0 }}>
+
+      <section className="wrap section" id="pricing">
         <div className="budget-panel">
           <div>
-            <p className="eyebrow">A starting point for your budget</p>
+            <p className="eyebrow">What it costs</p>
             <h2>
-              Beautifully considered.
+              Honest numbers,
               <br />
-              Clearly discussed.
+              up front.
             </h2>
           </div>
           <div>
-            <p>{business.budget}</p>
-            <div className="actions">
-              <Link href="/contact" className="text-link">
-                Tell us about your piece ↗
-              </Link>
-            </div>
-            <CtaPair className="budget-cta" />
+            <p className="price-anchor">
+              Most projects start around <b>{pricing.startsAround}</b>. Large pieces run <b>{pricing.largeFrom}</b> and up.
+            </p>
+            <p>
+              Size, moulding, mat and glass all move the number. The{" "}
+              <Link href={START} className="inline-link">
+                Start framing preview
+              </Link>{" "}
+              gives you a ballpark range for your exact piece, and our{" "}
+              <Link href="/guides/how-much-does-custom-framing-cost" className="inline-link">
+                framing cost guide
+              </Link>{" "}
+              explains where the money goes.
+            </p>
           </div>
         </div>
       </section>
-      <section className="wrap section centered" id="visit" style={{ paddingTop: 0 }}>
-        <p className="eyebrow">Salado roots. A Central Texas welcome.</p>
-        <h2>Your artwork deserves the trip.</h2>
-        <p className="lede">
-          From Temple and Killeen to Georgetown, North Austin, and Waco, come
-          for a personal framing experience—and spend a little time in Salado.
-        </p>
-        <div className="region-links" style={{ justifyContent: "center" }}>
-          {regionCities.map((city) => (
-            <Link
-              key={city}
-              href={`/area/${city === "North Austin" ? "austin" : city.toLowerCase().replaceAll(" ", "-")}`}
-            >
-              {city}
-            </Link>
-          ))}
-        </div>
-        <address className="visit-line">
-          {business.address}
-          <br />
-          {business.hours} · <a href={business.phoneHref}>{business.phone}</a>
-        </address>
-        <div className="actions" style={{ justifyContent: "center" }}>
-          <Link className="text-link" href="/visit">
-            Plan your visit ↗
-          </Link>
-        </div>
-        <CtaPair className="centered-cta" />
-      </section>
-      <section className="sage">
+
+      <Reviews />
+
+      <section className="rifle sage" id="rifle-paper-co">
         <div className="wrap section">
           <div className="section-heading">
             <div>
-              <p className="eyebrow">Notes from the frame shop</p>
-              <h2>A little inspiration.</h2>
+              <p className="eyebrow">Gifts in the shop</p>
+              <h2>
+                Rifle Paper Co.,
+                <br />
+                right here in Salado.
+              </h2>
             </div>
-            <Link href="/journal" className="text-link">
-              Visit the journal ↗
-            </Link>
+            <p>
+              We carry Rifle Paper Co. stationery, notebooks, wrapping paper and umbrellas. Stop in while your frame is
+              in progress and pick out something for someone.
+            </p>
           </div>
-          <div className="cards-3">
-            <Link
-              href="/journal/choosing-a-frame-and-mat"
-              className="picture-card journal-card"
-            >
-              <div className="photo">
-                <Image
-                  src="/images/selected/moulding-wall.webp"
-                  alt="Rows of moulding samples in the shop"
-                  fill
-                  sizes="(max-width:540px) 90vw, 30vw"
-                />
+          <div className="rifle-grid">
+            {rifle.map((r) => (
+              <div className="rifle-photo" key={r.f}>
+                <Image src={`/images/rifle/${r.f}.webp`} alt={r.alt} fill sizes="(max-width:540px) 90vw, (max-width:1000px) 45vw, 24vw" />
               </div>
-              <h3>Find a frame direction before you visit.</h3>
-              <p>
-                A few things to notice about your artwork and the room it
-                belongs in.
-              </p>
-            </Link>
-            <Link
-              href="/journal/framing-oversized-art"
-              className="picture-card journal-card"
-            >
-              <div className="photo">
-                <Image
-                  src="/images/selected/cherie-large-frame.webp"
-                  alt="Cherie working with a large framed piece"
-                  fill
-                  sizes="(max-width:540px) 90vw, 30vw"
-                />
-              </div>
-              <h3>A little planning for a much larger piece.</h3>
-              <p>
-                What to gather before bringing oversized artwork to the shop.
-              </p>
-            </Link>
-            <Link href="/gallery" className="picture-card journal-card">
-              <div className="photo">
-                <Image
-                  src="/images/selected/textile-frame-detail.webp"
-                  alt="Detail of a framed textile"
-                  fill
-                  sizes="(max-width:540px) 90vw, 30vw"
-                />
-              </div>
-              <h3>Not everything starts on paper.</h3>
-              <p>
-                See the textures, objects, and meaningful pieces that pass
-                through our hands.
-              </p>
-            </Link>
+            ))}
           </div>
-          <CtaPair />
+        </div>
+      </section>
+
+      <section className="wrap section visit" id="visit">
+        <div className="visit-grid">
+          <div>
+            <p className="eyebrow">Visit</p>
+            <h2>Come see the work.</h2>
+            <p className="lede">
+              Bring your piece, a photo of the wall and any questions. Call ahead if what you are bringing is large.
+            </p>
+            <address className="visit-line">
+              <b>{business.name}</b>
+              <br />
+              {business.streetAddress}
+              <br />
+              {business.locality}, {business.region} {business.postalCode}
+              <br />
+              <a href={business.phoneHref}>{business.phone}</a>
+              <br />
+              {business.hours} · {business.hoursNote}
+            </address>
+            <div className="actions">
+              <a className="text-link" href={business.mapsDirections} target="_blank" rel="noopener noreferrer">
+                Get directions
+              </a>
+              <Link className="text-link" href="/service-area">
+                Where our customers come from
+              </Link>
+            </div>
+          </div>
+          <div className="visit-photo">
+            <Image src="/images/selected/shop-at-dusk.webp" alt="The Village Framer storefront and porch at dusk" fill sizes="(max-width:800px) 100vw, 50vw" />
+          </div>
         </div>
       </section>
     </>
