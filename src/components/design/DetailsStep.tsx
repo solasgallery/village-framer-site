@@ -87,7 +87,7 @@ export default function DetailsStep({ design, onDone }: { design: Design; onDone
           delivery,
           measured: design.measured,
           design: {
-            artW: sel.artW, artH: sel.artH, mouldingId: sel.moulding.id, matStyle: sel.matStyle,
+            artW: sel.artW, artH: sel.artH, rawW: design.rawW, rawH: design.rawH, mouldingId: sel.moulding.id, matStyle: sel.matStyle,
             matWidth: sel.matWidth, matColorId: mat.id,
           },
         }),
