@@ -48,6 +48,7 @@ export default function Footer() {
             <Link href="/guides">Guides</Link>
             <Link href="/service-area">Service area</Link>
             <Link href="/contact">Contact</Link>
+            <Link href="/trade">Trade</Link>
             <a href={business.instagram}>Instagram</a>
             <a href={business.facebook}>Facebook</a>
             <Link href="/privacy">Privacy</Link>

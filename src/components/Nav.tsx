@@ -42,7 +42,7 @@ export default function Nav() {
         </nav>
         {open && (
           <nav id="mobile-nav" className="mobile-links" aria-label="Mobile navigation">
-            {[{ href: START, label: "Start framing" }, ...links, { href: "/contact", label: "Contact us" }].map((l) => (
+            {[{ href: START, label: "Start framing" }, ...links, { href: "/contact", label: "Contact us" }, { href: "/trade", label: "Trade program" }].map((l) => (
               <Link key={l.href} href={l.href} onClick={() => setOpen(false)}>
                 {l.label}
                 <span aria-hidden="true">→</span>

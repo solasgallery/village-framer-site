@@ -3,7 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trade Collective Application - Salado Village Framer</title>
+    <title>Apply to the Trade Collective | Salado Village Framer</title>
+    <meta name="description" content="Apply to the Salado Village Framer Trade Collective, a custom framing partnership for interior designers in Central Texas. There is no fee to join the program.">
+    <link rel="canonical" href="https://www.saladovillageframer.com/trade/apply">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Salado Village Framer">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:url" content="https://www.saladovillageframer.com/trade/apply">
+    <meta property="og:title" content="Apply to the Trade Collective | Salado Village Framer">
+    <meta property="og:description" content="Apply to the Salado Village Framer Trade Collective, a custom framing partnership for interior designers in Central Texas. There is no fee to join the program.">
+    <meta property="og:image" content="https://www.saladovillageframer.com/svf-og-default.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Salado Village Framer, custom framing in Salado, Texas">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Apply to the Trade Collective | Salado Village Framer">
+    <meta name="twitter:description" content="Apply to the Salado Village Framer Trade Collective, a custom framing partnership for interior designers in Central Texas. There is no fee to join the program.">
+    <meta name="twitter:image" content="https://www.saladovillageframer.com/svf-og-default.jpg">
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Lora:wght@400;500&display=swap" rel="stylesheet">
 
     <!-- No analytics tag on this page. gtag() is a local stub so the form-event calls below don't throw; add GTM/GA here when a real ID exists. -->
@@ -439,6 +455,20 @@
                 padding: 2rem 1rem;
             }
         }
+    
+        /* shared trade-page additions */
+        nav a.nav-start { border: 1px solid #5FBFB3; padding: 0.45rem 1rem; color: #F5F0DC; }
+        nav a.nav-start:hover { background: #5FBFB3; color: #F5F0DC; }
+        .svf-foot { text-align: center; padding: 1rem 2rem; }
+        .svf-foot p { margin: 0.4rem 0; color: #F5F0DC; }
+        .svf-foot a { color: #F5F0DC; }
+            @media (max-width: 768px) {
+            nav { position: static !important; flex-wrap: wrap; gap: 0.75rem; }
+            nav ul, nav .nav-right { flex-wrap: wrap; justify-content: center; gap: 0.75rem 1.25rem; }
+            nav ul { flex-direction: row !important; }
+            .hero { margin-top: 0 !important; min-height: 0 !important; }
+            main { margin-top: 0 !important; }
+        }
     </style>
 </head>
 <body>
@@ -451,6 +481,7 @@
             <li><a href="/visit">Visit</a></li>
             <li><a href="/contact">Contact</a></li>
             <li><a href="/trade" class="active">Trade</a></li>
+            <li><a href="/start-framing" class="nav-start">Start framing →</a></li>
         </ul>
     </nav>
 
@@ -470,7 +501,7 @@
 
         <!-- Membership Note -->
         <div class="membership-note">
-            <p><strong>Partnership Benefit:</strong> Membership in the Trade Collective extends to our sister business, Solas Gallery, giving you access to fine art, custom commissions, and large-format printing.</p>
+            <p>Solas Gallery runs its own trade program. <a href="https://www.solasgallery.com/trade">See the Solas Gallery trade page</a>.</p>
         </div>
 
         <!-- Form Section -->
@@ -630,7 +661,7 @@
 
                 <!-- Success Message (hidden until form submits) -->
                 <div class="success-message" id="successMessage">
-                    <p><strong>Thank you for applying!</strong> We've received your application and will be in touch within 3–5 business days.</p>
+                    <p><strong>Thank you for applying!</strong> We've received your application and will be in touch.</p>
                 </div>
             </form>
         </section>
@@ -638,29 +669,15 @@
 
     <!-- Footer -->
     <footer>
-        <div class="footer-content">
-            <div class="footer-nap">
-                <p><strong>Salado Village Framer</strong></p>
-                <p>2 Rock Creek Dr Unit A</p>
-                <p>Salado, TX 76571</p>
-                <p>(254) 613-6123</p>
-                <p><a href="mailto:trade@saladovillageframer.com" style="color: var(--cream); text-decoration: none;">trade@saladovillageframer.com</a></p>
-            </div>
-            <p class="footer-partnership">In partnership with Solas Gallery</p>
+        <div class="svf-foot">
+            <p>Salado Village Framer · 2 Rock Creek Dr Unit A · Salado, TX 76571 · <a href="tel:+12546136123">(254) 613-6123</a></p>
+            <p>Monday – Saturday, 10 AM – 5 PM · Sunday closed</p>
+            <p><a href="mailto:info@solasgallery.com">info@solasgallery.com</a></p>
+            
         </div>
     </footer>
 
     <script>
-        // Handle form submission feedback
-        document.getElementById('tradeForm').addEventListener('submit', function(e) {
-            // Formspree will handle the actual submission
-            // This provides visual feedback
-            setTimeout(function() {
-                document.getElementById('successMessage').classList.add('show');
-                window.scrollTo({ top: document.querySelector('.form-section').offsetTop, behavior: 'smooth' });
-            }, 500);
-        });
-
         // GA4 Event Tracking for form interactions
         document.getElementById('tradeForm').addEventListener('change', function() {
             gtag('event', 'form_interaction', {
@@ -692,10 +709,11 @@
           .map(function(k){return k+': '+o[k];}).join('\n');
         var message=(firm?'Firm: '+firm+'\n':'')+extras;
         try{
-          await fetch('/api/inquiry',{method:'POST',headers:{'content-type':'application/json'},
+          var res=await fetch('/api/inquiry',{method:'POST',headers:{'content-type':'application/json'},
             body:JSON.stringify({name:name,email:o.email||'',phone:o.phone||'',message:message,source:'Trade — SVF (Apply)',listId:43})});
+          if(!res.ok) throw new Error('inquiry '+res.status);
           form.innerHTML='<p style="padding:2rem;text-align:center;font-size:1.1rem;">Thank you — your application has been received. We’ll be in touch shortly.</p>';
-        }catch(err){ alert('Something went wrong. Please email trade@saladovillageframer.com.'); }
+        }catch(err){ alert('Something went wrong. Please call (254) 613-6123.'); }
       });
     })();
     </script>

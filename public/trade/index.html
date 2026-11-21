@@ -3,13 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Salado Village Framer Trade Collective — A custom framing partnership program for interior design professionals in Central Texas.">
-    <meta name="keywords" content="custom framing trade program, interior designer framing partnership Central Texas, professional framing services">
-    <meta property="og:title" content="Trade Collective | Salado Village Framer">
-    <meta property="og:description" content="A custom framing partnership for interior design professionals.">
-    <meta property="og:type" content="website">
 
-    <title>Trade Collective | Salado Village Framer</title>
+    <title>Trade Framing for Interior Designers | Salado Village Framer</title>
+    <meta name="description" content="Trade framing for interior designers from Salado Village Framer in Salado, TX. Three tiers, no membership fee, and work done by a certified picture framer.">
+    <link rel="canonical" href="https://www.saladovillageframer.com/trade">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Salado Village Framer">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:url" content="https://www.saladovillageframer.com/trade">
+    <meta property="og:title" content="Trade Framing for Interior Designers | Salado Village Framer">
+    <meta property="og:description" content="Trade framing for interior designers from Salado Village Framer in Salado, TX. Three tiers, no membership fee, and work done by a certified picture framer.">
+    <meta property="og:image" content="https://www.saladovillageframer.com/svf-og-default.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Salado Village Framer, custom framing in Salado, Texas">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Trade Framing for Interior Designers | Salado Village Framer">
+    <meta name="twitter:description" content="Trade framing for interior designers from Salado Village Framer in Salado, TX. Three tiers, no membership fee, and work done by a certified picture framer.">
+    <meta name="twitter:image" content="https://www.saladovillageframer.com/svf-og-default.jpg">
 
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Lora:wght@400;500;600&display=swap" rel="stylesheet">
@@ -39,21 +50,6 @@
         }
     </script>
 
-    <!-- Meta Pixel -->
-    <script>
-        !function(f,b,e,v,n,t,s)
-        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-        n.queue=[];t=b.createElement(e);t.async=!0;
-        t.src=v;s=b.getElementsByTagName(e)[0];
-        s.parentNode.insertBefore(t,s)}(window, document,'script',
-        'https://connect.facebook.net/en_US/fbevents.js');
-        fbq('init', 'YOUR_PIXEL_ID');
-        fbq('track', 'PageView');
-    </script>
-    <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=YOUR_PIXEL_ID&ev=PageView&noscript=1" /></noscript>
-
     <!-- JSON-LD Schema -->
     <script type="application/ld+json">
     {
@@ -69,13 +65,8 @@
             "addressCountry": "US"
         },
         "telephone": "(254) 613-6123",
-        "email": "trade@saladovillageframer.com",
-        "url": "https://www.saladovillageframer.com/trade",
-        "description": "Custom framing partnership program for interior design professionals",
-        "serviceArea": {
-            "@type": "Place",
-            "name": "Central Texas"
-        }
+        "email": "info@solasgallery.com",
+        "url": "https://www.saladovillageframer.com/trade"
     }
     </script>
 
@@ -711,6 +702,20 @@
                 gap: 1rem;
             }
         }
+    
+        /* shared trade-page additions */
+        nav a.nav-start { border: 1px solid #5FBFB3; padding: 0.45rem 1rem; color: #F5F0DC; }
+        nav a.nav-start:hover { background: #5FBFB3; color: #F5F0DC; }
+        .svf-foot { text-align: center; padding: 1rem 2rem; }
+        .svf-foot p { margin: 0.4rem 0; color: #F5F0DC; }
+        .svf-foot a { color: #F5F0DC; }
+            @media (max-width: 768px) {
+            nav { position: static !important; flex-wrap: wrap; gap: 0.75rem; }
+            nav ul, nav .nav-right { flex-wrap: wrap; justify-content: center; gap: 0.75rem 1.25rem; }
+            nav ul { flex-direction: row !important; }
+            .hero { margin-top: 0 !important; min-height: 0 !important; }
+            main { margin-top: 0 !important; }
+        }
     </style>
 </head>
 <body onload="trackTradePageView()">
@@ -724,6 +729,7 @@
                 <a href="/visit">VISIT</a>
                 <a href="/contact">CONTACT</a>
                 <a href="/trade" class="active">TRADE</a>
+                <a href="/start-framing" class="nav-start">Start framing →</a>
             </li>
         </ul>
     </nav>
@@ -742,16 +748,16 @@
         <h2>About the Partnership</h2>
         <div class="about-content">
             <p>
-                For years, Salado Village Framer has been Central Texas's trusted source for custom framing, conservation, and curated décor. The Trade Collective extends this craft to the interior design community. From museum-quality framing to shadow boxes, conservation mounting to decorative mirrors — we serve as your dedicated framing partner from concept through installation.
+                Salado Village Framer is a custom frame shop in Salado, Texas. The Trade Collective extends that work to interior designers: framing for art and photographs, shadow boxes, conservation framing and mirrors, with one shop handling each project from first conversation to finished piece.
             </p>
             <p>
-                As a design professional, you understand the impact of thoughtful materials and precise execution. Our workshop team brings decades of experience to every project, offering guidance at every stage — from initial concept sketches through final installation. We work at your pace, respecting your vision and timeline.
+                Cherie Flanagan, a certified picture framer with thirty years at the bench, guides each project, and every piece is framed in our Salado shop. We work at your pace and around your vision and timeline.
             </p>
         </div>
 
         <div class="callout">
-            <h3>Sister Business Partnership</h3>
-            <p>As a sister business to Solas Gallery, Trade Collective membership extends across both businesses — giving you access to fine art, custom commissions, large-format printing, and museum-quality framing under one partnership. This dual access strengthens your ability to serve your clients with comprehensive design solutions.</p>
+            <h3>Solas Gallery</h3>
+            <p>Solas Gallery runs its own trade program. <a href="https://www.solasgallery.com/trade">See the Solas Gallery trade page</a>.</p>
         </div>
     </section>
 
@@ -761,27 +767,27 @@
         <div class="services-grid">
             <div class="service-card">
                 <h3>Custom Framing</h3>
-                <p>Museum-quality materials, hundreds of moulding profiles, and endless design possibilities. We work with artwork, textiles, prints, and more.</p>
+                <p>A wide range of mouldings and mats for artwork, textiles, prints and photographs.</p>
             </div>
             <div class="service-card">
                 <h3>Conservation & Archival</h3>
-                <p>Acid-free mounting, UV glass, and heirloom preservation techniques. Your clients' treasured pieces deserve expert care.</p>
+                <p>Archival mats, UV-filtering glazing and reversible mounting for pieces your clients want to keep.</p>
             </div>
             <div class="service-card">
                 <h3>Shadow Boxes & Specialty</h3>
-                <p>Jerseys, memorabilia, dimensional objects, and bespoke solutions. We frame what matters most.</p>
+                <p>Jerseys, medals, textiles and other objects that carry a story.</p>
             </div>
             <div class="service-card">
                 <h3>Decorative Mirrors</h3>
-                <p>Custom and curated mirror framing solutions that enhance any interior. From statement pieces to coordinated sets.</p>
+                <p>Custom frames for statement mirrors and large pieces.</p>
             </div>
             <div class="service-card">
-                <h3>Commercial & Volume Framing</h3>
-                <p>Multi-piece projects for offices, hotels, restaurants, and hospitality spaces. Consistency, quality, and timeline reliability.</p>
+                <h3>Multi-Piece Projects</h3>
+                <p>Framing several pieces for one project? Tell us the count and sizes and we will plan it together.</p>
             </div>
             <div class="service-card">
                 <h3>Design Consultation</h3>
-                <p>On-site visits, material selection, and collaborative project planning. We integrate seamlessly into your design process.</p>
+                <p>Material selection and project planning in the shop, with you and your client.</p>
             </div>
         </div>
     </section>
@@ -896,35 +902,17 @@
         <h3>Explore More</h3>
         <div class="cross-nav-links">
             <a href="/trade/faq">Trade FAQ</a>
-            <a href="/trade/events">Events & Workshops</a>
-            <a href="#apply">Application Portal</a>
+            <a href="/trade/apply">Full application</a>
         </div>
-        <div class="sister-business">
-            <p>Also part of the Solas Gallery Trade Collective. Access both businesses under one partnership. <a href="https://www.solasgallery.com/trade">Explore Solas Gallery Trade Collective</a></p>
-        </div>
-    </section>
+        </section>
 
     <!-- Footer -->
     <footer>
-        <div class="footer-content">
-            <div class="footer-section">
-                <h4>Contact</h4>
-                <p><strong>Salado Village Framer</strong></p>
-                <p>2 Rock Creek Dr Unit A<br>Salado, TX 76571</p>
-                <p><a href="tel:+12546136123">(254) 613-6123</a><br><a href="mailto:trade@saladovillageframer.com">trade@saladovillageframer.com</a></p>
-            </div>
-            <div class="footer-section">
-                <h4>Partnership</h4>
-                <p>In partnership with <strong>Solas Gallery</strong> & <strong>Village Lamplighter</strong></p>
-                <p>Celebrating years of craft on Main Street, Salado</p>
-            </div>
-            <div class="footer-section">
-                <h4>Quick Links</h4>
-                <p><a href="/">Home</a><br><a href="/services">Services</a><br><a href="/gallery">Gallery</a><br><a href="/visit">Visit Us</a><br><a href="/contact">Contact</a></p>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2024 Salado Village Framer. All rights reserved.</p>
+        <div class="svf-foot">
+            <p>Salado Village Framer · 2 Rock Creek Dr Unit A · Salado, TX 76571 · <a href="tel:+12546136123">(254) 613-6123</a></p>
+            <p>Monday – Saturday, 10 AM – 5 PM · Sunday closed</p>
+            <p><a href="mailto:info@solasgallery.com">info@solasgallery.com</a></p>
+            <p><a href="/">Home</a> · <a href="/services">Services</a> · <a href="/gallery">Gallery</a> · <a href="/visit">Visit</a> · <a href="/contact">Contact</a> · <a href="/start-framing">Start framing</a></p>
         </div>
     </footer>
     <!-- Brevo submission (list 43 = Trade Collective Prospects) -->
@@ -942,10 +930,11 @@
           .map(function(k){return k+': '+o[k];}).join('\n');
         var message=(firm?'Firm: '+firm+'\n':'')+extras;
         try{
-          await fetch('/api/inquiry',{method:'POST',headers:{'content-type':'application/json'},
+          var res=await fetch('/api/inquiry',{method:'POST',headers:{'content-type':'application/json'},
             body:JSON.stringify({name:name,email:o.email||'',phone:o.phone||'',message:message,source:'Trade — SVF',listId:43})});
+          if(!res.ok) throw new Error('inquiry '+res.status);
           form.innerHTML='<p style="padding:2rem;text-align:center;font-size:1.1rem;">Thank you — your application has been received. We’ll be in touch shortly.</p>';
-        }catch(err){ alert('Something went wrong. Please email trade@saladovillageframer.com.'); }
+        }catch(err){ alert('Something went wrong. Please call (254) 613-6123.'); }
       });
     })();
     </script>
