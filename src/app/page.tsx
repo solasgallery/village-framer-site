@@ -95,8 +95,8 @@ export default function Home() {
             <h2>Big pieces are what we do best.</h2>
             <p className="lede">
               Oversized canvas, estate art, statement mirrors, the piece that has leaned against your wall for a year
-              because nobody would touch it. Big work needs stronger joinery, safer glazing and a proper way to hang
-              it, and we plan all three before a single cut is made.
+              because nobody would touch it. Big work asks different questions about construction, glazing and hanging, so we talk
+              them through with you before anything is cut.
             </p>
             <p className="lede">
               Cherie Flanagan, certified picture framer, has framed for thirty years. Your work never
@@ -210,7 +210,7 @@ export default function Home() {
               </h2>
             </div>
             <p>
-              We carry Rifle Paper Co. stationery, notebooks, wrapping paper and umbrellas. Stop in while your frame is
+              We carry Rifle Paper Co. gifts. Stop in while your frame is
               in progress and pick out something for someone.
             </p>
           </div>

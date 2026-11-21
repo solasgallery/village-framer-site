@@ -12,7 +12,7 @@ export const metadata: Metadata = meta({
 
 const services = [
   ["Custom framing", "Mouldings and mats for artwork, textiles, prints and photographs."],
-  ["Conservation and archival", "Archival mats, UV-filtering glazing and reversible mounting for pieces your clients want to keep."],
+  ["Conservation and archival", "Archival materials and mounting choices for pieces your clients want to keep. Ask us what suits each piece."],
   ["Shadow boxes", "Jerseys, medals, textiles and other objects that carry a story."],
   ["Mirrors and large pieces", "Custom frames for statement mirrors and big work."],
   ["Multi-piece projects", "Framing several pieces for one project? Tell us the count and sizes and we will plan it together."],

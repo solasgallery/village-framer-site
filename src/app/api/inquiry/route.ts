@@ -194,7 +194,7 @@ export async function POST(request: NextRequest) {
         ],
         replyTo: { email, name },
         subject: `${process.env.VERCEL_ENV === "production" ? "" : "[PREVIEW TEST] "}${source}: ${name.replace(/[\r\n]/g, " ")}`,
-        htmlContent: `<div style="font-family:Arial,sans-serif;max-width:640px;margin:auto;padding:32px;color:#202b2a"><h1 style="font-family:Georgia,serif">A new framing conversation</h1><table style="width:100%;border-collapse:collapse">${rows
+        htmlContent: `<div style="font-family:Arial,sans-serif;max-width:640px;margin:auto;padding:32px;color:#202b2a"><h1 style="font-family:Georgia,serif">${source === sourceNames.trade ? "New trade application" : "A new framing conversation"}</h1><table style="width:100%;border-collapse:collapse">${rows
           .filter(([, v]) => v)
           .map(
             ([k, v]) =>
@@ -218,19 +218,19 @@ export async function POST(request: NextRequest) {
     // the request, so it is logged and swallowed.
     try {
       if (process.env.VERCEL_ENV !== "production") return NextResponse.json({ success: true });
+      const listId = Number(process.env.BREVO_LIST_ID);
+      if (!listId) {
+        console.error("Brevo list add skipped: BREVO_LIST_ID is not set");
+        return NextResponse.json({ success: true });
+      }
       const contactRes = await fetch("https://api.brevo.com/v3/contacts", {
         method: "POST",
         headers,
         signal: AbortSignal.timeout(12000),
-        body: JSON.stringify({
-          email,
-          attributes,
-          listIds: [Number(process.env.BREVO_LIST_ID) || 2],
-          updateEnabled: true,
-        }),
+        body: JSON.stringify({ email, attributes, listIds: [listId], updateEnabled: true }),
       });
       if (!contactRes.ok)
-        console.error("Brevo contact request failed:", contactRes.status);
+        console.error("Brevo contact request failed:", contactRes.status, await contactRes.text().catch(() => ""));
     } catch {
       console.error("Brevo contact request errored");
     }

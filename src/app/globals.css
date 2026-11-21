@@ -199,6 +199,9 @@ a:hover {
   padding: 9px 20px;
 }
 .announcement a {
+  display: inline-block;
+  min-height: 24px;
+  line-height: 24px;
   margin-left: 26px;
   text-decoration: underline;
   text-underline-offset: 3px;
@@ -840,8 +843,11 @@ a:hover {
   grid-template-columns: repeat(3, 1fr);
   gap: 50px;
 }
-.visit-details h3 {
+.visit-details h3,
+.visit-details .visit-h {
   margin-bottom: 20px;
+  font-size: 2rem;
+  letter-spacing: normal;
 }
 .visit-details p {
   color: var(--muted);

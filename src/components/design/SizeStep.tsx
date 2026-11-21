@@ -76,7 +76,7 @@ export default function SizeStep({
   };
   const FILLED = " (filled in from the photo’s proportions)";
   const setWidth = (v: string) => {
-    typedW.current = true;
+    typedW.current = v.trim() !== ""; // a cleared field counts as empty again
     filledW.current = false;
     setW(v);
     const cw = parse(v);
@@ -91,7 +91,7 @@ export default function SizeStep({
     commit(cw, ch, v, filledH.current && !typedH.current ? rh + FILLED : rh);
   };
   const setHeight = (v: string) => {
-    typedH.current = true;
+    typedH.current = v.trim() !== ""; // a cleared field counts as empty again
     filledH.current = false;
     setH(v);
     const ch = parse(v);
@@ -104,6 +104,24 @@ export default function SizeStep({
       filledW.current = true;
     }
     commit(cw, ch, filledW.current && !typedW.current ? rw + FILLED : rw, v);
+  };
+  const toggleLock = (on: boolean) => {
+    setLock(on);
+    if (!on) return;
+    // Turning the lock on fills a field that is empty, from the one that has a value.
+    if (nw && !h.trim()) {
+      const ch = toEighth(nw / ratio);
+      const rh = trim(ch);
+      setH(rh);
+      filledH.current = true;
+      commit(nw, ch, w, rh + FILLED);
+    } else if (nh && !w.trim()) {
+      const cw = toEighth(nh * ratio);
+      const rw = trim(cw);
+      setW(rw);
+      filledW.current = true;
+      commit(cw, nh, rw + FILLED, h);
+    }
   };
   const preset = ([a, b]: [number, number]) => {
     // orient the preset like the art
@@ -159,7 +177,7 @@ export default function SizeStep({
             </label>
           </div>
           <label className="check">
-            <input type="checkbox" checked={lock} onChange={(e) => setLock(e.target.checked)} />
+            <input type="checkbox" checked={lock} onChange={(e) => toggleLock(e.target.checked)} />
             Fill in the other side from my photo’s proportions (only if it’s empty)
           </label>
           <p id="size-help" className={problem ? "step-error" : "hint"} role={problem ? "alert" : undefined}>

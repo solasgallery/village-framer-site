@@ -38,11 +38,11 @@ export default function Visit() {
       <section className="wrap section visit-details">
         <div>
           <p className="eyebrow">Find the shop</p>
-          <h3>
+          <h2 className="visit-h">
             Village Framer
             <br />
             in Salado.
-          </h3>
+          </h2>
           <p>
             {business.streetAddress}<br />
             Salado, TX 76571
@@ -58,11 +58,11 @@ export default function Visit() {
         </div>
         <div>
           <p className="eyebrow">Hours</p>
-          <h3>
+          <h2 className="visit-h">
             Monday–Saturday
             <br />
             10am–5pm.
-          </h3>
+          </h2>
           <p>
             Sunday closed.
             <br />
@@ -75,10 +75,10 @@ export default function Visit() {
         </div>
         <div>
           <p className="eyebrow">Before you visit</p>
-          <h3>
+          <h2 className="visit-h">
             A photo is
             <br />a good beginning.
-          </h3>
+          </h2>
           <p>
             Bring approximate dimensions, a room photo if helpful, and a sense
             of your budget.

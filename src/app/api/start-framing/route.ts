@@ -191,7 +191,7 @@ export async function POST(request: NextRequest) {
       to: [{ email: LEADS_TO, name: "Cherie Flanagan" }],
       replyTo: { email, name: name.replace(/["<>]/g, "") },
       subject: `${prefix}New framing request: ${name} (${DELIVERY[delivery]})`,
-      htmlContent: `<div style="font-family:Arial,sans-serif;max-width:640px;margin:auto;padding:32px;color:#202b2a"><h1 style="font-family:Georgia,serif">${testMode ? "[PREVIEW TEST] " : ""}A new framing request</h1><p><a href="${photoLink}">Open the customer’s photo</a>${conceptLink ? ` · <a href="${conceptLink}">Open the design concept</a>` : ""}<br><small>Both images are also attached. The links stay private to this email and stop working after 30 days.</small></p><table style="width:100%;border-collapse:collapse">${table}</table><p style="font-size:12px">Sent from saladovillageframer.com/start-framing. Reply to this email to reach the customer.</p></div>`,
+      htmlContent: `<div style="font-family:Arial,sans-serif;max-width:640px;margin:auto;padding:32px;color:#202b2a"><h1 style="font-family:Georgia,serif">${testMode ? "[PREVIEW TEST] " : ""}A new framing request</h1><p style="word-break:break-all;font-size:13px">Customer’s photo (private link):<br>${photoLink}${conceptLink ? `<br><br>Design concept:<br>${conceptLink}` : ""}<br><small>Both images are also attached. The links stay private to this email and stop working after 30 days.</small></p><table style="width:100%;border-collapse:collapse">${table}</table><p style="font-size:12px">Sent from saladovillageframer.com/start-framing. Reply to this email to reach the customer.</p></div>`,
       attachment,
     });
     if (!notifyRes.ok) {
@@ -224,17 +224,23 @@ export async function POST(request: NextRequest) {
     // ---- 4) marketing list: opt-in only, production only
     if (!testMode && body.newsletter === true) {
       try {
-        await fetch("https://api.brevo.com/v3/contacts", {
-          method: "POST",
-          headers,
-          signal: AbortSignal.timeout(12000),
-          body: JSON.stringify({
-            email,
-            attributes: { FIRSTNAME: name.split(" ")[0], LASTNAME: name.split(" ").slice(1).join(" ") },
-            listIds: [Number(process.env.BREVO_LIST_ID) || 2],
-            updateEnabled: true,
-          }),
-        });
+        const listId = Number(process.env.BREVO_LIST_ID);
+        if (!listId) {
+          console.error("start-framing list add skipped: BREVO_LIST_ID is not set");
+        } else {
+          const lr = await fetch("https://api.brevo.com/v3/contacts", {
+            method: "POST",
+            headers,
+            signal: AbortSignal.timeout(12000),
+            body: JSON.stringify({
+              email,
+              attributes: { FIRSTNAME: name.split(" ")[0], LASTNAME: name.split(" ").slice(1).join(" ") },
+              listIds: [listId],
+              updateEnabled: true,
+            }),
+          });
+          if (!lr.ok) console.error("start-framing list add failed:", lr.status, await lr.text().catch(() => ""));
+        }
       } catch {
         console.error("start-framing list add errored");
       }

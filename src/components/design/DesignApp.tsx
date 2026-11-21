@@ -1,6 +1,7 @@
 "use client";
 import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 import { track } from "@/lib/design/track";
 import { findMoulding, initialDesign, STEPS, type Design, type Step } from "./state";
 import UploadStep from "./UploadStep";
@@ -16,6 +17,8 @@ export default function DesignApp() {
   const [design, setDesign] = useState<Design>(initialDesign);
   const [leaving, setLeaving] = useState(false);
   const [done, setDone] = useState(false);
+  const router = useRouter();
+  const pathname = usePathname();
   const top = useRef<HTMLDivElement>(null);
   const started = useRef(false);
 
@@ -33,19 +36,24 @@ export default function DesignApp() {
   const go = useCallback((s: Step, push = true) => {
     setStep(s);
     setReached((r) => (s > r ? s : r));
-    if (push) window.history.pushState({ designStep: s }, "");
+    // Each step is a hash entry pushed through Next's own router (e.g. /start-framing#step-3). A hash-only
+    // navigation never remounts the page, so the photo and choices stay in memory, and Next owns the history
+    // entries so its popstate handler never reloads the page.
+    if (push) router.push(`${pathname}#step-${s}`, { scroll: false });
     window.scrollTo({ top: 0 });
     requestAnimationFrame(() => top.current?.focus({ preventScroll: true }));
-  }, []);
+  }, [router, pathname]);
 
   useEffect(() => {
-    window.history.replaceState({ designStep: 1 }, "");
-    const pop = (e: PopStateEvent) => {
-      const s = e.state?.designStep;
-      if (s >= 1 && s <= 6) setStep(s);
+    // A reload or shared link carries a stale #step-n but no photo: start clean at step 1.
+    if (window.location.hash) router.replace(pathname, { scroll: false });
+    const pop = () => {
+      const m = /^#step-([1-6])$/.exec(window.location.hash);
+      setStep(m ? (Number(m[1]) as Step) : 1);
     };
     window.addEventListener("popstate", pop);
     return () => window.removeEventListener("popstate", pop);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const hasSize = !!(design.artW && design.artH);
