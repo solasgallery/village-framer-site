@@ -17,6 +17,11 @@ const nextConfig = {
       r("/journal/:slug", "/guides"),
       // Undated events page removed 2026-11-21; /trade is the one trade entry point
       r("/trade/events", "/trade"),
+      // Old static trade files (live today, 200) — rebuilt as Next pages
+      r("/trade/index.html", "/trade"),
+      r("/trade/apply.html", "/trade/apply"),
+      r("/trade/faq.html", "/trade/faq"),
+      r("/trade/events.html", "/trade"),
     ];
   },
 }
