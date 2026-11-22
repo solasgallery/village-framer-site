@@ -30,20 +30,18 @@ export default function Trade() {
           </a>
         </div>
       </header>
-      <div className="wrap">
-        <div className="editorial-hero">
-          <Image
-            src="/images/selected/design-table-collaboration.webp"
-            alt="Three framers working together at the design table"
-            fill
-            priority
-            sizes="90vw"
-          />
-        </div>
-      </div>
       <section className="wrap section prose trade-copy">
         <h2>{t.whoQualifies.h}</h2>
         <p>{t.whoQualifies.p}</p>
+        <figure className="trade-photo">
+          <Image
+            src="/images/selected/design-table-collaboration.webp"
+            alt="Three framers working together at the design table"
+            width={1800}
+            height={1350}
+            sizes="(max-width: 860px) 100vw, 820px"
+          />
+        </figure>
 
         <h2>{t.tiers.h}</h2>
         <table className="trade-table">

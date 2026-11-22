@@ -102,3 +102,6 @@ a[href^="mailto:"]{display:inline-block;padding:12px 2px;min-height:44px;box-siz
 .trade-enroll-ways span{display:none}
 .trade-enroll-ways a{display:block}
 }
+.trade-photo{margin:32px 0;max-width:820px}
+.trade-photo img{display:block;width:100%;height:auto}
+.trade-copy{padding-top:0}
