@@ -48,6 +48,7 @@ export default function Footer() {
           <p>© {new Date().getFullYear()} Salado Village Framer</p>
           <div>
             <Link href="/services">What we frame</Link>
+            <Link href="/gallery">Our work</Link>
             <Link href="/guides">Guides</Link>
             <Link href="/service-area">Service area</Link>
             <Link href="/contact">Contact</Link>

@@ -92,3 +92,11 @@ a[href^="mailto:"]{display:inline-block;padding:12px 2px;min-height:44px;box-siz
 .faq-item p{margin:0 0 16px}
 .inquiry-form label.check{display:flex;flex-direction:row;align-items:center;gap:10px;min-height:44px;margin:0 0 16px;font-weight:400;text-align:left}
 .inquiry-form label.check input{width:20px;height:20px;min-height:0;margin:0;padding:0;flex:0 0 auto;display:inline-block}
+/* /gallery: photos at their own shape (no crop), finished pieces first */
+.work-grid{columns:3;column-gap:28px}
+.work-grid figure{break-inside:avoid;margin:0 0 28px}
+.work-grid img{display:block;width:100%;height:auto;background:var(--sage)}
+.work-grid figcaption{font-size:14px;line-height:1.45;padding:10px 0 0;color:var(--muted)}
+.work-cta{margin-top:12px}
+@media (max-width:1000px){.work-grid{columns:2;column-gap:16px}}
+@media (max-width:640px){.work-grid{columns:1}}
