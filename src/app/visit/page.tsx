@@ -123,7 +123,7 @@ export default function Visit() {
           If you are coming from out of town, here are the towns around Salado.
         </p>
         <div className="actions">
-          <Link className="text-link" href="/service-area">
+          <Link className="text-link" href="/areas">
             Towns around Salado →
           </Link>
         </div>

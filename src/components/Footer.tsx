@@ -49,7 +49,6 @@ export default function Footer() {
           <div>
             <Link href="/services">What we frame</Link>
             <Link href="/guides">Guides</Link>
-            <Link href="/service-area">Service area</Link>
             <Link href="/areas">Areas we serve</Link>
             <Link href="/contact">Contact</Link>
             <Link href="/trade">Trade</Link>
