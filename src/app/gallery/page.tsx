@@ -2,6 +2,7 @@ import Image from "next/image";
 import type { Metadata } from "next";
 import { meta } from "@/lib/seo";
 import StartCta from "@/components/StartCta";
+import FrameBand from "@/components/FrameBand";
 
 export const metadata: Metadata = meta({
   title: "Recent Work from the Bench · Salado Village Framer",
@@ -41,6 +42,7 @@ const work: Work[] = [
 export default function Gallery() {
   return (
     <>
+      <FrameBand edge="top" />
       <header className="page-intro">
         <p className="eyebrow">Our work</p>
         <h1>Recent work from the bench.</h1>
@@ -50,6 +52,7 @@ export default function Gallery() {
         </p>
         <StartCta />
       </header>
+      <FrameBand edge="bottom" />
       <section className="wrap section" style={{ paddingTop: 0 }}>
         <div className="work-grid">
           {work.map((p, i) => (

@@ -100,3 +100,8 @@ a[href^="mailto:"]{display:inline-block;padding:12px 2px;min-height:44px;box-siz
 .work-cta{margin-top:12px}
 @media (max-width:1000px){.work-grid{columns:2;column-gap:16px}}
 @media (max-width:640px){.work-grid{columns:1}}
+/* FrameBand: real moulding strip, top/bottom of a hero only; thin on purpose */
+.frame-band{height:14px;background-repeat:repeat-x;background-size:auto 100%;background-position:center}
+@media (min-width:800px){.frame-band{height:18px}}
+.frame-band-bottom{margin-bottom:32px}
+@media (min-width:800px){.frame-band-bottom{margin-bottom:48px}}
