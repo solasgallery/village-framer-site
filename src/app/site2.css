@@ -96,6 +96,8 @@ a[href^="mailto:"]{display:inline-block;padding:12px 2px;min-height:44px;box-siz
 @media (min-width:800px){.frame-band{height:18px}}
 .frame-band-bottom{margin-bottom:32px}
 @media (min-width:800px){.frame-band-bottom{margin-bottom:48px}}
+/* Homepage hero: the next section brings its own top padding, so the band adds no gap */
+.home-hero + .frame-band-bottom{margin-bottom:0}
 /* Trade landing (Track 5): the one-pager's tier table; stacks into cards on phones */
 .trade-table{width:100%;max-width:820px;border-collapse:collapse;margin:20px 0;font-size:15px;line-height:1.45}
 .trade-table th,.trade-table td{border-bottom:1px solid #b4bcb5;padding:12px 14px 12px 0;text-align:left;vertical-align:top}

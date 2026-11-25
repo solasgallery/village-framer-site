@@ -5,6 +5,7 @@ import { business, pricing, START } from "@/lib/site";
 import { meta } from "@/lib/seo";
 import StartCta from "@/components/StartCta";
 import Reviews from "@/components/Reviews";
+import FrameBand from "@/components/FrameBand";
 
 export const metadata: Metadata = meta({
   title: "Custom Picture Framing in Salado, TX | Village Framer",
@@ -35,6 +36,7 @@ const rifle = [
 export default function Home() {
   return (
     <>
+      <FrameBand edge="top" />
       <section className="home-hero">
         <div className="hero-copy">
           <p className="eyebrow">Custom framing · Salado, Texas</p>
@@ -63,6 +65,7 @@ export default function Home() {
           />
         </div>
       </section>
+      <FrameBand edge="bottom" />
 
       <section className="wrap section" id="what-we-frame">
         <div className="section-heading">
