@@ -8,9 +8,10 @@ const nextConfig = {
     return [
       r("/design", "/start-framing"),
       r("/studio", "/start-framing"),
-      // 16 thin town pages consolidated into one service-area page
-      r("/area", "/service-area"),
-      r("/area/:city", "/service-area"),
+      // Old thin town pages and the retired /service-area page all land on the /areas hub (one hop)
+      r("/area", "/areas"),
+      r("/area/:city", "/areas"),
+      r("/service-area", "/areas"),
       r("/journal", "/guides"),
       r("/journal/framing-oversized-art", "/services/oversized-framing"),
       r("/journal/choosing-a-frame-and-mat", "/guides/float-mount-vs-mat"),

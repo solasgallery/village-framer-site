@@ -247,7 +247,7 @@ export default function Home() {
               <a className="text-link" href={business.mapsDirections} target="_blank" rel="noopener noreferrer">
                 Get directions
               </a>
-              <Link className="text-link" href="/service-area">
+              <Link className="text-link" href="/areas">
                 Towns around Salado
               </Link>
             </div>
