@@ -20,8 +20,11 @@ const nextConfig = {
       r("/trade/events", "/trade"),
       // Old static trade files (live today, 200) — rebuilt as Next pages
       r("/trade/index.html", "/trade"),
-      r("/trade/apply.html", "/trade/apply"),
-      r("/trade/faq.html", "/trade/faq"),
+      // One trade page (Track 5): the application form and FAQ are retired; enroll is by email or phone
+      r("/trade/apply", "/trade#enroll"),
+      r("/trade/faq", "/trade"),
+      r("/trade/apply.html", "/trade#enroll"),
+      r("/trade/faq.html", "/trade"),
       r("/trade/events.html", "/trade"),
     ];
   },

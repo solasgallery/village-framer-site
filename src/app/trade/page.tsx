@@ -1,83 +1,102 @@
-import Link from "next/link";
+import Image from "next/image";
 import type { Metadata } from "next";
 import { meta } from "@/lib/seo";
-import TradeForm from "@/components/TradeForm";
+import { business } from "@/lib/site";
+import { tradeCopy as t } from "@/data/trade-copy";
 
 export const metadata: Metadata = meta({
-  title: "Trade Framing for Interior Designers | Salado, Texas",
+  title: "Framing Trade Program for Interior Designers | Salado, TX",
   description:
-    "Trade framing for interior designers from Salado Village Framer in Salado, Texas. Three tiers, no membership fee, and work done by a certified picture framer.",
+    "Trade pricing on custom framing for registered interior designers: 10%, 15% or 20% off by annual framing spend. One enrollment also covers Solas Gallery trade.",
   path: "/trade",
 });
 
-const services = [
-  ["Custom framing", "Mouldings and mats for artwork, textiles, prints and photographs."],
-  ["Conservation and archival", "Archival materials and mounting choices for pieces your clients want to keep. Ask us what suits each piece."],
-  ["Shadow boxes", "Jerseys, medals, textiles and other objects that carry a story."],
-  ["Mirrors and large pieces", "Custom frames for statement mirrors and big work."],
-  ["Multi-piece projects", "Framing several pieces for one project? Tell us the count and sizes and we will plan it together."],
-  ["Design consultation", "Material selection and project planning in the shop, with you and your client."],
-];
-// Percentages and thresholds are the established facts (YARDSTICK_P3, G7-01). Tier names: Tim, 2026-11-21.
-const tiers = [
-  ["Trade", "10%", "$2,500"],
-  ["Trade Plus", "15%", "$7,500"],
-  ["Trade Premier", "20%", "$15,000"],
-];
+const mailto = `mailto:${t.email}?subject=${encodeURIComponent("Trade enrollment")}`;
 
+/** One trade page: the locked one-pager, then the enroll call to action. No form anywhere in the trade flow. */
 export default function Trade() {
   return (
     <>
-      <header className="page-intro">
-        <p className="eyebrow">Trade program</p>
-        <h1>Framing for interior designers.</h1>
-        <p className="lede">
-          Salado Village Framer is a custom frame shop in Salado, Texas. The trade program gives designers one shop for
-          each project, from the first conversation to the finished piece. Cherie Flanagan, a certified picture framer
-          with 30 years at the bench, guides each one, and the work never leaves the shop.
-        </p>
-        <a href="#apply" className="button button-ink">
-          Apply <span aria-hidden="true">↓</span>
-        </a>
+      <header className="page-intro trade-intro">
+        <p className="eyebrow">{t.kicker}</p>
+        <h1>{t.title}</h1>
+        <p className="lede">{t.lede}</p>
+        <div className="actions">
+          <a href="#enroll" className="button button-ink">
+            Enroll <span aria-hidden="true">↓</span>
+          </a>
+          <a href={t.pdf} className="text-link" download>
+            Download the one-pager (PDF)
+          </a>
+        </div>
       </header>
-      <section className="wrap section prose" style={{ paddingTop: 0 }}>
-        <h2>What we frame</h2>
-        <ul className="trade-list">
-          {services.map(([h, p]) => (
+      <section className="wrap section prose trade-copy">
+        <h2>{t.whoQualifies.h}</h2>
+        <p>{t.whoQualifies.p}</p>
+        <figure className="trade-photo">
+          <Image
+            src="/images/selected/design-table-collaboration.webp"
+            alt="Three framers working together at the design table"
+            width={1800}
+            height={1350}
+            sizes="(max-width: 860px) 100vw, 820px"
+          />
+        </figure>
+
+        <h2>{t.tiers.h}</h2>
+        <table className="trade-table">
+          <thead>
+            <tr>
+              {t.tiers.cols.map((c) => (
+                <th key={c} scope="col">
+                  {c}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {t.tiers.rows.map((r) => (
+              <tr key={r[0]}>
+                <th scope="row">{r[0]}</th>
+                {r.slice(1).map((v, i) => (
+                  <td key={v} data-label={t.tiers.cols[i + 1]}>
+                    {v}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <p>{t.tiers.note}</p>
+
+        <h2>{t.covers.h}</h2>
+        <p>{t.covers.p}</p>
+
+        <h2>{t.howItWorks.h}</h2>
+        <ol className="trade-steps">
+          {t.howItWorks.steps.map(([h, p]) => (
             <li key={h}>
-              <b>{h}.</b> {p}
+              <b>{h}</b> — {p}
             </li>
           ))}
-        </ul>
-        <h2>Trade tiers</h2>
-        <p>
-          There is no membership fee. Your tier is earned by your custom framing spend with us over a rolling 12 months.
-          The percentage comes off custom framing only, not retail gifts.
-        </p>
-        <ul className="trade-tiers">
-          {tiers.map(([n, pct, spend]) => (
-            <li key={n}>
-              <span className="tier-pct">{pct}</span>
-              <span className="tier-name">{n}</span>
-              <span className="tier-spend">{spend} in framing over a rolling 12 months</span>
-            </li>
-          ))}
-        </ul>
-        <h2>How it works</h2>
-        <ol>
-          <li>Apply below with a few details about your practice.</li>
-          <li>Visit the shop at 2 Rock Creek Dr Unit A in Salado to see the mouldings and mats, and talk through what you need.</li>
-          <li>Start your first project together.</li>
         </ol>
-        <p>
-          Questions first? Read the <Link href="/trade/faq">trade FAQ</Link>, or see the{" "}
-          <Link href="/trade/apply">full application</Link>. Solas Gallery runs its own trade program;{" "}
-          <a href="https://www.solasgallery.com/trade">see the Solas Gallery trade page</a>.
-        </p>
+        <p className="trade-joint">{t.howItWorks.joint}</p>
+
+        <h2>{t.local.h}</h2>
+        <p>{t.local.p}</p>
       </section>
-      <section className="wrap section" id="apply" style={{ paddingTop: 0, maxWidth: 760 }}>
-        <h2>Apply</h2>
-        <TradeForm />
+      <section className="wrap section trade-enroll" id="enroll">
+        <h2>Enroll</h2>
+        <p className="trade-enroll-ways">
+          <a href={mailto}>{t.email}</a>
+          <span aria-hidden="true"> · </span>
+          <a href={business.phoneHref}>{business.phone}</a>
+        </p>
+        <p>
+          <a href={t.pdf} className="text-link" download>
+            Download the one-pager (PDF)
+          </a>
+        </p>
       </section>
     </>
   );
