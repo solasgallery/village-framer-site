@@ -27,9 +27,6 @@ export default function FormNotSent() {
         <Link href="/contact" className="button button-ink">
           Contact form
         </Link>
-        <Link href="/trade/apply" className="text-link">
-          Trade application →
-        </Link>
       </div>
     </section>
   );

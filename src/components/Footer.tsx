@@ -50,7 +50,7 @@ export default function Footer() {
             <Link href="/services">What we frame</Link>
             <Link href="/gallery">Our work</Link>
             <Link href="/guides">Guides</Link>
-            <Link href="/service-area">Service area</Link>
+            <Link href="/areas">Areas we serve</Link>
             <Link href="/contact">Contact</Link>
             <Link href="/trade">Trade</Link>
             <a href={business.instagram}>Instagram</a>

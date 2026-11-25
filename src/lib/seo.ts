@@ -10,10 +10,12 @@ export function meta(o: {
   imageAlt?: string;
   type?: "website" | "article";
   noindex?: boolean;
+  /** Raise the 60-char ceiling for a title fixed by an approved pattern (regional pages). */
+  titleMax?: number;
 }): Metadata {
   const t = o.title.length;
   const d = o.description.length;
-  if (t < 50 || t > 60) throw new Error(`SEO: title ${t} chars (need 50-60) for ${o.path}: ${o.title}`);
+  if (t < 50 || t > (o.titleMax ?? 60)) throw new Error(`SEO: title ${t} chars (need 50-${o.titleMax ?? 60}) for ${o.path}: ${o.title}`);
   if (d < 150 || d > 160) throw new Error(`SEO: description ${d} chars (need 150-160) for ${o.path}`);
   const image = o.image || "/svf-og-default.jpg";
   const images = [{ url: image, width: 1200, height: 630, alt: o.imageAlt || "Salado Village Framer, custom framing in Salado, Texas" }];
